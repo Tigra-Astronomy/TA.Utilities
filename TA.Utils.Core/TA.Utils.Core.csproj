@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Tim Long</Authors>
+    <Company>Tigra Astronomy</Company>
+    <Product>TA.Utils</Product>
+    <Description>A collection of commonly used utility and helper classes</Description>
+    <Copyright>Copyright 2020 Tigra Astronomy, all rights reserved</Copyright>
+    <PackageLicenseExpression>mit</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>
