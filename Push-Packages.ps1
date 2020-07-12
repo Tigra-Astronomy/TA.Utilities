@@ -1,8 +1,13 @@
-$feed = "https://www.myget.org/F/tigra-astronomy/api/v2/package"
+# Push all packages from release builds to Tigra Astronomy MyGet feed.
+# Assumes that the API key for the relevant feeds has been installed in NuGet.
+# Searches the current directory and child directories recursively.
+
+$packageFeed = "https://www.myget.org/F/tigra-astronomy/api/v2/package"
 $symbolFeed = "https://www.myget.org/F/tigra-astronomy/api/v3/index.json"
-Push-Location .\TA.Utils.Core\bin\Release
-$packages = Get-ChildItem -Filter *.nupkg
-foreach ($package in $packages)
+
+$allPackages = Get-ChildItem -Recurse | Where-Object { $_.Name -match '^.*\.s?nupkg$' }
+$releasePackages = $allPackages | Where-Object { $_.DirectoryName -match 'Release' }
+foreach ($package in $releasePackages)
 {
     if ($package.Name -like "*.snupkg")
     {
@@ -10,7 +15,6 @@ foreach ($package in $packages)
     }
     else
     {
-        NuGet.exe push -Source $feed $package
+        NuGet.exe push -Source $packageFeed $package
     }
 }
-Pop-Location
