@@ -26,7 +26,7 @@ namespace TA.Utils.Core
 
         private static Type ReflectInjectedGitVersionType()
             {
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var type = assembly.GetTypes().SingleOrDefault(t => t.Name == "GitVersionInformation");
             return type;
             }

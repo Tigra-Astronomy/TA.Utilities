@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Utils.Core", "TA.Utils.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Utils.Specifications", "TA.Utils.Specifications\TA.Utils.Specifications.csproj", "{8B3A2531-3295-4037-95EC-0BAD0DB4E972}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{22935A98-C6AD-4424-B288-56C89E864321}"
+	ProjectSection(SolutionItems) = preProject
+		Push-Packages.ps1 = Push-Packages.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
