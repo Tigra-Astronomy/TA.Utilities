@@ -1,5 +1,6 @@
-﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+﻿// This file is part of the TA.Utils project
+// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// File: EnumExtensions.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using System;
 using System.Linq;
@@ -7,17 +8,17 @@ using System.Reflection;
 
 namespace TA.Utils.Core
     {
+    /// <summary>Helper methods for use with enumerated types.</summary>
     public static class EnumExtensions
         {
         /// <summary>
-        ///     Returns the equivalent display text for a given Enum value
+        ///     Returns the equivalent display text for a given Enum value. Specifiy display text by placing
+        ///     the <see cref="DisplayEquivalentAttribute" /> attribute on the enumeration's member fields.
         /// </summary>
-        /// <remarks>
-        ///     Inspired by: http://blogs.msdn.com/b/abhinaba/archive/2005/10/21/483337.aspx
-        /// </remarks>
-        /// <param name="en"></param>
-        /// <returns></returns>
-        /// <seealso cref="DisplayEquivalentAttribute"/>
+        /// <remarks>Inspired by: http://blogs.msdn.com/b/abhinaba/archive/2005/10/21/483337.aspx</remarks>
+        /// <param name="en">The enumerated value.</param>
+        /// <returns>Text suitable for use in a display or user interface.</returns>
+        /// <seealso cref="DisplayEquivalentAttribute" />
         public static string DisplayEquivalent(this Enum en)
             {
             string enumValueName = en.ToString();
@@ -25,7 +26,7 @@ namespace TA.Utils.Core
             var fields = type.GetTypeInfo().DeclaredFields;
             var fieldInfo = fields.Single(p => p.Name == enumValueName);
             var attribute =
-                (DisplayEquivalentAttribute)fieldInfo?.GetCustomAttribute(typeof(DisplayEquivalentAttribute));
+                (DisplayEquivalentAttribute) fieldInfo?.GetCustomAttribute(typeof(DisplayEquivalentAttribute));
             if (fieldInfo == null || attribute == null)
                 return enumValueName;
             string displayEquivalent = attribute.Value;

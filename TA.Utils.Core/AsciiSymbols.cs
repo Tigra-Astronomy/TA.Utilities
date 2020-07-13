@@ -1,11 +1,12 @@
-﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+﻿// This file is part of the TA.Utils project
+// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// File: AsciiSymbols.cs  Last modified: 2020-07-13@02:11 by Tim Long
+
+#pragma warning disable 1591
 
 namespace TA.Utils.Core
     {
-    /// <summary>
-    ///     Enumeration constants for ASCII control codes.
-    /// </summary>
+    /// <summary>Enumeration constants for ASCII control codes.</summary>
     public enum AsciiSymbols : byte
         {
         // ReSharper disable InconsistentNaming

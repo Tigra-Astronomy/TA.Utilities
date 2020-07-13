@@ -1,0 +1,668 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TA.Utils.Core</name>
+    </assembly>
+    <members>
+        <member name="T:TA.Utils.Core.AsciiExtensions">
+            <summary>Helper methods for manipulating strings of ASCII-encoded text.</summary>
+        </member>
+        <member name="M:TA.Utils.Core.AsciiExtensions.ExpandAscii(System.String)">
+            <summary>Expands non-printable ASCII characters into mnemonic human-readable form.</summary>
+            <returns>Returns a new string with non-printing characters replaced by human-readable mnemonics.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.AsciiExtensions.ExpandAscii(System.Char)">
+            <summary>
+                Expands a non-printable ASCII character into mnemonic human-readable form. If the character is
+                printable, then the character is returned as a string.
+            </summary>
+            <returns>Returns a new string with non-printing characters replaced by human-readable mnemonics.</returns>
+            <remarks>To convert a whole string on one go, use the overload that accepts a string.</remarks>
+        </member>
+        <member name="T:TA.Utils.Core.AsciiSymbols">
+            <summary>Enumeration constants for ASCII control codes.</summary>
+        </member>
+        <member name="T:TA.Utils.Core.AsyncExtensions">
+            <summary>Helper methods for manipulating strings of ASCII-encoded text.</summary>
+        </member>
+        <member name="M:TA.Utils.Core.AsyncExtensions.WithCancellation``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
+            <summary>
+                Adds cancellation to a task that was otherwise not cancellable. Note: the underlying task may
+                still execute to completion.
+            </summary>
+            <typeparam name="T">The type of result to be returned by the task.</typeparam>
+            <param name="task">The uncancellable task.</param>
+            <param name="cancellationToken">The cancellation token that can be used to cancel the task.</param>
+            <returns>Task{T}.</returns>
+            <exception cref="T:System.OperationCanceledException">
+                Thrown if cancellation occurs before the
+                underlying task completes.
+            </exception>
+        </member>
+        <member name="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread``1(System.Threading.Tasks.Task{``0})">
+            <summary>
+                Configures a task to schedule its completion on any available thread. Use this when awaiting
+                tasks in a user interface thread to avoid deadlock issues.
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="task">The task to configure.</param>
+            <returns>An awaitable object that may schedule continuation on any thread.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread(System.Threading.Tasks.Task)">
+            <summary>
+                Configures a task to schedule its completion on any available thread. Use this when awaiting
+                tasks in a user interface thread to avoid deadlock issues.
+            </summary>
+            <param name="task">The task to configure.</param>
+            <returns>An awaitable object that may schedule continuation on any thread.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.AsyncExtensions.ContinueOnCurrentThread(System.Threading.Tasks.Task)">
+            <summary>
+                Configures a task awaiter to schedule continuation on the captured synchronization context.
+                That is, the continuation should execute on the same thread that created the task. This can be
+                risky when the awaiter is a single threaded apartment (STA) thread, such as the user interface
+                thread. If the awaiter blocks waiting for the task, then the continuation may never execute,
+                resulting in deadlock. Use with care.
+            </summary>
+            <param name="task">The task.</param>
+            <returns>ConfiguredTaskAwaitable.</returns>
+            <seealso cref="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread(System.Threading.Tasks.Task)" />
+        </member>
+        <member name="T:TA.Utils.Core.DisplayEquivalentAttribute">
+            <summary>
+                When applied to an enum member or field, specifies a string that should be used for display
+                purposes instead of the identifier name. This can be useful within code that must render HTML
+                markup from an enumerated type.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+            <seealso cref="M:TA.Utils.Core.EnumExtensions.DisplayEquivalent(System.Enum)" />
+        </member>
+        <member name="M:TA.Utils.Core.DisplayEquivalentAttribute.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the
+                <see cref="T:TA.Utils.Core.DisplayEquivalentAttribute" /> class.
+            </summary>
+            <param name="text">The text to be shown on the display instead of the value name.</param>
+        </member>
+        <member name="P:TA.Utils.Core.DisplayEquivalentAttribute.Value">
+            <summary>Gets the display text value.</summary>
+            <value>The display text to be used instead of the enumerated value name.</value>
+        </member>
+        <member name="T:TA.Utils.Core.EnumExtensions">
+            <summary>Helper methods for use with enumerated types.</summary>
+        </member>
+        <member name="M:TA.Utils.Core.EnumExtensions.DisplayEquivalent(System.Enum)">
+            <summary>
+                Returns the equivalent display text for a given Enum value. Specifiy display text by placing
+                the <see cref="T:TA.Utils.Core.DisplayEquivalentAttribute" /> attribute on the enumeration's member fields.
+            </summary>
+            <remarks>Inspired by: http://blogs.msdn.com/b/abhinaba/archive/2005/10/21/483337.aspx</remarks>
+            <param name="en">The enumerated value.</param>
+            <returns>Text suitable for use in a display or user interface.</returns>
+            <seealso cref="T:TA.Utils.Core.DisplayEquivalentAttribute" />
+        </member>
+        <member name="T:TA.Utils.Core.GitVersion">
+            <summary>
+                Provides a set of read-only properties for accessing version information that was injected by
+                GitVersion as part of the build process.
+            </summary>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="F:TA.Utils.Core.GitVersion.InjectedVersion">
+            <summary>The type injected by GitVersion during the build process, containing version information.</summary>
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitInformationalVersion">
+            <summary>Gets the git informational version.</summary>
+            <value>The git informational version.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitCommitSha">
+            <summary>Gets the git commit SHA.</summary>
+            <value>The git commit SHA.</value>
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitCommitShortSha">
+            <summary>Gets the git commit short SHA.</summary>
+            <value>The git commit short SHA.</value>
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitCommitDate">
+            <summary>Gets the git commit date.</summary>
+            <value>The git commit date.</value>
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitSemVer">
+            <summary>Gets the git semantic version string.</summary>
+            <value>The git semantic version string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitFullSemVer">
+            <summary>Gets the git full semantic version string.</summary>
+            <value>The git full semantic version string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitBuildMetadata">
+            <summary>Gets the git build metadata.</summary>
+            <value>The git build metadata string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitMajorVersion">
+            <summary>Gets the git major version.</summary>
+            <value>The git major version, as a string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitMinorVersion">
+            <summary>Gets the git minor version.</summary>
+            <value>The git minor version, as a string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitPatchVersion">
+            <summary>Gets the git patch version.</summary>
+            <value>The git patch version, as a string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="M:TA.Utils.Core.GitVersion.GitVersionField(System.Type,System.String)">
+            <summary>Uses reflection to fetch the value of a member field of the injected version information.</summary>
+            <param name="gitVersionInformationType">Type of the git version information.</param>
+            <param name="fieldName">Name of the field.</param>
+            <returns>A string containing the field value, or "undefined".</returns>
+        </member>
+        <member name="M:TA.Utils.Core.GitVersion.ReflectInjectedGitVersionType">
+            <summary>Reflects the type of the injected git version information.</summary>
+            <returns>Type.</returns>
+        </member>
+        <member name="T:TA.Utils.Core.MathExtensions">
+            <summary>Helper methods for mathematical constants, operations and algorithms</summary>
+        </member>
+        <member name="M:TA.Utils.Core.MathExtensions.Clip``1(``0,``0,``0)">
+            <summary>Clips (constrains) a value to within the specified range.</summary>
+            <typeparam name="T">A type that implements <see cref="T:System.IComparable" />.</typeparam>
+            <param name="input">The input value.</param>
+            <param name="minimum">The minimum allowed value.</param>
+            <param name="maximum">The maximum allowed value.</param>
+            <returns>The input value clipped to the specified range.</returns>
+        </member>
+        <member name="T:TA.Utils.Core.Maybe`1">
+            <summary>
+                Represents an object that may or may not have a value (strictly, a collection of zero or one
+                elements). Use LINQ expression <c>maybe.Any()</c> to determine if there is a value. Use LINQ
+                expression <c>maybe.Single()</c> to retrieve the value.
+            </summary>
+            <typeparam name="T">The type of the item in the collection.</typeparam>
+            <remarks>
+                This type almost completely eliminates any need to return <c>null</c> or deal with possibly
+                null references, which makes code cleaner and more clearly expresses the intent of 'no value'
+                versus 'error'.  The value of a Maybe cannot be <c>null</c>, because <c>null</c> really means
+                'no value' and that is better expressed by using <see cref="P:TA.Utils.Core.Maybe{T}.Empty" />.
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.Maybe`1.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:TA.Utils.Core.Maybe`1" /> with no value.</summary>
+        </member>
+        <member name="M:TA.Utils.Core.Maybe`1.#ctor(`0)">
+            <summary>Initializes a new instance of the <see cref="T:TA.Utils.Core.Maybe`1" /> with a value.</summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="P:TA.Utils.Core.Maybe`1.Empty">
+            <summary>Gets an instance that does not contain a value.</summary>
+            <value>The empty instance.</value>
+        </member>
+        <member name="P:TA.Utils.Core.Maybe`1.None">
+            <summary>Gets a value indicating whether this <see cref="T:TA.Utils.Core.Maybe`1" /> is empty (has no value).</summary>
+            <value><c>true</c> if none; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="M:TA.Utils.Core.Maybe`1.GetEnumerator">
+            <summary>Returns an enumerator that iterates through the collection.</summary>
+            <returns>
+                A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through
+                the collection.
+            </returns>
+        </member>
+        <member name="M:TA.Utils.Core.Maybe`1.From(`0)">
+            <summary>Creates a new <see cref="T:TA.Utils.Core.Maybe`1" /> from an instance of <typeparamref name="T" />.</summary>
+            <param name="source">The source instance to wrap in a Maybe.</param>
+            <returns>A new <see cref="T:TA.Utils.Core.Maybe`1" /> containing the source item.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Maybe`1.ToString">
+            <summary>Returns a <see cref="T:System.String" /> that represents this instance.</summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="T:TA.Utils.Core.MaybeExtensions">
+            <summary>Helper methods for working with <see cref="T:TA.Utils.Core.Maybe`1" /></summary>
+        </member>
+        <member name="M:TA.Utils.Core.MaybeExtensions.AsMaybe``1(``0)">
+            <summary>Expresses an instance of <typeparamref name="T" /> into a <see cref="T:TA.Utils.Core.Maybe`1" />.</summary>
+            <typeparam name="T">The reference type being wrapped (usually inferred from usage).</typeparam>
+            <param name="source">The source object.</param>
+        </member>
+        <member name="M:TA.Utils.Core.MaybeExtensions.None``1(TA.Utils.Core.Maybe{``0})">
+            <summary>Returns <c>true</c> if the <see cref="T:TA.Utils.Core.Maybe`1" /> has no value.</summary>
+        </member>
+        <member name="T:TA.Utils.Core.Octet">
+            <summary>
+                An immutable representation of an 8 bit byte, with each bit individually addressable. In most
+                cases an Octet is interchangeable with a <see cref="T:System.Byte" /> (implicit conversion operators are
+                provided). An Octet can be explicitly converted (cast) to or from an integer. Take care when
+                converting to and from negative integers.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.#ctor(System.Boolean[])">
+            <summary>
+                Initializes a new instance of the <see cref="T:TA.Utils.Core.Octet" /> struct from an array of at least 8
+                booleans.
+            </summary>
+            <param name="bits">The bits; there must be exactly 8.</param>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.#ctor">
+            <summary>
+                Prevents a default instance of the <see cref="T:TA.Utils.Core.Octet" /> class from being created. Use one of
+                the static factory methods or conversion operators instead.
+            </summary>
+            <seealso cref="P:TA.Utils.Core.Octet.Max" />
+            <seealso cref="P:TA.Utils.Core.Octet.Zero" />
+            <seealso cref="M:TA.Utils.Core.Octet.FromInt(System.Int32)" />
+            <seealso cref="M:TA.Utils.Core.Octet.FromUnsignedInt(System.UInt32)" />
+            <seealso cref="M:TA.Utils.Core.Octet.op_Implicit(System.Byte)~TA.Utils.Core.Octet" />
+            <seealso cref="M:TA.Utils.Core.Octet.op_Explicit(System.Int32)~TA.Utils.Core.Octet" />
+            <seealso cref="M:TA.Utils.Core.Octet.op_Explicit(System.UInt32)~TA.Utils.Core.Octet" />
+        </member>
+        <member name="P:TA.Utils.Core.Octet.Zero">
+            <summary>Gets an Octet with all the bits set to zero.</summary>
+        </member>
+        <member name="P:TA.Utils.Core.Octet.Max">
+            <summary>Gets an Octet set to the maximum value (i.e. all the bits set to one).</summary>
+        </member>
+        <member name="P:TA.Utils.Core.Octet.Item(System.Int32)">
+            <summary>Gets the <see cref="T:System.Boolean" /> value of the the specified bit.</summary>
+            <param name="bit">
+                The bit position, where 0 is the least significant bit and 7 is the most
+                significant bit.
+            </param>
+            <returns><c>true</c> if the bit at the specified position is 1, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.Equals(TA.Utils.Core.Octet)">
+            <summary>Indicates whether this octet is equal to another octet, using value semantics.</summary>
+            <returns>
+                true if the current object is equal to the <paramref name="other" /> parameter; otherwise,
+                false.
+            </returns>
+            <param name="other">An object to compare with this object.</param>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.FromInt(System.Int32)">
+            <summary>
+                Factory method: create an Octet from an integer. The integer two's complement binary value is
+                simply truncated and the resultant octet will be the least significant byte. Take care with
+                negative values as this may not produce the expected result. For example,
+                <c>Octet.FromInt(int.Min)</c> is <c>Octet.Zero</c> whereas <c>Octet.FromInt(int.Max)</c> is
+                <c>Octet.Max</c>
+            </summary>
+            <param name="source">The source.</param>
+            <returns>Octet.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.FromUnsignedInt(System.UInt32)">
+            <summary>Factory method: create an Octet from an unsigned integer.</summary>
+            <param name="source">The source.</param>
+            <returns>Octet.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.WithBitSetTo(System.UInt16,System.Boolean)">
+            <summary>
+                Returns a new octet with the specified bit number set to the specified value. Other bits are
+                duplicated.
+            </summary>
+            <param name="bit">The bit number to be modified.</param>
+            <param name="value">The value of the specified bit number.</param>
+            <returns>A new octet instance with the specified bit number set to the specified value.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.WithBitSetTo(System.Int32,System.Boolean)">
+            <summary>
+                Returns a new octet with the specified bit number set to the specified value. Other bits are
+                duplicated.
+            </summary>
+            <param name="bit">The bit number to be modified.</param>
+            <param name="value">The value of the specified bit number.</param>
+            <returns>A new octet instance with the specified bit number set to the specified value.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.ToString">
+            <summary>Returns a <see cref="T:System.String" /> that represents the octet instance.</summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_Explicit(System.UInt32)~TA.Utils.Core.Octet">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.UInt32" /> to <see cref="T:TA.Utils.Core.Octet" />. This
+                conversion is explicit because there is potential loss of information.
+            </summary>
+            <param name="integer">The integer.</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_Explicit(System.Int32)~TA.Utils.Core.Octet">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Int32" /> to <see cref="T:TA.Utils.Core.Octet" />. This
+                conversion is explicit because there is potential loss of information.
+            </summary>
+            <param name="integer">The integer.</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_Implicit(TA.Utils.Core.Octet)~System.Byte">
+            <summary>Performs an implicit conversion from <see cref="T:TA.Utils.Core.Octet" /> to <see cref="T:System.Byte" />.</summary>
+            <param name="octet">The octet.</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_Implicit(System.Byte)~TA.Utils.Core.Octet">
+            <summary>Performs an implicit conversion from <see cref="T:System.Byte" /> to <see cref="T:TA.Utils.Core.Octet" />.</summary>
+            <param name="b">The input byte.</param>
+            <returns>The result of the conversion in a new Octet.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.Equals(System.Object)">
+            <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.</summary>
+            <param name="other">The object to compare with the current object.</param>
+            <returns>
+                <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance;
+                otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.GetHashCode">
+            <summary>Returns a hash code for this instance.</summary>
+            <returns>
+                A hash code for this instance, suitable for use in hashing algorithms and data structures like
+                a hash table.
+            </returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_Equality(TA.Utils.Core.Octet,TA.Utils.Core.Octet)">
+            <summary>Tests two octets for equality.</summary>
+            <param name="left">The left argument.</param>
+            <param name="right">The right argument.</param>
+            <returns><c>true</c> if the octets are equal; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_Inequality(TA.Utils.Core.Octet,TA.Utils.Core.Octet)">
+            <summary>Tests two octets for inequality.</summary>
+            <param name="left">The left argument.</param>
+            <param name="right">The right argument.</param>
+            <returns><c>true</c> if the octets are not equal; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_BitwiseAnd(TA.Utils.Core.Octet,TA.Utils.Core.Octet)">
+            <summary>Performs a bitwise logical AND on two octets and produces a third containing the result.</summary>
+            <param name="left">The left argument.</param>
+            <param name="right">The right argument.</param>
+            <returns>A new octet containing the result of the bitwise logical AND operation.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.op_BitwiseOr(TA.Utils.Core.Octet,TA.Utils.Core.Octet)">
+            <summary>Performs a bitwise logical OR on two octets and produces a third containing the result.</summary>
+            <param name="left">The left argument.</param>
+            <param name="right">The right argument.</param>
+            <returns>A new octet containing the result of the bitwise logical OR operation.</returns>
+        </member>
+        <member name="T:TA.Utils.Core.SemanticVersion">
+            <summary>
+                <para>
+                    Implements parsing, storage and comparison of semantic versions as defined at
+                    http://semver.org/.
+                </para>
+                <para>
+                    Semantic Versions have a very specific and somewhat counter-intuitive order of precedence.
+                    Comparison begins with the major version and proceeds to the minor version, patch,
+                    prerelease tag and build metadata tag. The order of precedence is always returned as soon
+                    as it can be determined.
+                </para>
+                <para>
+                    If order cannot be determined from the major, minor and patch versions, then comparison
+                    proceeds to the prerelease tag and then the build metadata tag. These fields can contain
+                    multiple segments separated by the '.' character. each dot-separated segment is considered
+                    separately and where possible is converted to an integer, so that <c>beta.9</c> sorts
+                    before <c>beta.10</c>.
+                </para>
+                <para>
+                    Note that any version with a prerelease tag sorts lower than the same version without a
+                    prerelease tag. Put another way: a release version is greater than a prerelease version.
+                </para>
+                <para>
+                    The specification states that build metadata should be ignored when determining precedence.
+                    That doesn't seem like a very sensible approach to us, since builds have to appear in some
+                    sort of order and 'random' didn't strike us as an amazingly useful outcome. Therefore we
+                    have chosen to deviate from the specification and include it as the last item in the list
+                    of comparisons when determining the collation sequence. We treat the build metadata in a
+                    similar way to the prerelease tag, giving it the lowest precedence but nonetheless yielding
+                    a more deterministic result when comparing and sorting semantic versions. Build metadata is
+                    NOT considered when determining equality.
+                </para>
+            </summary>
+            <remarks>
+                This class was inspired by Michael F. Collins and based on his blog article at
+                http://www.michaelfcollins3.me/blog/2013/01/23/semantic_versioning_dotnet.html. For guidance on
+                the meaning and rules of semantic versioning, please see https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:TA.Utils.Core.SemanticVersion" /> class from a version encoded
+                in a string.
+            </summary>
+            <param name="version">The version.</param>
+            <exception cref="T:System.ArgumentException">version</exception>
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:TA.Utils.Core.SemanticVersion" /> class.</summary>
+            <param name="majorVersion">The major version.</param>
+            <param name="minorVersion">The minor version.</param>
+            <param name="patchVersion">The patch version.</param>
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="P:TA.Utils.Core.SemanticVersion.BuildVersion">
+            <summary>Gets the build version, if any.</summary>
+            <value>The build version.</value>
+        </member>
+        <member name="P:TA.Utils.Core.SemanticVersion.MajorVersion">
+            <summary>Gets the major version.</summary>
+            <value>The major version.</value>
+        </member>
+        <member name="P:TA.Utils.Core.SemanticVersion.MinorVersion">
+            <summary>Gets the minor version.</summary>
+            <value>The minor version.</value>
+        </member>
+        <member name="P:TA.Utils.Core.SemanticVersion.PatchVersion">
+            <summary>Gets the patch version.</summary>
+            <value>The patch version.</value>
+        </member>
+        <member name="P:TA.Utils.Core.SemanticVersion.PrereleaseVersion">
+            <summary>Gets the prerelease version, if any.</summary>
+            <value>The prerelease version.</value>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.ToString">
+            <summary>Returns a semantic version string.</summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.IsValid(System.String)">
+            <summary>Tests a string to determine whether it is a valid semantic version string.</summary>
+            <param name="candidate">The candidate string to be examined.</param>
+            <returns>
+                <c>true</c> if the specified candidate is a valid semantic version; otherwise,
+                <c>false</c>.
+            </returns>
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.Equals(TA.Utils.Core.SemanticVersion)">
+            <summary>
+                Indicates whether this semantic version is equal to another semantic version. For two versions
+                to be equal, they must have the same Major, Minor and Patch versions and the Prerelease tag
+                must match. Build metadata is not considered part of the version and is not checked.
+            </summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>
+                true if the current object is equal to the <paramref name="other" /> parameter; otherwise,
+                false.
+            </returns>
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.Equals(System.Object)">
+            <summary>
+                Determines whether the specified (possibly null) <see cref="T:System.Object" /> is equal to
+                this instance.
+            </summary>
+            <param name="other">The object to compare with the current object.</param>
+            <returns>
+                <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance;
+                otherwise, <c>false</c>.
+            </returns>
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.GetHashCode">
+            <summary>Returns a hash code for this instance.</summary>
+            <returns>
+                A hash code for this instance, suitable for use in hashing algorithms and data structures like
+                a hash table.
+            </returns>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.op_Equality(TA.Utils.Core.SemanticVersion,TA.Utils.Core.SemanticVersion)">
+            <summary>Tests two semantic versions for equality.</summary>
+            <param name="left">The left argument.</param>
+            <param name="right">The right argument.</param>
+            <returns>
+                <c>true</c> if the two versions are equal according to the rules for semantic versioning.
+                otherwise <c>false</c>.
+            </returns>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.Equals(TA.Utils.Core.SemanticVersion)" />
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.op_Inequality(TA.Utils.Core.SemanticVersion,TA.Utils.Core.SemanticVersion)">
+            <summary>Tests two semantic versions for inequality.</summary>
+            <param name="left">The left argument.</param>
+            <param name="right">The right argument.</param>
+            <returns>
+                <c>true</c> if the two versions are unequal according to the rules for semantic versioning.
+                otherwise <c>false</c>.
+            </returns>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.Equals(TA.Utils.Core.SemanticVersion)" />
+            <remarks>
+                For guidance on the meaning and rules of semantic versioning, please see
+                https://semver.org/
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.CompareTo(System.Object)">
+            <summary>
+                Compares the current instance with another object of the same type and returns an integer that
+                indicates whether the current instance precedes, follows, or occurs in the same position in the
+                sort order as the comparison object.
+            </summary>
+            <param name="comparison">An object to compare with this instance.</param>
+            <returns>
+                A value that indicates the relative order of the objects being compared. The return value has
+                these meanings:
+                <list type="table">
+                    <listheader>
+                        <term>Value</term><term>Meaning</term>
+                    </listheader>
+                    <item>
+                        <description>Less than zero</description>
+                        <description>This instance precedes <paramref name="comparison" /> in the sort order.</description>
+                    </item>
+                    <item>
+                        <description>Zero</description>
+                        <description>
+                            This instance occurs in the same position in the sort order as
+                            <paramref name="comparison" />.
+                        </description>
+                    </item>
+                    <item>
+                        <description>Greater than zero</description>
+                        <description>This instance succeeds <paramref name="comparison" /> in the sort order.</description>
+                    </item>
+                </list>
+            </returns>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="comparison" /> is not the same type as
+                this instance.
+            </exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="comparison" /> is <c>null</c>.</exception>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.CompareTo(TA.Utils.Core.SemanticVersion)">
+            <summary>
+                Compares the current instance with another object of the same type and returns an integer that
+                indicates whether the current instance precedes, follows, or occurs in the same position in the
+                sort order as the <paramref name="comparison" /> object.
+            </summary>
+            <remarks>
+                <para>
+                    Semantic Versions have a very specific and somewhat counterintuitive order of precedence.
+                    Comparison begins with the major version and proceeds to the minor version, patch,
+                    prerelease tag and build metadata tag. The order of precedence is always returned as soon
+                    as it can be determined.
+                </para>
+                <para>
+                    If order cannot be determined from the major, minor and patch versions, then comparison
+                    proceeds to the prerelease tag and then the build metadata tag. These fields can contain
+                    multiple segments separated by the '.' character. each dot-separated segment is considered
+                    separately and where possible is converted to an integer, so that <c>beta.9</c> sorts
+                    before <c>beta.10</c>.
+                </para>
+                <para>
+                    Note that any version with a prerelease tag sorts lower than the same version without a
+                    prerelease tag. Put another way: a release version is greater than a prerelease version.
+                </para>
+                <para>
+                    The specification states that build metadata should be ignored when determining precedence.
+                    That doesn't seem like a very sensible approach to us, since builds have to appear in some
+                    sort of order and 'random' didn't strike us as an amazingly useful outcome. Therefore we
+                    have chosen to deviate from the specification and include it as the last item in the list
+                    of comparisons when determining the collation sequence. We treat the build metadata in a
+                    similar way to the prerelease tag, giving it the lowest precedence but nonetheless yielding
+                    a more deterministic result when comparing and sorting semantic versions.
+                </para>
+            </remarks>
+            <param name="comparison">An object to compare with this instance.</param>
+            <returns>A value that indicates the relative order of the objects being compared.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.op_LessThan(TA.Utils.Core.SemanticVersion,TA.Utils.Core.SemanticVersion)">
+            <summary>
+                Determines whether the left version is less than the right version,
+                according to the collation rules for semantic versions.</summary>
+            <param name="left">The left version operand.</param>
+            <param name="right">The right version operand.</param>
+            <returns><c>true</c> if the left version is less than the right version.</returns>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.CompareTo(TA.Utils.Core.SemanticVersion)"/>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.op_GreaterThan(TA.Utils.Core.SemanticVersion,TA.Utils.Core.SemanticVersion)">
+            <summary>
+                Determines whether the left version is greater than the right version,
+                according to the collation rules for semantic versions.</summary>
+            <param name="left">The left version operand.</param>
+            <param name="right">The right version operand.</param>
+            <returns><c>true</c> if the left version is greater than the right version.</returns>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.CompareTo(TA.Utils.Core.SemanticVersion)"/>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.op_LessThanOrEqual(TA.Utils.Core.SemanticVersion,TA.Utils.Core.SemanticVersion)">
+            <summary>
+                Determines whether the left version is less than or equal to the right version,
+                according to the collation and equality rules for semantic versions.</summary>
+            <param name="left">The left version operand.</param>
+            <param name="right">The right version operand.</param>
+            <returns><c>true</c> if the left version is less than or equal to the right version.</returns>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.CompareTo(TA.Utils.Core.SemanticVersion)"/>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.Equals(TA.Utils.Core.SemanticVersion)"/>
+        </member>
+        <member name="M:TA.Utils.Core.SemanticVersion.op_GreaterThanOrEqual(TA.Utils.Core.SemanticVersion,TA.Utils.Core.SemanticVersion)">
+            <summary>
+                Determines whether the left version is greater than or equal to the right version,
+                according to the collation and equality rules for semantic versions.</summary>
+            <param name="left">The left version operand.</param>
+            <param name="right">The right version operand.</param>
+            <returns><c>true</c> if the left version is greater than or equal to the right version.</returns>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.CompareTo(TA.Utils.Core.SemanticVersion)"/>
+            <seealso cref="M:TA.Utils.Core.SemanticVersion.Equals(TA.Utils.Core.SemanticVersion)"/>
+        </member>
+    </members>
+</doc>

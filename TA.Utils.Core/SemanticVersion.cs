@@ -1,8 +1,6 @@
 ﻿// This file is part of the TA.Utils project
-//
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: SemanticVersion.cs  Last modified: 2020-07-11@20:07 by Tim Long
+// File: SemanticVersion.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -13,10 +11,43 @@ using System.Text.RegularExpressions;
 
 namespace TA.Utils.Core
     {
-    /// <summary>Implements storage and comparison of semantic versions as defined at http://semver.org/.</summary>
+    /// <summary>
+    ///     <para>
+    ///         Implements parsing, storage and comparison of semantic versions as defined at
+    ///         http://semver.org/.
+    ///     </para>
+    ///     <para>
+    ///         Semantic Versions have a very specific and somewhat counter-intuitive order of precedence.
+    ///         Comparison begins with the major version and proceeds to the minor version, patch,
+    ///         prerelease tag and build metadata tag. The order of precedence is always returned as soon
+    ///         as it can be determined.
+    ///     </para>
+    ///     <para>
+    ///         If order cannot be determined from the major, minor and patch versions, then comparison
+    ///         proceeds to the prerelease tag and then the build metadata tag. These fields can contain
+    ///         multiple segments separated by the '.' character. each dot-separated segment is considered
+    ///         separately and where possible is converted to an integer, so that <c>beta.9</c> sorts
+    ///         before <c>beta.10</c>.
+    ///     </para>
+    ///     <para>
+    ///         Note that any version with a prerelease tag sorts lower than the same version without a
+    ///         prerelease tag. Put another way: a release version is greater than a prerelease version.
+    ///     </para>
+    ///     <para>
+    ///         The specification states that build metadata should be ignored when determining precedence.
+    ///         That doesn't seem like a very sensible approach to us, since builds have to appear in some
+    ///         sort of order and 'random' didn't strike us as an amazingly useful outcome. Therefore we
+    ///         have chosen to deviate from the specification and include it as the last item in the list
+    ///         of comparisons when determining the collation sequence. We treat the build metadata in a
+    ///         similar way to the prerelease tag, giving it the lowest precedence but nonetheless yielding
+    ///         a more deterministic result when comparing and sorting semantic versions. Build metadata is
+    ///         NOT considered when determining equality.
+    ///     </para>
+    /// </summary>
     /// <remarks>
     ///     This class was inspired by Michael F. Collins and based on his blog article at
-    ///     http://www.michaelfcollins3.me/blog/2013/01/23/semantic_versioning_dotnet.html
+    ///     http://www.michaelfcollins3.me/blog/2013/01/23/semantic_versioning_dotnet.html. For guidance on
+    ///     the meaning and rules of semantic versioning, please see https://semver.org/
     /// </remarks>
     public sealed class SemanticVersion : IEquatable<SemanticVersion>, IComparable, IComparable<SemanticVersion>
         {
@@ -39,6 +70,10 @@ namespace TA.Utils.Core
         /// </summary>
         /// <param name="version">The version.</param>
         /// <exception cref="System.ArgumentException">version</exception>
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
         public SemanticVersion(string version)
             {
             Contract.Requires(!string.IsNullOrEmpty(version));
@@ -66,6 +101,14 @@ namespace TA.Utils.Core
                 : Maybe<string>.Empty;
             }
 
+        /// <summary>Initializes a new instance of the <see cref="T:TA.Utils.Core.SemanticVersion" /> class.</summary>
+        /// <param name="majorVersion">The major version.</param>
+        /// <param name="minorVersion">The minor version.</param>
+        /// <param name="patchVersion">The patch version.</param>
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
         public SemanticVersion(int majorVersion, int minorVersion, int patchVersion)
             {
             Contract.Requires(majorVersion >= 0);
@@ -128,39 +171,87 @@ namespace TA.Utils.Core
             return builder.ToString();
             }
 
+        /// <summary>Tests a string to determine whether it is a valid semantic version string.</summary>
+        /// <param name="candidate">The candidate string to be examined.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified candidate is a valid semantic version; otherwise,
+        ///     <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
         public static bool IsValid(string candidate)
             {
             return SemanticVersionRegex.IsMatch(candidate);
             }
 
         #region Equality members
+        /// <summary>
+        ///     Indicates whether this semantic version is equal to another semantic version. For two versions
+        ///     to be equal, they must have the same Major, Minor and Patch versions and the Prerelease tag
+        ///     must match. Build metadata is not considered part of the version and is not checked.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        ///     true if the current object is equal to the <paramref name="other" /> parameter; otherwise,
+        ///     false.
+        /// </returns>
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
         public bool Equals(SemanticVersion other)
             {
             if (ReferenceEquals(null, other))
                 return false;
             if (ReferenceEquals(this, other))
                 return true;
-            return BuildVersion.Equals(other.BuildVersion) && MajorVersion == other.MajorVersion
-                                                           && MinorVersion == other.MinorVersion
-                                                           && PatchVersion == other.PatchVersion
-                                                           && PrereleaseVersion.Equals(other.PrereleaseVersion);
+            // Note that PrereleaseVersion is Maybe<string>
+            return MajorVersion == other.MajorVersion
+                   && MinorVersion == other.MinorVersion
+                   && PatchVersion == other.PatchVersion
+                   && PrereleaseVersion.SequenceEqual(other.PrereleaseVersion);
             }
 
-        public override bool Equals(object obj)
+        /// <summary>
+        ///     Determines whether the specified (possibly null) <see cref="T:System.Object" /> is equal to
+        ///     this instance.
+        /// </summary>
+        /// <param name="other">The object to compare with the current object.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance;
+        ///     otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
+        public override bool Equals(object other)
             {
-            if (ReferenceEquals(null, obj))
+            if (ReferenceEquals(null, other))
                 return false;
-            if (ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, other))
                 return true;
-            return obj is SemanticVersion && Equals((SemanticVersion) obj);
+            return other is SemanticVersion version && Equals(version);
             }
 
+        /// <summary>Returns a hash code for this instance.</summary>
+        /// <returns>
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like
+        ///     a hash table.
+        /// </returns>
         public override int GetHashCode()
             {
+            /*
+             * [TPL 2020-07] A requirement for hash codes is that items considered to be equal should have
+             * the same hash. Since SemVer does not treat build metadata as significant, then we should
+             * not include it in the hash code.
+             */
             unchecked
                 {
-                int hashCode = MaybeHashCode(BuildVersion);
-                hashCode = (hashCode * 397) ^ MajorVersion;
+                int hashCode = MajorVersion; //MaybeHashCode(BuildVersion);
+                //hashCode = (hashCode * 397) ^ MajorVersion;
                 hashCode = (hashCode * 397) ^ MinorVersion;
                 hashCode = (hashCode * 397) ^ PatchVersion;
                 hashCode = (hashCode * 397) ^ MaybeHashCode(PrereleaseVersion);
@@ -173,11 +264,35 @@ namespace TA.Utils.Core
             return item.Any() ? item.Single().GetHashCode() : string.Empty.GetHashCode();
             }
 
+        /// <summary>Tests two semantic versions for equality.</summary>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
+        /// <returns>
+        ///     <c>true</c> if the two versions are equal according to the rules for semantic versioning.
+        ///     otherwise <c>false</c>.
+        /// </returns>
+        /// <seealso cref="Equals(TA.Utils.Core.SemanticVersion)" />
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
         public static bool operator ==(SemanticVersion left, SemanticVersion right)
             {
             return Equals(left, right);
             }
 
+        /// <summary>Tests two semantic versions for inequality.</summary>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
+        /// <returns>
+        ///     <c>true</c> if the two versions are unequal according to the rules for semantic versioning.
+        ///     otherwise <c>false</c>.
+        /// </returns>
+        /// <seealso cref="Equals(TA.Utils.Core.SemanticVersion)" />
+        /// <remarks>
+        ///     For guidance on the meaning and rules of semantic versioning, please see
+        ///     https://semver.org/
+        /// </remarks>
         public static bool operator !=(SemanticVersion left, SemanticVersion right)
             {
             return !Equals(left, right);
@@ -190,20 +305,36 @@ namespace TA.Utils.Core
         ///     indicates whether the current instance precedes, follows, or occurs in the same position in the
         ///     sort order as the comparison object.
         /// </summary>
+        /// <param name="comparison">An object to compare with this instance.</param>
         /// <returns>
         ///     A value that indicates the relative order of the objects being compared. The return value has
-        ///     these meanings: Value Meaning Less than zero This instance precedes
-        ///     <paramref name="comparison" /> in the sort order. Zero This instance occurs in the same
-        ///     position in the sort order as <paramref name="comparison" />. Greater than zero This instance
-        ///     follows <paramref name="comparison" /> in the sort order.
+        ///     these meanings:
+        ///     <list type="table">
+        ///         <listheader>
+        ///             <term>Value</term><term>Meaning</term>
+        ///         </listheader>
+        ///         <item>
+        ///             <description>Less than zero</description>
+        ///             <description>This instance precedes <paramref name="comparison" /> in the sort order.</description>
+        ///         </item>
+        ///         <item>
+        ///             <description>Zero</description>
+        ///             <description>
+        ///                 This instance occurs in the same position in the sort order as
+        ///                 <paramref name="comparison" />.
+        ///             </description>
+        ///         </item>
+        ///         <item>
+        ///             <description>Greater than zero</description>
+        ///             <description>This instance succeeds <paramref name="comparison" /> in the sort order.</description>
+        ///         </item>
+        ///     </list>
         /// </returns>
-        /// <param name="comparison">An object to compare with this instance. </param>
         /// <exception cref="T:System.ArgumentException">
         ///     <paramref name="comparison" /> is not the same type as
         ///     this instance.
         /// </exception>
-        /// <filterpriority>2</filterpriority>
-        /// <exception cref="ArgumentNullException"><paramref name="comparison" /> is <see langword="null" />.</exception>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="comparison" /> is <c>null</c>.</exception>
         public int CompareTo(object comparison)
             {
             if (ReferenceEquals(comparison, null))
@@ -338,20 +469,43 @@ namespace TA.Utils.Core
             return result;
             }
 
-        public static bool operator <(SemanticVersion version, SemanticVersion other)
+        /// <summary>
+        ///     Determines whether the left version is less than the right version,
+        ///     according to the collation rules for semantic versions.</summary>
+        /// <param name="left">The left version operand.</param>
+        /// <param name="right">The right version operand.</param>
+        /// <returns><c>true</c> if the left version is less than the right version.</returns>
+        /// <seealso cref="CompareTo(TA.Utils.Core.SemanticVersion)"/>
+        public static bool operator <(SemanticVersion left, SemanticVersion right)
             {
-            Contract.Requires(null != version);
-            Contract.Requires(null != other);
-            return version.CompareTo(other) < 0;
+            Contract.Requires(null != left);
+            Contract.Requires(null != right);
+            return left.CompareTo(right) < 0;
             }
 
-        public static bool operator >(SemanticVersion version, SemanticVersion other)
+        /// <summary>
+        ///     Determines whether the left version is greater than the right version,
+        ///     according to the collation rules for semantic versions.</summary>
+        /// <param name="left">The left version operand.</param>
+        /// <param name="right">The right version operand.</param>
+        /// <returns><c>true</c> if the left version is greater than the right version.</returns>
+        /// <seealso cref="CompareTo(TA.Utils.Core.SemanticVersion)"/>
+
+        public static bool operator >(SemanticVersion left, SemanticVersion right)
             {
-            Contract.Requires(null != version);
-            Contract.Requires(null != other);
-            return version.CompareTo(other) > 0;
+            Contract.Requires(null != left);
+            Contract.Requires(null != right);
+            return left.CompareTo(right) > 0;
             }
 
+        /// <summary>
+        ///     Determines whether the left version is less than or equal to the right version,
+        ///     according to the collation and equality rules for semantic versions.</summary>
+        /// <param name="left">The left version operand.</param>
+        /// <param name="right">The right version operand.</param>
+        /// <returns><c>true</c> if the left version is less than or equal to the right version.</returns>
+        /// <seealso cref="CompareTo(TA.Utils.Core.SemanticVersion)"/>
+        /// <seealso cref="Equals(TA.Utils.Core.SemanticVersion)"/>
         public static bool operator <=(SemanticVersion left, SemanticVersion right)
             {
             Contract.Requires(null != left);
@@ -360,6 +514,14 @@ namespace TA.Utils.Core
             return left.CompareTo(right) < 0;
             }
 
+        /// <summary>
+        ///     Determines whether the left version is greater than or equal to the right version,
+        ///     according to the collation and equality rules for semantic versions.</summary>
+        /// <param name="left">The left version operand.</param>
+        /// <param name="right">The right version operand.</param>
+        /// <returns><c>true</c> if the left version is greater than or equal to the right version.</returns>
+        /// <seealso cref="CompareTo(TA.Utils.Core.SemanticVersion)"/>
+        /// <seealso cref="Equals(TA.Utils.Core.SemanticVersion)"/>
         public static bool operator >=(SemanticVersion left, SemanticVersion right)
             {
             Contract.Requires(null != left);

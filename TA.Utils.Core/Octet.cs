@@ -1,8 +1,6 @@
 // This file is part of the TA.Utils project
-// 
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-// 
-// File: Octet.cs  Last modified: 2020-07-11@18:16 by Tim Long
+// File: Octet.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -19,13 +17,6 @@ namespace TA.Utils.Core
     public sealed class Octet : IEquatable<Octet>
         {
         private readonly bool[] bits;
-
-        [ContractInvariantMethod]
-        private void ObjectInvariant()
-            {
-            Contract.Invariant(bits != null);
-            Contract.Invariant(bits.Length == 8, "Consider using Octet.FromInt() instead of new Octet()");
-            }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Octet" /> struct from an array of at least 8
@@ -58,6 +49,12 @@ namespace TA.Utils.Core
         /// <summary>Gets an Octet set to the maximum value (i.e. all the bits set to one).</summary>
         public static Octet Max { get; } = FromInt(0xFF);
 
+        /// <summary>Gets the <see cref="T:System.Boolean" /> value of the the specified bit.</summary>
+        /// <param name="bit">
+        ///     The bit position, where 0 is the least significant bit and 7 is the most
+        ///     significant bit.
+        /// </param>
+        /// <returns><c>true</c> if the bit at the specified position is 1, <c>false</c> otherwise.</returns>
         public bool this[int bit]
             {
             get
@@ -65,6 +62,27 @@ namespace TA.Utils.Core
                 Contract.Requires(bit >= 0 && bit < 8);
                 return bits[bit];
                 }
+            }
+
+        /// <summary>Indicates whether this octet is equal to another octet, using value semantics.</summary>
+        /// <returns>
+        ///     true if the current object is equal to the <paramref name="other" /> parameter; otherwise,
+        ///     false.
+        /// </returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Octet other)
+            {
+            for (int i = 0; i < bits.Length; i++)
+                if (bits[i] != other[i])
+                    return false;
+            return true;
+            }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+            {
+            Contract.Invariant(bits != null);
+            Contract.Invariant(bits.Length == 8, "Consider using Octet.FromInt() instead of new Octet()");
             }
 
         /// <summary>
@@ -89,7 +107,7 @@ namespace TA.Utils.Core
             return new Octet(bits);
             }
 
-        /// <summary>Factory method: create an Octet from an unisgned integer.</summary>
+        /// <summary>Factory method: create an Octet from an unsigned integer.</summary>
         /// <param name="source">The source.</param>
         /// <returns>Octet.</returns>
         public static Octet FromUnsignedInt(uint source)
@@ -126,6 +144,8 @@ namespace TA.Utils.Core
             return WithBitSetTo((ushort) bit, value);
             }
 
+        /// <summary>Returns a <see cref="T:System.String" /> that represents the octet instance.</summary>
+        /// <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
         public override string ToString()
             {
             var builder = new StringBuilder();
@@ -181,41 +201,50 @@ namespace TA.Utils.Core
             return FromUnsignedInt(b);
             }
 
-        /// <summary>Indicates whether this octet is equal to another octet, using value semantics.</summary>
+        /// <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.</summary>
+        /// <param name="other">The object to compare with the current object.</param>
         /// <returns>
-        ///     true if the current object is equal to the <paramref name="other" /> parameter; otherwise,
-        ///     false.
+        ///     <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance;
+        ///     otherwise, <c>false</c>.
         /// </returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Octet other)
+        public override bool Equals(object other)
             {
-            for (int i = 0; i < bits.Length; i++)
-                if (bits[i] != other[i])
-                    return false;
-            return true;
+            if (ReferenceEquals(null, other)) return false;
+            return other is Octet && Equals((Octet) other);
             }
 
-        public override bool Equals(object obj)
-            {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Octet && Equals((Octet) obj);
-            }
-
+        /// <summary>Returns a hash code for this instance.</summary>
+        /// <returns>
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like
+        ///     a hash table.
+        /// </returns>
         public override int GetHashCode()
             {
             return bits.GetHashCode();
             }
 
+        /// <summary>Tests two octets for equality.</summary>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
+        /// <returns><c>true</c> if the octets are equal; otherwise <c>false</c>.</returns>
         public static bool operator ==(Octet left, Octet right)
             {
             return left.Equals(right);
             }
 
+        /// <summary>Tests two octets for inequality.</summary>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
+        /// <returns><c>true</c> if the octets are not equal; otherwise <c>false</c>.</returns>
         public static bool operator !=(Octet left, Octet right)
             {
             return !left.Equals(right);
             }
 
+        /// <summary>Performs a bitwise logical AND on two octets and produces a third containing the result.</summary>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
+        /// <returns>A new octet containing the result of the bitwise logical AND operation.</returns>
         public static Octet operator &(Octet left, Octet right)
             {
             var result = (bool[]) left.bits.Clone();
@@ -223,6 +252,10 @@ namespace TA.Utils.Core
             return new Octet(result);
             }
 
+        /// <summary>Performs a bitwise logical OR on two octets and produces a third containing the result.</summary>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
+        /// <returns>A new octet containing the result of the bitwise logical OR operation.</returns>
         public static Octet operator |(Octet left, Octet right)
             {
             var result = (bool[]) left.bits.Clone();
