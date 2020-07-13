@@ -1,8 +1,6 @@
 ﻿// This file is part of the TA.Utils project
-//
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: OctetSpecs.cs  Last modified: 2020-07-11@17:51 by Tim Long
+// File: OctetSpecs.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using Machine.Specifications;
 using TA.Utils.Core;
@@ -42,23 +40,23 @@ namespace TA.Utils.Specifications
     [Subject(typeof(Octet), "Immutability")]
     public class when_mutating_an_octet
         {
-        static Octet immutable = Octet.Max;
         It should_intern_well_known_instances = () => ReferenceEquals(Octet.Zero, Octet.Zero).ShouldBeTrue();
         It should_be_immutable = () => ReferenceEquals(immutable.WithBitSetTo(3, false), immutable).ShouldBeFalse();
+        static Octet immutable = Octet.Max;
         }
 
     [Subject(typeof(Octet), "Conversion")]
     public class when_converting_from_an_integer
         {
-        It should_truncate_negative_int = () =>  ((Octet) int.MinValue).ShouldEqual(Octet.Zero);
-        It should_truncate_positive_int = () =>  ((Octet) int.MaxValue).ShouldEqual(Octet.Max);
-        It should_truncate_unsigned_int = () =>  ((Octet) uint.MaxValue).ShouldEqual(Octet.Max);
+        It should_truncate_negative_int = () => ((Octet) int.MinValue).ShouldEqual(Octet.Zero);
+        It should_truncate_positive_int = () => ((Octet) int.MaxValue).ShouldEqual(Octet.Max);
+        It should_truncate_unsigned_int = () => ((Octet) uint.MaxValue).ShouldEqual(Octet.Max);
         }
 
     [Subject(typeof(Octet), "Conversion")]
     public class when_converting_to_an_integer
         {
-        It should_produce_a_positive_signed_int = () => ((int)Octet.Max).ShouldEqual(0b11111111);
-        It should_produce_a_small_unsigned_int = () => ((uint)Octet.Max).ShouldEqual(0b11111111u);
+        It should_produce_a_positive_signed_int = () => ((int) Octet.Max).ShouldEqual(0b11111111);
+        It should_produce_a_small_unsigned_int = () => ((uint) Octet.Max).ShouldEqual(0b11111111u);
         }
     }

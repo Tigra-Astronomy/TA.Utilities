@@ -1,14 +1,16 @@
-﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+﻿// This file is part of the TA.Utils project
+// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// File: MathExtensions.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using System;
 
 namespace TA.Utils.Core
     {
+    /// <summary>Helper methods for mathematical constants, operations and algorithms</summary>
     public static class MathExtensions
         {
         /// <summary>Clips (constrains) a value to within the specified range.</summary>
-        /// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
+        /// <typeparam name="T">A type that implements <see cref="IComparable" />.</typeparam>
         /// <param name="input">The input value.</param>
         /// <param name="minimum">The minimum allowed value.</param>
         /// <param name="maximum">The maximum allowed value.</param>
