@@ -4,10 +4,12 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using Ascom.Utilities.Logging.LoggingService;
 using NLog;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Utils.Logging.NLog
     {
@@ -16,7 +18,7 @@ namespace TA.Utils.Logging.NLog
         private readonly LogEventInfo logEvent;
         private readonly ILogger logger;
 
-        internal NLogLogBuilder(ILogger logger, LogLevel level)
+        internal NlogLogBuilder(ILogger logger, LogLevel level)
             {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -61,6 +63,24 @@ namespace TA.Utils.Logging.NLog
             logEvent.FormatProvider = provider;
             logEvent.Message = format;
             logEvent.Parameters = args;
+            return this;
+            }
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Property(string name, object value)
+            {
+            logEvent.Properties.Add(name, value);
+            return this;
+            }
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Properties(IDictionary<string, object> properties)
+            {
+            var logProperties = properties.Select(p => new KeyValuePair<object, object>(p.Key, p.Value));
+            foreach (var keyValuePair in logProperties)
+                {
+                logEvent.Properties.Add(keyValuePair);
+                }
             return this;
             }
 

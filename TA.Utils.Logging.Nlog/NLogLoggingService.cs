@@ -3,11 +3,16 @@
 // File: NLogLoggingService.cs  Last modified: 2020-07-14@02:43 by Tim Long
 
 using System.IO;
-using Ascom.Utilities.Logging.LoggingService;
 using NLog;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Utils.Logging.NLog
     {
+    /// <summary>
+    /// A logging service that uses NLog as the back-end logger.
+    /// Implements the <see cref="TA.Utils.Core.Diagnostics.ILog" />
+    /// </summary>
+    /// <seealso cref="TA.Utils.Core.Diagnostics.ILog" />
     public sealed class NlogLoggingService : ILog
         {
         private static readonly ILogger DefaultLogger = LogManager.GetCurrentClassLogger();
