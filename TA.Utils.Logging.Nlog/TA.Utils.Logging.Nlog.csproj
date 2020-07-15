@@ -16,11 +16,12 @@
     <PackageTags>log,logging,nlog,service,utility</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>TA.Utils.Logging.Nlog.xml</DocumentationFile>
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>TA.Utils.Logging.Nlog.xml</DocumentationFile>
   </PropertyGroup>
 

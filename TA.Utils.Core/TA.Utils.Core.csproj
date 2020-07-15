@@ -7,7 +7,7 @@
     <Company>Tigra Astronomy</Company>
     <Product>TA.Utilities</Product>
     <Description>A collection of commonly used utility and helper classes</Description>
-    <Copyright>Copyright 2020 Tigra Astronomy, all rights reserved</Copyright>
+    <Copyright>Copyright © 2015-2020 Tigra Astronomy, all rights reserved</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.Utilities</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.Utilities</RepositoryUrl>
@@ -23,7 +23,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>TA.Utils.Core.xml</DocumentationFile>
   </PropertyGroup>
 
