@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace TA.Utils.Core.Diagnostics
     {
-    class DegenerateLogBuilder : IFluentLogBuilder
+    public sealed class DegenerateLogBuilder : IFluentLogBuilder
         {
         /// <inheritdoc />
         public IFluentLogBuilder Exception(Exception exception) => this;

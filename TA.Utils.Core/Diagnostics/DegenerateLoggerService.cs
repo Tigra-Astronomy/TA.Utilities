@@ -16,7 +16,7 @@ namespace TA.Utils.Core.Diagnostics
     ///     This is the default logging service used if non is supplied by the user. The service does
     ///     nothing and produces no output. It is essentially "logging disabled".
     /// </summary>
-    class DegenerateLoggerService : ILog
+    public sealed class DegenerateLoggerService : ILog
         {
         private static IFluentLogBuilder builder = new DegenerateLogBuilder();
         /// <inheritdoc />
