@@ -43,6 +43,7 @@
             <summary>
                 Configures a task to schedule its completion on any available thread. Use this when awaiting
                 tasks in a user interface thread to avoid deadlock issues.
+                This is the recommended best practice for library writers.
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="task">The task to configure.</param>
@@ -52,6 +53,7 @@
             <summary>
                 Configures a task to schedule its completion on any available thread. Use this when awaiting
                 tasks in a user interface thread to avoid deadlock issues.
+                This is the recommended best practice for library writers.
             </summary>
             <param name="task">The task to configure.</param>
             <returns>An awaitable object that may schedule continuation on any thread.</returns>
@@ -67,6 +69,200 @@
             <param name="task">The task.</param>
             <returns>ConfiguredTaskAwaitable.</returns>
             <seealso cref="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread(System.Threading.Tasks.Task)" />
+        </member>
+        <member name="M:TA.Utils.Core.AsyncExtensions.ContinueInCurrentContext(System.Threading.Tasks.Task)">
+            <summary>
+                Configures a task awaiter to schedule continuation on the captured synchronization context.
+                What happens next depends on the current synchronization context.
+                In a Single Threaded Apartment (STA thread) such as a UI thread, the continuation should
+                execute on the same thread. However in a free threaded context, the continuation can
+                still happen on a different thread. This can be risky when the awaiter is a single
+                threaded apartment (STA) thread. If the awaiter blocks waiting for the task, then
+                the continuation may never execute, preventign completion and resulting in deadlock.
+                Use with care.
+            </summary>
+            <param name="task">The task.</param>
+            <returns>ConfiguredTaskAwaitable.</returns>
+            <seealso cref="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread(System.Threading.Tasks.Task)" />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Exception(System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.LoggerName(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Message(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Message(System.String,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Message(System.IFormatProvider,System.String,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Property(System.String,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Properties(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.TimeStamp(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.StackTrace(System.Diagnostics.StackTrace,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Write(System.String,System.String,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.WriteIf(System.Func{System.Boolean},System.String,System.String,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.WriteIf(System.Boolean,System.String,System.String,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:TA.Utils.Core.Diagnostics.DegenerateLoggerService">
+            <summary>
+                This is the default logging service used if non is supplied by the user. The service does
+                nothing and produces no output. It is essentially "logging disabled".
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Trace(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Debug(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Info(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Warning(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Error(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Fatal(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:TA.Utils.Core.Diagnostics.IFluentLogBuilder">
+            <summary>
+            Fluent Log Builder
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Exception(System.Exception)">
+            <summary>
+            Add an exception to the log entry.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.LoggerName(System.String)">
+            <summary>
+            Set the log (source) name. By default, this is the name of the source file.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Message(System.String)">
+            <summary>
+            Sets the message template for the log entry.
+            The message may be a simple plain text string,
+            it may contain numbered substitution tokens like string.Format,
+            or it may contain named substitution tokens enclosed in {braces}
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Message(System.String,System.Object[])">
+            <summary>
+            Sets the message template and property values for the log entry.
+            The format string may use numbered positional placeholders like string.Format,
+            or it may contain named substitution tokens enclosed in {braces}.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Message(System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            Sets the message template and property values for the log entry.
+            The format provider will be used when rendering the property values.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Property(System.String,System.Object)">
+            <summary>
+            Adds a named property and value pair to the log entry.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Properties(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Adds a collection of property/value pairs to the log entry.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.TimeStamp(System.DateTime)">
+            <summary>
+            Sets the time stamp of the log entry.
+            If not set, the log entry will be timed at the moment Write() was called.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.StackTrace(System.Diagnostics.StackTrace,System.Int32)">
+            <summary>
+            Adds a stack trace to the log entry.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Write(System.String,System.String,System.Int32)">
+            <summary>
+            Writes the log entry.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.WriteIf(System.Func{System.Boolean},System.String,System.String,System.Int32)">
+            <summary>
+            Writes the log entry if the supplied predicate is true.
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.WriteIf(System.Boolean,System.String,System.String,System.Int32)">
+            <summary>
+            Writes the log entry if the boolean condition is true.
+            </summary>
+        </member>
+        <member name="T:TA.Utils.Core.Diagnostics.ILog">
+            <summary>
+            Logging service interface
+            </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Trace(System.String)">
+            <summary>
+            Creates a log builder for a log entry with Trace severity.
+            </summary>
+            <param name="callerFilePath">The caller file path.</param>
+            <returns>IFluentLogBuilder.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Debug(System.String)">
+            <summary>
+            Debugs the specified caller file path.
+            </summary>
+            <param name="callerFilePath">The caller file path.</param>
+            <returns>IFluentLogBuilder.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Info(System.String)">
+            <summary>
+            Informations the specified caller file path.
+            </summary>
+            <param name="callerFilePath">The caller file path.</param>
+            <returns>IFluentLogBuilder.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Warning(System.String)">
+            <summary>
+            Warnings the specified caller file path.
+            </summary>
+            <param name="callerFilePath">The caller file path.</param>
+            <returns>IFluentLogBuilder.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Error(System.String)">
+            <summary>
+            Errors the specified caller file path.
+            </summary>
+            <param name="callerFilePath">The caller file path.</param>
+            <returns>IFluentLogBuilder.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Fatal(System.String)">
+            <summary>
+            Fatals the specified caller file path.
+            </summary>
+            <param name="callerFilePath">The caller file path.</param>
+            <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="T:TA.Utils.Core.DisplayEquivalentAttribute">
             <summary>
