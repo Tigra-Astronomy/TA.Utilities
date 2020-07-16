@@ -3,7 +3,7 @@
 # Searches the current directory and child directories recursively.
 
 param (
-    [string]$ApiKey = $null,
+    [string]$ApiKey = $null
     )
 
 if ($ApiKey) { $setApiKey = "-ApiKey " + $ApiKey }
