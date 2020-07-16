@@ -36,5 +36,8 @@ namespace TA.Utils.Core.Diagnostics
 
         /// <inheritdoc />
         public IFluentLogBuilder Fatal(string callerFilePath = null) => builder;
+
+        /// <inheritdoc />
+        public void Shutdown() { }
         }
     }

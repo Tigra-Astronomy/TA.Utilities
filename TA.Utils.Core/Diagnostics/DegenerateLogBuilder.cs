@@ -16,6 +16,12 @@ using System.Diagnostics;
 
 namespace TA.Utils.Core.Diagnostics
     {
+    /// <summary>
+    /// A degenerate log builder that does nothing and produces no output.
+    /// Can be used as a default log builder when logging is disabled.
+    /// Implements the <see cref="TA.Utils.Core.Diagnostics.IFluentLogBuilder" />
+    /// </summary>
+    /// <seealso cref="TA.Utils.Core.Diagnostics.IFluentLogBuilder" />
     public sealed class DegenerateLogBuilder : IFluentLogBuilder
         {
         /// <inheritdoc />

@@ -85,6 +85,14 @@
             <returns>ConfiguredTaskAwaitable.</returns>
             <seealso cref="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread(System.Threading.Tasks.Task)" />
         </member>
+        <member name="T:TA.Utils.Core.Diagnostics.DegenerateLogBuilder">
+            <summary>
+            A degenerate log builder that does nothing and produces no output.
+            Can be used as a default log builder when logging is disabled.
+            Implements the <see cref="T:TA.Utils.Core.Diagnostics.IFluentLogBuilder" />
+            </summary>
+            <seealso cref="T:TA.Utils.Core.Diagnostics.IFluentLogBuilder" />
+        </member>
         <member name="M:TA.Utils.Core.Diagnostics.DegenerateLogBuilder.Exception(System.Exception)">
             <inheritdoc />
         </member>
@@ -143,6 +151,9 @@
             <inheritdoc />
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Fatal(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Shutdown">
             <inheritdoc />
         </member>
         <member name="T:TA.Utils.Core.Diagnostics.IFluentLogBuilder">
@@ -263,6 +274,12 @@
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Shutdown">
+            <summary>
+            Instructs the logging service to shut down.
+            This should flush any buffered log entries and close any open files or streams.
+            </summary>
         </member>
         <member name="T:TA.Utils.Core.DisplayEquivalentAttribute">
             <summary>
