@@ -57,7 +57,7 @@ namespace TA.Utils.Logging.NLog.SampleConsoleApp
                     }
                 catch (SuperstitiousNumberException ex)
                     {
-                    log.Warning()
+                    log.Warn()
                         .Message("Superstitious looking number: {number}", i)
                         .Exception(ex)
                         .Property("SuperstitiousNumbers", SuperstitiousNumbers)

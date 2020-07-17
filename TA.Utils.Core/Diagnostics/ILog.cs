@@ -45,7 +45,7 @@ namespace TA.Utils.Core.Diagnostics
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Warning([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Warn([CallerFilePath] string callerFilePath = null);
 
         /// <summary>
         /// Errors the specified caller file path.

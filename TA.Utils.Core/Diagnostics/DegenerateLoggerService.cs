@@ -29,7 +29,7 @@ namespace TA.Utils.Core.Diagnostics
         public IFluentLogBuilder Info(string callerFilePath = null) => builder;
 
         /// <inheritdoc />
-        public IFluentLogBuilder Warning(string callerFilePath = null) => builder;
+        public IFluentLogBuilder Warn(string callerFilePath = null) => builder;
 
         /// <inheritdoc />
         public IFluentLogBuilder Error(string callerFilePath = null) => builder;
