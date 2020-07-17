@@ -158,5 +158,10 @@ namespace TA.Utils.Logging.NLog
             if (callerMethodName != null || callerFilePath != null || callerLineNumber != 0)
                 logEvent.SetCallerInfo(null, callerMethodName, callerFilePath, callerLineNumber);
         }
+
+        /// <summary>
+        /// Builds and returns the <see cref="LogEventInfo"/> without writing it to the log.
+        /// </summary>
+        internal LogEventInfo Build() => logEvent;
     }
 }

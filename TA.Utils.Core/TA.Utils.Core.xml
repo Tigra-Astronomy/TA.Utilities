@@ -144,7 +144,7 @@
         <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Info(System.String)">
             <inheritdoc />
         </member>
-        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Warning(System.String)">
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Warn(System.String)">
             <inheritdoc />
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.Error(System.String)">
@@ -254,7 +254,7 @@
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
-        <member name="M:TA.Utils.Core.Diagnostics.ILog.Warning(System.String)">
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.Warn(System.String)">
             <summary>
             Warnings the specified caller file path.
             </summary>

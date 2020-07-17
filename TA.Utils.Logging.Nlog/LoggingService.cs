@@ -43,7 +43,7 @@ namespace TA.Utils.Logging.NLog
             }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Warning([CallerFilePath] string callerFilePath = null)
+        public IFluentLogBuilder Warn([CallerFilePath] string callerFilePath = null)
             {
             return CreateLogBuilder(LogLevel.Warn, callerFilePath);
             }
