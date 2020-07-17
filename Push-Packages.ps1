@@ -2,6 +2,12 @@
 # Assumes that the API key for the relevant feeds has been installed in NuGet.
 # Searches the current directory and child directories recursively.
 
+param (
+    [string]$ApiKey = $null
+    )
+
+if ($ApiKey) { $setApiKey = "-ApiKey " + $ApiKey }
+
 $packageFeed = "https://www.myget.org/F/tigra-astronomy/api/v2/package"
 $symbolFeed = "https://www.myget.org/F/tigra-astronomy/api/v3/index.json"
 
@@ -11,10 +17,10 @@ foreach ($package in $releasePackages)
 {
     if ($package.Name -like "*.snupkg")
     {
-        NuGet.exe push -Source $symbolFeed $package
+        NuGet.exe push -Source $symbolFeed $package $setApiKey
     }
     else
     {
-        NuGet.exe push -Source $packageFeed $package
+        NuGet.exe push -Source $packageFeed $package $setApiKey
     }
 }

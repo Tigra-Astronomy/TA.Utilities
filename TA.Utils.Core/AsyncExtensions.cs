@@ -36,6 +36,7 @@ namespace TA.Utils.Core
         /// <summary>
         ///     Configures a task to schedule its completion on any available thread. Use this when awaiting
         ///     tasks in a user interface thread to avoid deadlock issues.
+        ///     This is the recommended best practice for library writers.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="task">The task to configure.</param>
@@ -48,6 +49,7 @@ namespace TA.Utils.Core
         /// <summary>
         ///     Configures a task to schedule its completion on any available thread. Use this when awaiting
         ///     tasks in a user interface thread to avoid deadlock issues.
+        ///     This is the recommended best practice for library writers.
         /// </summary>
         /// <param name="task">The task to configure.</param>
         /// <returns>An awaitable object that may schedule continuation on any thread.</returns>
@@ -66,7 +68,27 @@ namespace TA.Utils.Core
         /// <param name="task">The task.</param>
         /// <returns>ConfiguredTaskAwaitable.</returns>
         /// <seealso cref="ContinueOnAnyThread" />
+        [Obsolete("Use ContinueInCurrentContext() instead")]
         public static ConfiguredTaskAwaitable ContinueOnCurrentThread(this Task task)
+            {
+            return task.ConfigureAwait(continueOnCapturedContext: true);
+            }
+
+        /// <summary>
+        ///     Configures a task awaiter to schedule continuation on the captured synchronization context.
+        ///     What happens next depends on the current synchronization context.
+        ///     In a Single Threaded Apartment (STA thread) such as a UI thread, the continuation should
+        ///     execute on the same thread. However in a free threaded context, the continuation can
+        ///     still happen on a different thread. This can be risky when the awaiter is a single
+        ///     threaded apartment (STA) thread. If the awaiter blocks waiting for the task, then
+        ///     the continuation may never execute, preventign completion and resulting in deadlock.
+        ///     Use with care.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <returns>ConfiguredTaskAwaitable.</returns>
+        /// <seealso cref="ContinueOnAnyThread" />
+
+        public static ConfiguredTaskAwaitable ContinueInCurrentContext(this Task task)
             {
             return task.ConfigureAwait(continueOnCapturedContext: true);
             }

@@ -6,10 +6,14 @@
 
   <ItemGroup>
     <PackageReference Include="Machine.Specifications.Should" Version="1.0.0" />
+    <PackageReference Include="Machine.Specifications.Runner.VisualStudio" Version="2.10.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="NLog" Version="4.7.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TA.Utils.Core\TA.Utils.Core.csproj" />
+    <ProjectReference Include="..\TA.Utils.Logging.Nlog\TA.Utils.Logging.Nlog.csproj" />
   </ItemGroup>
 
 </Project>

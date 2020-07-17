@@ -1,21 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.0</Version>
     <Authors>Tim Long</Authors>
     <Company>Tigra Astronomy</Company>
     <Product>TA.Utilities</Product>
-    <Description>A collection of commonly used utility and helper classes</Description>
-    <Copyright>Copyright © 2015-2020 Tigra Astronomy, all rights reserved</Copyright>
+    <Description>A logging service that uses NLog as the back-end.</Description>
+    <Copyright>Copyright © 2020 Tigra Astronomy, all rights reserved</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.Utilities</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.Utilities</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>utilities</PackageTags>
-    <AssemblyVersion>0.0.0.0</AssemblyVersion>
-    <FileVersion>0.0.0.0</FileVersion>
-    <Version>0.0.0</Version>
+    <PackageTags>log,logging,nlog,service,utility</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -24,7 +22,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>TA.Utils.Core.xml</DocumentationFile>
+    <DocumentationFile>TA.Utils.Logging.Nlog.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +30,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NLog" Version="4.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TA.Utils.Core\TA.Utils.Core.csproj" />
   </ItemGroup>
 
 </Project>
