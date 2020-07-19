@@ -4,7 +4,7 @@
 
 param (
     [string]$ApiKey = $null
-    )
+)
 
 if ($ApiKey) { $setApiKey = "-ApiKey " + $ApiKey }
 
@@ -13,14 +13,20 @@ $symbolFeed = "https://www.myget.org/F/tigra-astronomy/api/v3/index.json"
 
 $allPackages = Get-ChildItem -Recurse | Where-Object { $_.Name -match '^.*\.s?nupkg$' }
 $releasePackages = $allPackages | Where-Object { $_.DirectoryName -match 'Release' }
-foreach ($package in $releasePackages)
-{
-    if ($package.Name -like "*.snupkg")
-    {
+
+if ($releasePackages) {
+    $releasePackages | Format-Table | Write-Output
+}
+else {
+    Write-Host "No release packages found"
+    Exit
+}
+
+foreach ($package in $releasePackages) {
+    if ($package.Name -like "*.snupkg") {
         NuGet.exe push -Source $symbolFeed $package $setApiKey
     }
-    else
-    {
+    else {
         NuGet.exe push -Source $packageFeed $package $setApiKey
     }
 }

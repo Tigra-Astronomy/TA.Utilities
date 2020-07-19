@@ -11,13 +11,13 @@
 // File: DegenerateLoggerService.cs  Last modified: 2020-07-14@09:02 by Tim Long
 
 namespace TA.Utils.Core.Diagnostics
-    {
+{
     /// <summary>
     ///     This is the default logging service used if non is supplied by the user. The service does
     ///     nothing and produces no output. It is essentially "logging disabled".
     /// </summary>
     public sealed class DegenerateLoggerService : ILog
-        {
+    {
         private static IFluentLogBuilder builder = new DegenerateLogBuilder();
         /// <inheritdoc />
         public IFluentLogBuilder Trace(string callerFilePath = null) => builder;
@@ -39,5 +39,8 @@ namespace TA.Utils.Core.Diagnostics
 
         /// <inheritdoc />
         public void Shutdown() { }
-        }
+
+        /// <inheritdoc />
+        public ILog WithAmbientProperty(string name, object value) => this;
     }
+}

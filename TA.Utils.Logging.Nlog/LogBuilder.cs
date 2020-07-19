@@ -18,7 +18,7 @@ namespace TA.Utils.Logging.NLog
         private readonly LogEventInfo logEvent;
         private readonly ILogger logger;
 
-        public LogBuilder(ILogger logger, LogLevel level)
+        public LogBuilder(ILogger logger, LogLevel level, IDictionary<string, object> ambientProperties = null)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -26,6 +26,10 @@ namespace TA.Utils.Logging.NLog
                 throw new ArgumentNullException(nameof(level));
             this.logger = logger;
             logEvent = new LogEventInfo { LoggerName = logger.Name, Level = level };
+            // Add ambient properties to the log event, if there are any.
+            if (ambientProperties?.Any() ?? false)
+                foreach (var property in ambientProperties)
+                    logEvent.Properties[property.Key] = property.Value;
         }
 
         /// <inheritdoc />
