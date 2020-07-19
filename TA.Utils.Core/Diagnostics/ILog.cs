@@ -13,12 +13,12 @@
 using System.Runtime.CompilerServices;
 
 namespace TA.Utils.Core.Diagnostics
-    {
+{
     /// <summary>
     /// Logging service interface
     /// </summary>
     public interface ILog
-        {
+    {
         /// <summary>
         /// Creates a log builder for a log entry with Trace severity.
         /// </summary>
@@ -27,35 +27,36 @@ namespace TA.Utils.Core.Diagnostics
         IFluentLogBuilder Trace([CallerFilePath] string callerFilePath = null);
 
         /// <summary>
-        /// Debugs the specified caller file path.
+        /// Creates a log builder for a log entry with Debug severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Debug([CallerFilePath] string callerFilePath = null);
 
         /// <summary>
-        /// Informations the specified caller file path.
+        /// Creates a log builder for a log entry with Information severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Info([CallerFilePath] string callerFilePath = null);
 
         /// <summary>
-        /// Warnings the specified caller file path.
+        /// Creates a log builder for a log entry with Warning severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Warn([CallerFilePath] string callerFilePath = null);
 
         /// <summary>
-        /// Errors the specified caller file path.
+        /// Creates a log builder for a log entry with Error severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Error([CallerFilePath] string callerFilePath = null);
 
         /// <summary>
-        /// Fatals the specified caller file path.
+        /// Creates a log builder for a log entry with Fatal severity.
+        /// Writing a Fatal log entry also terminates the process.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
@@ -64,7 +65,15 @@ namespace TA.Utils.Core.Diagnostics
         /// <summary>
         /// Instructs the logging service to shut down.
         /// This should flush any buffered log entries and close any open files or streams.
+        /// It is best practice to call <c>Shutdown</c> before exiting from the program.
         /// </summary>
         void Shutdown();
-        }
+
+        /// <summary>
+        /// Sets an "ambient property" that should be included in all log events.
+        /// Once added, the property persists for the lifetim of the instance.
+        /// Useful for loggers that support semantic logging.
+        /// </summary>
+        ILog WithAmbientProperty(string name, object value);
     }
+}
