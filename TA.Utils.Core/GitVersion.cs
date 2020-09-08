@@ -7,14 +7,14 @@ using System.Linq;
 using System.Reflection;
 
 namespace TA.Utils.Core
-    {
+{
     /// <summary>
     ///     Provides a set of read-only properties for accessing version information that was injected by
     ///     GitVersion as part of the build process.
     /// </summary>
     /// <seealso cref="SemanticVersion" />
     public static class GitVersion
-        {
+    {
         /// <summary>The type injected by GitVersion during the build process, containing version information.</summary>
         private static readonly Type InjectedVersion = ReflectInjectedGitVersionType();
 
@@ -65,23 +65,28 @@ namespace TA.Utils.Core
         /// <seealso cref="SemanticVersion" />
         public static string GitPatchVersion => InjectedVersion.GitVersionField("Patch");
 
+        /// <summary>Gets the name of the git branch from which the assembly was built.</summary>
+        /// <value>The git branch name, as a string.</value>
+        /// <seealso cref="SemanticVersion" />
+        public static string GitBranchName => InjectedVersion.GitVersionField("BranchName");
+
         /// <summary>Uses reflection to fetch the value of a member field of the injected version information.</summary>
         /// <param name="gitVersionInformationType">Type of the git version information.</param>
         /// <param name="fieldName">Name of the field.</param>
         /// <returns>A string containing the field value, or "undefined".</returns>
         private static string GitVersionField(this Type gitVersionInformationType, string fieldName)
-            {
+        {
             var versionField = gitVersionInformationType?.GetField(fieldName);
             return versionField?.GetValue(null).ToString() ?? "undefined";
-            }
+        }
 
         /// <summary>Reflects the type of the injected git version information.</summary>
         /// <returns>Type.</returns>
         private static Type ReflectInjectedGitVersionType()
-            {
+        {
             var assembly = Assembly.GetEntryAssembly();
             var type = assembly.GetTypes().SingleOrDefault(t => t.Name == "GitVersionInformation");
             return type;
-            }
         }
     }
+}

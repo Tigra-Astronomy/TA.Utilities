@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /TA.Utils.Logging.Nlog/TA.Utils.Logging.Nlog.xml
+TA.Utils.Core/TA.Utils.Core.xml
