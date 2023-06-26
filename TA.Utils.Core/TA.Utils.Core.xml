@@ -383,6 +383,11 @@
             <value>The git patch version, as a string.</value>
             <seealso cref="T:TA.Utils.Core.SemanticVersion" />
         </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitBranchName">
+            <summary>Gets the name of the git branch from which the assembly was built.</summary>
+            <value>The git branch name, as a string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
         <member name="M:TA.Utils.Core.GitVersion.GitVersionField(System.Type,System.String)">
             <summary>Uses reflection to fetch the value of a member field of the injected version information.</summary>
             <param name="gitVersionInformationType">Type of the git version information.</param>
