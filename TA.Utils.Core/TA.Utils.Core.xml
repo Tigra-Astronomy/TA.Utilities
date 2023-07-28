@@ -333,7 +333,7 @@
             </summary>
             <seealso cref="T:TA.Utils.Core.SemanticVersion" />
         </member>
-        <member name="F:TA.Utils.Core.GitVersion.InjectedVersion">
+        <member name="F:TA.Utils.Core.GitVersion.injectedVersion">
             <summary>The type injected by GitVersion during the build process, containing version information.</summary>
         </member>
         <member name="P:TA.Utils.Core.GitVersion.GitInformationalVersion">
@@ -387,6 +387,11 @@
             <summary>Gets the name of the git branch from which the assembly was built.</summary>
             <value>The git branch name, as a string.</value>
             <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="M:TA.Utils.Core.GitVersion.UnitTestNullInjectedVersionType">
+            <summary>
+                A method intended to be used for unit testing to set the injected version type to null. [#2]
+            </summary>
         </member>
         <member name="M:TA.Utils.Core.GitVersion.GitVersionField(System.Type,System.String)">
             <summary>Uses reflection to fetch the value of a member field of the injected version information.</summary>

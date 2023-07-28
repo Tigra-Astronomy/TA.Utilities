@@ -2,6 +2,7 @@
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">This file is part of the $SOLUTION$ project&#xD;
 Copyright © 2016-$CURRENT_YEAR$ Tigra Astronomy, all rights reserved.&#xD;
 File: $FILENAME$  Last modified: $CURRENT_YEAR$-$CURRENT_MONTH$-$CURRENT_DAY$@$CURRENT_TIME$ by $USER_NAME$</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateStaticFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=C416A94FC578474BAE38CF2376C5BEA9/AbsolutePath/@EntryValue">C:\Users\Tim\source\repos\TA.Utils\TA.Utils.Specifications\TA.Utils.Specifications.csproj.DotSettings</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=C416A94FC578474BAE38CF2376C5BEA9/RelativePath/@EntryValue">..\TA.Utils.Specifications\TA.Utils.Specifications.csproj.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=C416A94FC578474BAE38CF2376C5BEA9/@KeyIndexDefined">True</s:Boolean>
