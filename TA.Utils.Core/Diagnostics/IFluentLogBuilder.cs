@@ -11,84 +11,85 @@
 // File: IFluentLogBuilder.cs  Last modified: 2020-07-14@07:01 by Tim Long
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
 namespace TA.Utils.Core.Diagnostics
     {
     /// <summary>
-    /// Fluent Log Builder
+    ///     Fluent Log Builder
     /// </summary>
     public interface IFluentLogBuilder
         {
         /// <summary>
-        /// Add an exception to the log entry.
+        ///     Add an exception to the log entry.
         /// </summary>
         IFluentLogBuilder Exception(Exception exception);
 
         /// <summary>
-        /// Set the log (source) name. By default, this is the name of the source file.
+        ///     Set the log (source) name. By default, this is usually the name of the class or source file.
         /// </summary>
         IFluentLogBuilder LoggerName(string loggerName);
 
         /// <summary>
-        /// Sets the message template for the log entry.
-        /// The message may be a simple plain text string,
-        /// it may contain numbered substitution tokens like string.Format,
-        /// or it may contain named substitution tokens enclosed in {braces}
+        ///     Sets the message template for the log entry.
+        ///     The message may be a simple plain text string,
+        ///     it may contain numbered substitution tokens like string.Format,
+        ///     or it may contain named substitution tokens enclosed in {braces}
         /// </summary>
-        IFluentLogBuilder Message(string message);
+        IFluentLogBuilder Message([StructuredMessageTemplate] string message);
 
         /// <summary>
-        /// Sets the message template and property values for the log entry.
-        /// The format string may use numbered positional placeholders like string.Format,
-        /// or it may contain named substitution tokens enclosed in {braces}.
+        ///     Sets the message template and property values for the log entry.
+        ///     The format string may use numbered positional placeholders like string.Format,
+        ///     or it may contain named substitution tokens enclosed in {braces}.
         /// </summary>
-        IFluentLogBuilder Message(string format, params object[] args);
+        IFluentLogBuilder Message([StructuredMessageTemplate] string format, params object[] args);
 
         /// <summary>
-        /// Sets the message template and property values for the log entry.
-        /// The format provider will be used when rendering the property values.
+        ///     Sets the message template and property values for the log entry.
+        ///     The format provider will be used when rendering the property values.
         /// </summary>
-        IFluentLogBuilder Message(IFormatProvider provider, string format, params object[] args);
+        IFluentLogBuilder Message(IFormatProvider provider, [StructuredMessageTemplate] string format,
+            params object[] args);
 
         /// <summary>
-        /// Adds a named property and value pair to the log entry.
+        ///     Adds a named property and value pair to the log entry.
         /// </summary>
         IFluentLogBuilder Property(string name, object value);
 
         /// <summary>
-        /// Adds a collection of property/value pairs to the log entry.
+        ///     Adds a collection of property/value pairs to the log entry.
         /// </summary>
-        IFluentLogBuilder Properties(IDictionary<string,object> properties);
+        IFluentLogBuilder Properties(IDictionary<string, object> properties);
 
         /// <summary>
-        /// Sets the time stamp of the log entry.
-        /// If not set, the log entry will be timed at the moment Write() was called.
+        ///     Sets the time stamp of the log entry.
+        ///     If not set, the log entry will be timed at the moment Write() was called.
         /// </summary>
         IFluentLogBuilder TimeStamp(DateTime timeStamp);
 
         /// <summary>
-        /// Adds a stack trace to the log entry.
+        ///     Adds a stack trace to the log entry.
         /// </summary>
         IFluentLogBuilder StackTrace(StackTrace stackTrace, int userStackFrame);
 
         /// <summary>
-        /// Writes the log entry.
+        ///     Writes the log entry.
         /// </summary>
         void Write([CallerMemberName] string callerMemberName = null, [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = default);
 
         /// <summary>
-        /// Writes the log entry if the supplied predicate is true.
+        ///     Writes the log entry if the supplied predicate is true.
         /// </summary>
         void WriteIf(Func<bool> condition, [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);
 
         /// <summary>
-        /// Writes the log entry if the boolean condition is true.
+        ///     Writes the log entry if the boolean condition is true.
         /// </summary>
         void WriteIf(bool condition, [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);

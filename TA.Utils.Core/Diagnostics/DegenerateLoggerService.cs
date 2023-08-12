@@ -42,5 +42,8 @@ namespace TA.Utils.Core.Diagnostics
 
         /// <inheritdoc />
         public ILog WithAmbientProperty(string name, object value) => this;
+
+        /// <inheritdoc />
+        public ILog WithName(string logSourceName) => this;
     }
 }

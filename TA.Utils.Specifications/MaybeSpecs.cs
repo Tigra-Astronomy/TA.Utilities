@@ -2,6 +2,7 @@
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 // File: MaybeSpecs.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
+using System;
 using System.Linq;
 using Machine.Specifications;
 using TA.Utils.Core;
@@ -25,5 +26,12 @@ namespace TA.Utils.Specifications
         It should_contain_the_source_object = () => maybe.Single().ShouldBeTheSameAs(source);
         static Maybe<object> maybe;
         static object source = new object();
+        }
+
+    class when_calling_single_on_an_empty_maybe
+        {
+        private Because of = () => exception = Catch.Exception(() => Maybe<int>.Empty.Single());
+        private It should_throw_invalid_operation_exception = () => exception.ShouldBeOfExactType<InvalidOperationException>();
+        private static Exception exception;
         }
     }

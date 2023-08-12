@@ -19,6 +19,7 @@ namespace TA.Utils.Logging.NLog
     {
         private static readonly ILogger DefaultLogger = LogManager.GetCurrentClassLogger();
         private IDictionary<string, object> ambientProperties = new Dictionary<string, object>();
+        private string sourceName = string.Empty;
 
         /// <summary>Static initializer can be used to perform 1-time NLog configurations.</summary>
         static LoggingService()
@@ -64,15 +65,31 @@ namespace TA.Utils.Logging.NLog
 
         private IFluentLogBuilder CreateLogBuilder(LogLevel logLevel, string callerFilePath)
         {
-            string name = !string.IsNullOrWhiteSpace(callerFilePath)
-                ? Path.GetFileNameWithoutExtension(callerFilePath)
-                : null;
+            var name = GetLoggerName(callerFilePath);
             var logger = string.IsNullOrWhiteSpace(name) ? DefaultLogger : LogManager.GetLogger(name);
             var builder = new LogBuilder(logger, logLevel, ambientProperties);
             return builder;
         }
 
-        /// <inheritdoc />
+    /// <summary>
+    /// Gets the name for this logger instance.
+    /// Any explicitly set user preference takes priority.
+    /// Otherwise, we try to build a logger name from the caller file path.
+    /// If all else fails, we return <see cref="string.Empty"/>.
+    /// </summary>
+    /// <param name="callerFilePath">The name of the caller's source file, if known.</param>
+    /// <returns>A string containing the suggested logger name.</returns>
+        private string GetLoggerName(string callerFilePath)
+        {
+            if (!string.IsNullOrWhiteSpace(sourceName)) 
+                return sourceName;
+            var name = !string.IsNullOrWhiteSpace(callerFilePath)
+                ? Path.GetFileNameWithoutExtension(callerFilePath)
+                : string.Empty;
+            return name;
+        }
+
+    /// <inheritdoc />
         public void Shutdown() => LogManager.Shutdown();
 
         /// <inheritdoc />
@@ -80,6 +97,13 @@ namespace TA.Utils.Logging.NLog
         {
             ambientProperties[name] = value;
             return this;
+        }
+
+    /// <inheritdoc />
+    public ILog WithName(string logSourceName)
+        {
+        this.sourceName = logSourceName;
+        return this;
         }
     }
 }
