@@ -72,6 +72,7 @@ namespace TA.Utils.Core
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Octet other)
             {
+            if (other is null) return false; // equality to a null object is false by definition
             for (var i = 0; i < bits.Length; i++)
                 if (bits[i] != other[i])
                     return false;
@@ -176,7 +177,7 @@ namespace TA.Utils.Core
         ///     Returns a new octet with the specified bit number set to the specified value. Other bits are
         ///     duplicated.
         /// </summary>
-        /// <param name="bit">The bit number to be modified.</param>
+        /// <param name="bitNumber">The bit number to be modified.</param>
         /// <param name="value">The value of the specified bit number.</param>
         /// <returns>A new octet instance with the specified bit number set to the specified value.</returns>
         public Octet WithBitSetTo(int bitNumber, bool value)
@@ -269,6 +270,8 @@ namespace TA.Utils.Core
         /// <returns><c>true</c> if the octets are equal; otherwise <c>false</c>.</returns>
         public static bool operator ==(Octet left, Octet right)
             {
+            if (left is null) return false;
+            if (right is null) return false;
             return left.Equals(right);
             }
 
@@ -278,6 +281,8 @@ namespace TA.Utils.Core
         /// <returns><c>true</c> if the octets are not equal; otherwise <c>false</c>.</returns>
         public static bool operator !=(Octet left, Octet right)
             {
+            if (left is null) return true; // Cannot be equal if either instance is null
+            if (right is null) return true;
             return !left.Equals(right);
             }
 

@@ -50,7 +50,7 @@ namespace TA.Utils.Core
         public static string Head(this string source, int length)
             {
             if (length > source.Length)
-                throw new ArgumentOutOfRangeException("source",
+                throw new ArgumentOutOfRangeException(nameof(source),
                     "The specified length is greater than the length of the string.");
             return source.Substring(0, length);
             }
@@ -113,7 +113,7 @@ namespace TA.Utils.Core
             {
             var srcLength = source.Length;
             if (length > srcLength)
-                throw new ArgumentOutOfRangeException("source",
+                throw new ArgumentOutOfRangeException(nameof(source),
                     "The specified length is greater than the length of the string.");
             return source.Substring(srcLength - length, length);
             }

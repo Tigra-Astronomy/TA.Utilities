@@ -22,10 +22,10 @@ namespace TA.Utils.Specifications
         {
         Because of = () => maybe = source.AsMaybe();
         It should_have_content = () => maybe.Any().ShouldBeTrue();
-        It should_not_be_empty = () => maybe.None.ShouldBeFalse();
+        It should_not_be_empty = () => maybe.IsEmpty.ShouldBeFalse();
         It should_contain_the_source_object = () => maybe.Single().ShouldBeTheSameAs(source);
         static Maybe<object> maybe;
-        static object source = new object();
+        static object source = new();
         }
 
     class when_calling_single_on_an_empty_maybe

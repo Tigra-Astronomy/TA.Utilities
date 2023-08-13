@@ -95,6 +95,8 @@ namespace TA.Utils.Specifications
     [Subject(typeof(Octet), "Immutability")]
     public class when_mutating_an_octet
         {
+        // ReSharper disable once EqualExpressionComparison
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         It should_intern_well_known_instances = () => ReferenceEquals(Octet.Zero, Octet.Zero).ShouldBeTrue();
         It should_be_immutable = () => ReferenceEquals(immutable.WithBitSetTo(3, false), immutable).ShouldBeFalse();
         static Octet immutable = Octet.Max;

@@ -403,11 +403,11 @@ namespace TA.Utils.Core
 
         private static int CompareBuildVersions(Maybe<string> leftVersion, Maybe<string> rightVersion)
             {
-            if (leftVersion.None && rightVersion.None)
+            if (leftVersion.IsEmpty && rightVersion.IsEmpty)
                 return 0; // equal if both absent
-            if (leftVersion.Any() && rightVersion.None)
+            if (leftVersion.Any() && rightVersion.IsEmpty)
                 return 1;
-            if (leftVersion.None && rightVersion.Any())
+            if (leftVersion.IsEmpty && rightVersion.Any())
                 return -1;
             int result = CompareSegmentBySegment(leftVersion.Single(), rightVersion.Single());
             return result;
@@ -417,7 +417,6 @@ namespace TA.Utils.Core
             {
             Contract.Requires(!string.IsNullOrEmpty(left));
             Contract.Requires(!string.IsNullOrEmpty(right));
-            int result;
             var dotDelimiter = new[] {'.'};
             var leftSegments = left.Split(dotDelimiter, StringSplitOptions.RemoveEmptyEntries);
             var rightSegments = right.Split(dotDelimiter, StringSplitOptions.RemoveEmptyEntries);
@@ -431,7 +430,7 @@ namespace TA.Utils.Core
                     return 1;
 
                 // Compare the next segment to see if we can determine inequality.
-                result = CompareSegmentPreferNumericSort(leftSegments[i], rightSegments[i]);
+                var result = CompareSegmentPreferNumericSort(leftSegments[i], rightSegments[i]);
                 if (result != 0)
                     return result;
 
@@ -457,13 +456,13 @@ namespace TA.Utils.Core
         private static int ComparePrereleaseVersions(Maybe<string> leftVersion, Maybe<string> rightVersion)
             {
             // If the prerelease segment is absent in both instances, then they are considered equal.
-            if (leftVersion.None && rightVersion.None)
+            if (leftVersion.IsEmpty && rightVersion.IsEmpty)
                 return 0;
 
             // By definition, a prerelease version is less than the absence of a prerelease version - this is a bit counterintuitive.
-            if (leftVersion.Any() && rightVersion.None)
+            if (leftVersion.Any() && rightVersion.IsEmpty)
                 return -1;
-            if (leftVersion.None && rightVersion.Any())
+            if (leftVersion.IsEmpty && rightVersion.Any())
                 return 1;
             int result = CompareSegmentBySegment(leftVersion.Single(), rightVersion.Single());
             return result;

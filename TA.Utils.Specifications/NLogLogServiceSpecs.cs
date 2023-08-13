@@ -31,6 +31,7 @@ namespace TA.Utils.Specifications
 
     internal class when_creating_a_named_logger : with_caller_info_context
         {
+        // ReSharper disable once ExplicitCallerInfoArgument
         Establish context = () => builder = (LogBuilder)new LoggingService().Info("Roger");
         It should_change_the_name = () => builder.Build().LoggerName.ShouldEqual("Roger");
         static LogBuilder builder;
@@ -38,6 +39,7 @@ namespace TA.Utils.Specifications
 
     internal class when_creating_and_building_a_named_logger : with_caller_info_context
         {
+        // ReSharper disable once ExplicitCallerInfoArgument
         Establish context = () => builder = (LogBuilder)new LoggingService().Info("Roger");
         Because of = () => builder.LoggerName("Jim");
         It should_change_the_name = () => builder.Build().LoggerName.ShouldEqual("Jim");
