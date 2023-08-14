@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Utils.Logging.NLog.SampleConsoleApp", "TA.Utils.Logging.NLog.SampleConsoleApp\TA.Utils.Logging.NLog.SampleConsoleApp.csproj", "{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Utils.Benchmarks", "TA.Utils.Benchmarks\TA.Utils.Benchmarks.csproj", "{8C4CF2BE-301A-4471-A574-846BFE537844}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

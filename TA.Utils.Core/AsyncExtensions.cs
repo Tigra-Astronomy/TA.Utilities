@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Utils project
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-// File: AsyncExtensions.cs  Last modified: 2020-07-13@02:11 by Tim Long
+// Copyright © 2016-2023 Timtek Systems Limited, all rights reserved.
+// File: AsyncExtensions.cs  Last modified: 2023-08-14@01:28 by Tim Long
 
 using System;
 using System.Runtime.CompilerServices;
@@ -27,9 +27,11 @@ namespace TA.Utils.Core
         public static async Task<T> WithCancellation<T>(this Task<T> task, CancellationToken cancellationToken)
             {
             var tcs = new TaskCompletionSource<bool>();
-            using (cancellationToken.Register(s => ((TaskCompletionSource<bool>) s).TrySetResult(true), tcs))
+            using (cancellationToken.Register(s => ((TaskCompletionSource<bool>)s).TrySetResult(true), tcs))
+                {
                 if (task != await Task.WhenAny(task, tcs.Task))
                     throw new OperationCanceledException(cancellationToken);
+                }
             return task.Result;
             }
 
@@ -43,19 +45,21 @@ namespace TA.Utils.Core
         /// <returns>An awaitable object that may schedule continuation on any thread.</returns>
         public static ConfiguredTaskAwaitable<TResult> ContinueOnAnyThread<TResult>(this Task<TResult> task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: false);
+            return task.ConfigureAwait(false);
             }
 
         /// <summary>
-        ///     Configures a task to schedule its completion on any available thread. Use this when awaiting
+        ///     Configures a task awaiter to schedule its completion on any available thread. Use this when awaiting
         ///     tasks in a user interface thread to avoid deadlock issues.
-        ///     This is the recommended best practice for library writers.
+        ///     This is the recommended best practice for general purpose library writers.
+        ///     There is no need to post library internal async operations back to the UI thread,
+        ///     and doing so could potentially lead to a deadlock if the UI thread is blocked.
         /// </summary>
         /// <param name="task">The task to configure.</param>
         /// <returns>An awaitable object that may schedule continuation on any thread.</returns>
         public static ConfiguredTaskAwaitable ContinueOnAnyThread(this Task task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: false);
+            return task.ConfigureAwait(false);
             }
 
         /// <summary>
@@ -68,10 +72,10 @@ namespace TA.Utils.Core
         /// <param name="task">The task.</param>
         /// <returns>ConfiguredTaskAwaitable.</returns>
         /// <seealso cref="ContinueOnAnyThread" />
-        [Obsolete("Use ContinueInCurrentContext() instead")]
+        [Obsolete("Use ContinueInCurrentContext() instead", true)]
         public static ConfiguredTaskAwaitable ContinueOnCurrentThread(this Task task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: true);
+            return task.ConfigureAwait(true);
             }
 
         /// <summary>
@@ -81,16 +85,15 @@ namespace TA.Utils.Core
         ///     execute on the same thread. However in a free threaded context, the continuation can
         ///     still happen on a different thread. This can be risky when the awaiter is a single
         ///     threaded apartment (STA) thread. If the awaiter blocks waiting for the task, then
-        ///     the continuation may never execute, preventign completion and resulting in deadlock.
-        ///     Use with care.
+        ///     the continuation may never execute, preventing completion and resulting in deadlock.
+        ///     Use with care, especially in general purpose libraries.
         /// </summary>
         /// <param name="task">The task.</param>
         /// <returns>ConfiguredTaskAwaitable.</returns>
         /// <seealso cref="ContinueOnAnyThread" />
-
         public static ConfiguredTaskAwaitable ContinueInCurrentContext(this Task task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: true);
+            return task.ConfigureAwait(true);
             }
         }
     }
