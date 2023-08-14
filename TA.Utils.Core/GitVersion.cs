@@ -16,59 +16,68 @@ namespace TA.Utils.Core
     public static class GitVersion
     {
         /// <summary>The type injected by GitVersion during the build process, containing version information.</summary>
-        private static readonly Type InjectedVersion = ReflectInjectedGitVersionType();
+        private static Type injectedVersion = ReflectInjectedGitVersionType();
 
         /// <summary>Gets the git informational version.</summary>
         /// <value>The git informational version.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitInformationalVersion => InjectedVersion.GitVersionField("InformationalVersion");
+        public static string GitInformationalVersion =>
+            injectedVersion?.GitVersionField("InformationalVersion") ?? GitFullSemVer;
 
         /// <summary>Gets the git commit SHA.</summary>
         /// <value>The git commit SHA.</value>
-        public static string GitCommitSha => InjectedVersion.GitVersionField("Sha");
+        public static string GitCommitSha => injectedVersion?.GitVersionField("Sha") ?? string.Empty;
 
         /// <summary>Gets the git commit short SHA.</summary>
         /// <value>The git commit short SHA.</value>
-        public static string GitCommitShortSha => InjectedVersion.GitVersionField("ShortSha");
+        public static string GitCommitShortSha => injectedVersion?.GitVersionField("ShortSha") ?? string.Empty;
 
         /// <summary>Gets the git commit date.</summary>
         /// <value>The git commit date.</value>
-        public static string GitCommitDate => InjectedVersion.GitVersionField("CommitDate");
+        public static string GitCommitDate => injectedVersion?.GitVersionField("CommitDate") ?? string.Empty;
 
         /// <summary>Gets the git semantic version string.</summary>
         /// <value>The git semantic version string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitSemVer => InjectedVersion.GitVersionField("SemVer");
+        public static string GitSemVer => injectedVersion?.GitVersionField("SemVer") ?? "0.0.0";
 
         /// <summary>Gets the git full semantic version string.</summary>
         /// <value>The git full semantic version string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitFullSemVer => InjectedVersion.GitVersionField("FullSemVer");
+        public static string GitFullSemVer => injectedVersion?.GitVersionField("FullSemVer") ?? "0.0.0-unversioned";
 
         /// <summary>Gets the git build metadata.</summary>
         /// <value>The git build metadata string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitBuildMetadata => InjectedVersion.GitVersionField("FullBuildMetaData");
+        public static string GitBuildMetadata => injectedVersion?.GitVersionField("FullBuildMetaData") ?? string.Empty;
 
         /// <summary>Gets the git major version.</summary>
         /// <value>The git major version, as a string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitMajorVersion => InjectedVersion.GitVersionField("Major");
+        public static string GitMajorVersion => injectedVersion?.GitVersionField("Major") ?? "0";
 
         /// <summary>Gets the git minor version.</summary>
         /// <value>The git minor version, as a string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitMinorVersion => InjectedVersion.GitVersionField("Minor");
+        public static string GitMinorVersion => injectedVersion?.GitVersionField("Minor") ?? "0";
 
         /// <summary>Gets the git patch version.</summary>
         /// <value>The git patch version, as a string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitPatchVersion => InjectedVersion.GitVersionField("Patch");
+        public static string GitPatchVersion => injectedVersion?.GitVersionField("Patch") ?? "0";
 
         /// <summary>Gets the name of the git branch from which the assembly was built.</summary>
         /// <value>The git branch name, as a string.</value>
         /// <seealso cref="SemanticVersion" />
-        public static string GitBranchName => InjectedVersion.GitVersionField("BranchName");
+        public static string GitBranchName => injectedVersion?.GitVersionField("BranchName") ?? string.Empty;
+
+        /// <summary>
+        ///     A method intended to be used for unit testing to set the injected version type to null. [#2]
+        /// </summary>
+        internal static void UnitTestNullInjectedVersionType()
+        {
+            injectedVersion = null;
+        }
 
         /// <summary>Uses reflection to fetch the value of a member field of the injected version information.</summary>
         /// <param name="gitVersionInformationType">Type of the git version information.</param>
@@ -84,7 +93,7 @@ namespace TA.Utils.Core
         /// <returns>Type.</returns>
         private static Type ReflectInjectedGitVersionType()
         {
-            var assembly = Assembly.GetEntryAssembly();
+            var assembly = Assembly.GetEntryAssembly()??Assembly.GetExecutingAssembly();
             var type = assembly.GetTypes().SingleOrDefault(t => t.Name == "GitVersionInformation");
             return type;
         }

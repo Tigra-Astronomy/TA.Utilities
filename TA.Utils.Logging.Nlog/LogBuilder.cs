@@ -3,7 +3,6 @@
 // File: NLogLogBuilder.cs  Last modified: 2020-07-14@03:27 by Tim Long
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -88,28 +87,7 @@ namespace TA.Utils.Logging.NLog
             return this;
         }
 
-        /// <inheritdoc />
-        public IFluentLogBuilder Property(object name, object value)
-        {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-            logEvent.Properties[name] = value;
-            return this;
-        }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Properties(IDictionary properties)
-        {
-            if (properties == null)
-                throw new ArgumentNullException(nameof(properties));
-            foreach (var key in properties.Keys)
-            {
-                logEvent.Properties[key] = properties[key];
-            }
-            return this;
-        }
-
-        /// <inheritdoc />
+    /// <inheritdoc />
         public IFluentLogBuilder TimeStamp(DateTime timeStamp)
         {
             logEvent.TimeStamp = timeStamp;

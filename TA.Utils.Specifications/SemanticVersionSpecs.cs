@@ -31,14 +31,14 @@ namespace TA.Utils.Specifications
     [Subject(typeof(SemanticVersion), "sorting and comparison")]
     public class when_sorting_semantic_versions
         {
-        It should_sort_lower_versions_first = () => v100.ShouldBeLessThan(v101);
-        It should_sort_higher_versions_second = () => v101.ShouldBeGreaterThan(v100);
-        It should_sort_prerelease_versions_before_releases = () => v101pre9.ShouldBeLessThan(v101);
-        It should_prefer_numeric_order_over_lexical_order = () => v101pre9.ShouldBeLessThan(v101pre10);
-        static SemanticVersion v100 = new SemanticVersion("1.0.0");
-        static SemanticVersion v101 = new SemanticVersion("1.0.1");
-        static SemanticVersion v101pre10 = new SemanticVersion("1.0.1-alpha.10");
-        static SemanticVersion v101pre9 = new SemanticVersion("1.0.1-alpha.9");
+        It should_sort_lower_versions_first = () => V100.ShouldBeLessThan(V101);
+        It should_sort_higher_versions_second = () => V101.ShouldBeGreaterThan(V100);
+        It should_sort_prerelease_versions_before_releases = () => V101Pre9.ShouldBeLessThan(V101);
+        It should_prefer_numeric_order_over_lexical_order = () => V101Pre9.ShouldBeLessThan(V101Pre10);
+        static readonly SemanticVersion V100 = new("1.0.0");
+        static readonly SemanticVersion V101 = new("1.0.1");
+        static readonly SemanticVersion V101Pre10 = new("1.0.1-alpha.10");
+        static readonly SemanticVersion V101Pre9 = new("1.0.1-alpha.9");
         }
 
     [Subject(typeof(SemanticVersion), "equality")]
@@ -47,9 +47,9 @@ namespace TA.Utils.Specifications
         It should_require_prerelease_tags_to_match = () => v100p5.ShouldNotEqual(v100p6);
         It should_ignore_missing_build_metadata = () => v100p5.Equals(v100p5b1).ShouldBeTrue();
         It should_ignore_different_build_metadata = () => v100p5b1.Equals(v100p5b2).ShouldBeTrue();
-        static SemanticVersion v100p5 = new SemanticVersion("1.0.0-prerelease.5");
-        static SemanticVersion v100p5b1 = new SemanticVersion("1.0.0-prerelease.5+build.1");
-        static SemanticVersion v100p5b2 = new SemanticVersion("1.0.0-prerelease.5+build.2");
-        static SemanticVersion v100p6 = new SemanticVersion("1.0.0-prerelease.6");
+        static readonly SemanticVersion v100p5 = new("1.0.0-prerelease.5");
+        static readonly SemanticVersion v100p5b1 = new("1.0.0-prerelease.5+build.1");
+        static readonly SemanticVersion v100p5b2 = new("1.0.0-prerelease.5+build.2");
+        static readonly SemanticVersion v100p6 = new("1.0.0-prerelease.6");
         }
     }

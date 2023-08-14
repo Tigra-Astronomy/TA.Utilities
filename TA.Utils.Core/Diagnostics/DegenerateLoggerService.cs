@@ -18,7 +18,7 @@ namespace TA.Utils.Core.Diagnostics
     /// </summary>
     public sealed class DegenerateLoggerService : ILog
     {
-        private static IFluentLogBuilder builder = new DegenerateLogBuilder();
+        private static readonly IFluentLogBuilder builder = new DegenerateLogBuilder();
         /// <inheritdoc />
         public IFluentLogBuilder Trace(string callerFilePath = null) => builder;
 
@@ -42,5 +42,8 @@ namespace TA.Utils.Core.Diagnostics
 
         /// <inheritdoc />
         public ILog WithAmbientProperty(string name, object value) => this;
+
+        /// <inheritdoc />
+        public ILog WithName(string logSourceName) => this;
     }
 }

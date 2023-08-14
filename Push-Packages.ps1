@@ -24,9 +24,10 @@ else {
 
 foreach ($package in $releasePackages) {
     if ($package.Name -like "*.snupkg") {
-        NuGet.exe push -Source $symbolFeed $package $setApiKey
+        #Symbols are supposed to be pushed alongside their related packacge, so no need for a separate push.
+        #NuGet.exe push -Source $symbolFeed $package $setApiKey
     }
     else {
-        NuGet.exe push -Source $packageFeed $package $setApiKey
+        NuGet.exe push -SkipDuplicate -Source $packageFeed $package $setApiKey
     }
 }

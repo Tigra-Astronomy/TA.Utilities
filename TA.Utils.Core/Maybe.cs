@@ -2,10 +2,14 @@
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 // File: Maybe.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace TA.Utils.Core
     {
@@ -21,6 +25,7 @@ namespace TA.Utils.Core
     ///     versus 'error'.  The value of a Maybe cannot be <c>null</c>, because <c>null</c> really means
     ///     'no value' and that is better expressed by using <see cref="P:TA.Utils.Core.Maybe{T}.Empty" />.
     /// </remarks>
+    [ImmutableObject(true)]
     public sealed class Maybe<T> : IEnumerable<T>
         {
         private static readonly Maybe<T> EmptyInstance = new Maybe<T>();
@@ -30,14 +35,15 @@ namespace TA.Utils.Core
         /// <summary>Initializes a new instance of the <see cref="Maybe{T}" /> with no value.</summary>
         private Maybe()
             {
-            values = new T[0];
+            values = Array.Empty<T>();
             }
 
         /// <summary>Initializes a new instance of the <see cref="Maybe{T}" /> with a value.</summary>
         /// <param name="value">The value.</param>
-        private Maybe(T value)
+        private Maybe([NotNull] T value)
             {
-            values = new[] {value};
+            Debug.Assert(value != null);
+            values = new[] { value };
             }
 
         /// <summary>Gets an instance that does not contain a value.</summary>
@@ -53,7 +59,12 @@ namespace TA.Utils.Core
 
         /// <summary>Gets a value indicating whether this <see cref="Maybe{T}" /> is empty (has no value).</summary>
         /// <value><c>true</c> if none; otherwise, <c>false</c>.</value>
+        [Obsolete("Use IsEmpty instead.")]
         public bool None => ReferenceEquals(this, Empty) || !values.Any();
+
+        /// <summary>Gets a value indicating whether this <see cref="Maybe{T}" /> is empty (has no value).</summary>
+        /// <value><c>true</c> if there is no value; otherwise, <c>false</c>.</value>
+        public bool IsEmpty => ReferenceEquals(this, Empty) || !values.Any();
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>
@@ -90,13 +101,11 @@ namespace TA.Utils.Core
 
         /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
-        [Pure]
+        [System.Diagnostics.Contracts.Pure]
         public override string ToString()
             {
             Contract.Ensures(Contract.Result<string>() != null);
-            if (Equals(Empty))
-                return "{no value}";
-            return this.Single().ToString();
+            return IsEmpty ? "{no value}" : this.Single().ToString();
             }
         }
 

@@ -51,9 +51,11 @@
         </member>
         <member name="M:TA.Utils.Core.AsyncExtensions.ContinueOnAnyThread(System.Threading.Tasks.Task)">
             <summary>
-                Configures a task to schedule its completion on any available thread. Use this when awaiting
+                Configures a task awaiter to schedule its completion on any available thread. Use this when awaiting
                 tasks in a user interface thread to avoid deadlock issues.
-                This is the recommended best practice for library writers.
+                This is the recommended best practice for general purpose library writers.
+                There is no need to post library internal async operations back to the UI thread,
+                and doing so could potentially lead to a deadlock if the UI thread is blocked.
             </summary>
             <param name="task">The task to configure.</param>
             <returns>An awaitable object that may schedule continuation on any thread.</returns>
@@ -78,8 +80,8 @@
                 execute on the same thread. However in a free threaded context, the continuation can
                 still happen on a different thread. This can be risky when the awaiter is a single
                 threaded apartment (STA) thread. If the awaiter blocks waiting for the task, then
-                the continuation may never execute, preventign completion and resulting in deadlock.
-                Use with care.
+                the continuation may never execute, preventing completion and resulting in deadlock.
+                Use with care, especially in general purpose libraries.
             </summary>
             <param name="task">The task.</param>
             <returns>ConfiguredTaskAwaitable.</returns>
@@ -159,139 +161,151 @@
         <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.WithAmbientProperty(System.String,System.Object)">
             <inheritdoc />
         </member>
+        <member name="M:TA.Utils.Core.Diagnostics.DegenerateLoggerService.WithName(System.String)">
+            <inheritdoc />
+        </member>
         <member name="T:TA.Utils.Core.Diagnostics.IFluentLogBuilder">
             <summary>
-            Fluent Log Builder
+                Fluent Log Builder
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Exception(System.Exception)">
             <summary>
-            Add an exception to the log entry.
+                Add an exception to the log entry.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.LoggerName(System.String)">
             <summary>
-            Set the log (source) name. By default, this is the name of the source file.
+                Set the log (source) name. By default, this is usually the name of the class or source file.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Message(System.String)">
             <summary>
-            Sets the message template for the log entry.
-            The message may be a simple plain text string,
-            it may contain numbered substitution tokens like string.Format,
-            or it may contain named substitution tokens enclosed in {braces}
+                Sets the message template for the log entry.
+                The message may be a simple plain text string,
+                it may contain numbered substitution tokens like string.Format,
+                or it may contain named substitution tokens enclosed in {braces}
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Message(System.String,System.Object[])">
             <summary>
-            Sets the message template and property values for the log entry.
-            The format string may use numbered positional placeholders like string.Format,
-            or it may contain named substitution tokens enclosed in {braces}.
+                Sets the message template and property values for the log entry.
+                The format string may use numbered positional placeholders like string.Format,
+                or it may contain named substitution tokens enclosed in {braces}.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Message(System.IFormatProvider,System.String,System.Object[])">
             <summary>
-            Sets the message template and property values for the log entry.
-            The format provider will be used when rendering the property values.
+                Sets the message template and property values for the log entry.
+                The format provider will be used when rendering the property values.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Property(System.String,System.Object)">
             <summary>
-            Adds a named property and value pair to the log entry.
+                Adds a named property and value pair to the log entry.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Properties(System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
-            Adds a collection of property/value pairs to the log entry.
+                Adds a collection of property/value pairs to the log entry.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.TimeStamp(System.DateTime)">
             <summary>
-            Sets the time stamp of the log entry.
-            If not set, the log entry will be timed at the moment Write() was called.
+                Sets the time stamp of the log entry.
+                If not set, the log entry will be timed at the moment Write() was called.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.StackTrace(System.Diagnostics.StackTrace,System.Int32)">
             <summary>
-            Adds a stack trace to the log entry.
+                Adds a stack trace to the log entry.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.Write(System.String,System.String,System.Int32)">
             <summary>
-            Writes the log entry.
+                Writes the log entry.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.WriteIf(System.Func{System.Boolean},System.String,System.String,System.Int32)">
             <summary>
-            Writes the log entry if the supplied predicate is true.
+                Writes the log entry if the supplied predicate is true.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.IFluentLogBuilder.WriteIf(System.Boolean,System.String,System.String,System.Int32)">
             <summary>
-            Writes the log entry if the boolean condition is true.
+                Writes the log entry if the boolean condition is true.
             </summary>
         </member>
         <member name="T:TA.Utils.Core.Diagnostics.ILog">
             <summary>
-            Logging service interface
+                Logging service interface
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Trace(System.String)">
             <summary>
-            Creates a log builder for a log entry with Trace severity.
+                Creates a log builder for a log entry with Trace severity.
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Debug(System.String)">
             <summary>
-            Creates a log builder for a log entry with Debug severity.
+                Creates a log builder for a log entry with Debug severity.
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Info(System.String)">
             <summary>
-            Creates a log builder for a log entry with Information severity.
+                Creates a log builder for a log entry with Information severity.
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Warn(System.String)">
             <summary>
-            Creates a log builder for a log entry with Warning severity.
+                Creates a log builder for a log entry with Warning severity.
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Error(System.String)">
             <summary>
-            Creates a log builder for a log entry with Error severity.
+                Creates a log builder for a log entry with Error severity.
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Fatal(System.String)">
             <summary>
-            Creates a log builder for a log entry with Fatal severity.
-            Writing a Fatal log entry also terminates the process.
+                Creates a log builder for a log entry with Fatal severity.
+                Writing a Fatal log entry also terminates the process.
             </summary>
             <param name="callerFilePath">The caller file path.</param>
             <returns>IFluentLogBuilder.</returns>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.Shutdown">
             <summary>
-            Instructs the logging service to shut down.
-            This should flush any buffered log entries and close any open files or streams.
-            It is best practice to call <c>Shutdown</c> before exiting from the program.
+                Instructs the logging service to shut down.
+                This should flush any buffered log entries and close any open files or streams.
+                It is best practice to call <c>Shutdown</c> before exiting from the program.
             </summary>
         </member>
         <member name="M:TA.Utils.Core.Diagnostics.ILog.WithAmbientProperty(System.String,System.Object)">
             <summary>
-            Sets an "ambient property" that should be included in all log events.
-            Once added, the property persists for the lifetim of the instance.
-            Useful for loggers that support semantic logging.
+                Sets an "ambient property" that should be included in all log events.
+                Once added, the property persists for the lifetim of the instance.
+                Useful for loggers that support semantic logging.
             </summary>
+        </member>
+        <member name="M:TA.Utils.Core.Diagnostics.ILog.WithName(System.String)">
+            <summary>
+            Sets the name of the logger, which can be used by a logging back-end for filtering and routing
+            of log entries. If unset, then the value is implementation dependent and may default to the name
+            of the class or source file where the ILog instance is created or injected, or some other value.
+            </summary>
+            <param name="logSourceName"></param>
+            <returns></returns>
         </member>
         <member name="T:TA.Utils.Core.DisplayEquivalentAttribute">
             <summary>
@@ -333,7 +347,7 @@
             </summary>
             <seealso cref="T:TA.Utils.Core.SemanticVersion" />
         </member>
-        <member name="F:TA.Utils.Core.GitVersion.InjectedVersion">
+        <member name="F:TA.Utils.Core.GitVersion.injectedVersion">
             <summary>The type injected by GitVersion during the build process, containing version information.</summary>
         </member>
         <member name="P:TA.Utils.Core.GitVersion.GitInformationalVersion">
@@ -382,6 +396,16 @@
             <summary>Gets the git patch version.</summary>
             <value>The git patch version, as a string.</value>
             <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="P:TA.Utils.Core.GitVersion.GitBranchName">
+            <summary>Gets the name of the git branch from which the assembly was built.</summary>
+            <value>The git branch name, as a string.</value>
+            <seealso cref="T:TA.Utils.Core.SemanticVersion" />
+        </member>
+        <member name="M:TA.Utils.Core.GitVersion.UnitTestNullInjectedVersionType">
+            <summary>
+                A method intended to be used for unit testing to set the injected version type to null. [#2]
+            </summary>
         </member>
         <member name="M:TA.Utils.Core.GitVersion.GitVersionField(System.Type,System.String)">
             <summary>Uses reflection to fetch the value of a member field of the injected version information.</summary>
@@ -432,6 +456,10 @@
         <member name="P:TA.Utils.Core.Maybe`1.None">
             <summary>Gets a value indicating whether this <see cref="T:TA.Utils.Core.Maybe`1" /> is empty (has no value).</summary>
             <value><c>true</c> if none; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:TA.Utils.Core.Maybe`1.IsEmpty">
+            <summary>Gets a value indicating whether this <see cref="T:TA.Utils.Core.Maybe`1" /> is empty (has no value).</summary>
+            <value><c>true</c> if there is no value; otherwise, <c>false</c>.</value>
         </member>
         <member name="M:TA.Utils.Core.Maybe`1.GetEnumerator">
             <summary>Returns an enumerator that iterates through the collection.</summary>
@@ -535,12 +563,30 @@
             <param name="value">The value of the specified bit number.</param>
             <returns>A new octet instance with the specified bit number set to the specified value.</returns>
         </member>
+        <member name="M:TA.Utils.Core.Octet.WithBitSet(System.Int32)">
+            <summary>
+                Returns a new Octet instance with the specified bit set to 1. Other bits are duplicated from the current instance.
+            </summary>
+            <param name="bitNumber">
+                The bit position to be set, where 0 is the least significant bit and 7 is the most significant
+                bit.
+            </param>
+            <returns>A new Octet instance with the specified bit set to 1.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when bitNumber is less than 0 or greater than 7.</exception>
+        </member>
+        <member name="M:TA.Utils.Core.Octet.WithBitClear(System.Int32)">
+            <summary>
+                Returns a new Octet instance with the specified bit number cleared (set to false). Other bits are unchanged.
+            </summary>
+            <param name="bitNumber">The bit number to be cleared. Must be between 0 and 7 inclusive.</param>
+            <returns>A new Octet instance with the specified bit number cleared.</returns>
+        </member>
         <member name="M:TA.Utils.Core.Octet.WithBitSetTo(System.Int32,System.Boolean)">
             <summary>
                 Returns a new octet with the specified bit number set to the specified value. Other bits are
                 duplicated.
             </summary>
-            <param name="bit">The bit number to be modified.</param>
+            <param name="bitNumber">The bit number to be modified.</param>
             <param name="value">The value of the specified bit number.</param>
             <returns>A new octet instance with the specified bit number set to the specified value.</returns>
         </member>
@@ -888,6 +934,83 @@
             <returns><c>true</c> if the left version is greater than or equal to the right version.</returns>
             <seealso cref="M:TA.Utils.Core.SemanticVersion.CompareTo(TA.Utils.Core.SemanticVersion)"/>
             <seealso cref="M:TA.Utils.Core.SemanticVersion.Equals(TA.Utils.Core.SemanticVersion)"/>
+        </member>
+        <member name="T:TA.Utils.Core.StringExtensions">
+            <summary>
+                String extension methods.
+            </summary>
+            <remarks>
+                Useful string manipulation convenience methods.
+            </remarks>
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.Clean(System.String,System.String)">
+            <summary>
+                Removes all unwanted characters from a string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="clean">A list of the unwanted characters. All other characters will be preserved.</param>
+            <returns>
+                A new string with all of the unwanted characters deleted. Returns <see cref="F:System.String.Empty" />
+                if all of the characters were deleted or if the source string was null or empty.
+                Returns the source string if <paramref name="clean"/>
+            </returns>
+            <remarks>
+                Contrast with <see cref="M:TA.Utils.Core.StringExtensions.Keep(System.String,System.String)" />
+            </remarks>
+            <seealso cref="M:TA.Utils.Core.StringExtensions.Keep(System.String,System.String)" />
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.Head(System.String,System.Int32)">
+            <summary>
+                Returns the specified number of characters from the head of a string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
+            <returns>The specified number of characters from the head of the source string, as a new string.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.Keep(System.String,System.String)">
+            <summary>
+                Keeps only the wanted (that is, removes all unwanted characters) from the string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="keep">A list of the wanted characters. All other characters will be removed.</param>
+            <returns>
+                A new string with all of the unwanted characters deleted. Returns <see cref="F:System.String.Empty" /> if all
+                the characters were deleted or if the source string was null or empty.
+            </returns>
+            <seealso cref="M:TA.Utils.Core.StringExtensions.Clean(System.String,System.String)" />
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.RemoveHead(System.String,System.Int32)">
+            <summary>
+                Remove the head of the string, leaving the tail.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">Number of characters to remove from the head.</param>
+            <returns>A new string containing the old string with <paramref name="length" /> characters removed from the head.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.RemoveTail(System.String,System.Int32)">
+            <summary>
+                Remove the tail of the string, leaving the head.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">Number of characters to remove from the tail.</param>
+            <returns>A new string containing the old string with <paramref name="length" /> characters removed from the tail.</returns>
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.Tail(System.String,System.Int32)">
+            <summary>
+                Returns the specified number of characters from the tail of a string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
+            <returns>The specified number of characters from the tail of the source string, as a new string.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+        </member>
+        <member name="M:TA.Utils.Core.StringExtensions.ToHex(System.String)">
+            <summary>
+                Converts a tring to a hex representation, suitable for display in a debugger.
+            </summary>
+            <param name="source">The source string.</param>
+            <returns>A new string showing each character of the source string as a hex digit.</returns>
         </member>
     </members>
 </doc>
