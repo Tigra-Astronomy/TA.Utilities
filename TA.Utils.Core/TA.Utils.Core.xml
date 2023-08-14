@@ -952,7 +952,7 @@
             <returns>
                 A new string with all of the unwanted characters deleted. Returns <see cref="F:System.String.Empty" />
                 if all of the characters were deleted or if the source string was null or empty.
-                Returns the source string if <paramref name="clean" /> is null or empty.
+                Returns the source string if <paramref name="clean"/>
             </returns>
             <remarks>
                 Contrast with <see cref="M:TA.Utils.Core.StringExtensions.Keep(System.String,System.String)" />
