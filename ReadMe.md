@@ -1,16 +1,19 @@
-# Tigra Astronomy Commonly Used Helpers and Utilities #
+# Timtek Commonly Used Helpers and Utilities
 
 This library represents a collection of classes factored out of our production projects, that we found were being used over and over again.
-Rather than re-using the code at source level, it is now collected together in this package as a general purpose reusable library and made freely available for you to use.
+Rather than re-using the code at source level, it is now collected together in this package as a general purpose reusable library and made freely available for you to use at no cost and with no obligation. The only stipulation is that you can't sue the author or Timtek Systems Limited
+if anything bad happens as a result of you using the code. It's up to you to determine suitability for your purpose.
+
+## Software Re-use at the Object Code level
 
 This was always the promise of _Object Oriented Design_, but it was not until the advent of [NuGet][nuget] and its widespread adoption that this became a practical reality.
 It is easy to overlook the impact of [NuGet][nuget], as it seems so obvious and natural once you've used it.
 
-> Dependency management is the key challenge in software at every scale  
-> **Donald Knuth**, _The Art of Computer Programming_
+> "Dependency management is the key challenge in software at every scale." 
+> Possibly attributed to **Donald Knuth**, _The Art of Computer Programming_
 
 NuGet has essentially solved a large chunk of the dependency management problem.
-At Tigra Astronomy, we use NuGet it as a key component in our software design strategy.
+At Timtek Systems, we use NuGet as a key component in our software design strategy.
 We publish our open source code on a [public MyGet feed][myget].
 We push both prerelease and release versions to [MyGet][myget].
 When we make an official release, we promote that package from [MyGet][myget] to [NuGet][nuget].
@@ -26,7 +29,7 @@ We have no time for "copyleft" licenses which we find irksome.
 
 So here it is, for you to use however you like, no strings attached.
 
-I tend to use "we" and "our" when talking about the company, but Tigra Astronomy is a one-man operation run by me, Tim Long.
+I tend to use "we" and "our" when talking about the company, but Timtek Systems Limited is a one-man operation run by me, Tim Long.
 I hope you find the software useful, and if you feel that my efforts are worth supporting, then it would make my day if you would [buying me some coffee][coffee].
 I also wouldn't mind you giving us a mention, if you feel you are able to, as it helps the company grow. Donations and mentions really make a difference, so please think about it and do what you can.
 
@@ -36,7 +39,7 @@ If you are a company and need some work done, then consider hiring me as a freel
 
 ### Versioning ###
 
-Tigra Astronomy has settled on a versioning strategy based on [Semantic Versioning 2.0.0][semver].
+Timtek has settled on a versioning strategy based on [Semantic Versioning 2.0.0][semver].
 
 We give all of our software a semantic version, which we display to the user in the About box and write out to log files on startup.
 We use [GitVersion][gitversion] to [automatically assign a version number to every build][yt-gitversion] (even in [Arduino projects][yt-gitversion-arduino]).
@@ -45,7 +48,7 @@ So we can never forget to "bump the version" and we can never forget to set it.
 Total automation.
 If you examine one of our log files, you may well find something like this:
 
-``` lang=log
+```log
 21:16:59.2909|INFO |Server          |Git Commit ID: "229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
 21:16:59.3069|INFO |Server          |Git Short ID: "229c1ac"
 21:16:59.3069|INFO |Server          |Commit Date: "2020-07-11"
@@ -57,6 +60,8 @@ If you examine one of our log files, you may well find something like this:
 
 There's no mistaking where that build came from.
 
+[GitVersion][gitversion] also injects a static class into the assembly containing all the versioning information it computed based on your Git commit history.
+This information can be a little tricky to get at, because it doesn't exist at compile time so you can't easily reference it. You have to use Reflection to get at it.
 Our `GitVersion` class contains static properties for getting your semantic version metadata at runtime. We use it to write the log entries as shown above.
 
 ### Readability and Intention-revealing Code ###
@@ -71,11 +76,16 @@ Did you mean there wans't an error but you can't give an answer?
 Did you mean the answer was empty?
 Or did someone just forget to initialize the variable?
 
+I'm not a fan of Microsoft's solution to the Null Reference problem.
+I think their _Nullable Reference Types_ [sic] are clumsy and make the code look ugly.
+They couldn't even get the name right - reference types were *always* nullable!
+
 The ambiguity around "error" vs. "no value" is why we created `Maybe<T>`.
 
 `Maybe<T>` is a type that either has a value, or doesn't, but it is never null.
 The idea is that by using a `Maybe<T>` you clearly communicate your intentions to the caller.
-By returning `Maybe<T>` you nail down the ambiguity: "there might not be a value and you have to check".
+By returning `Maybe<T>` you nail down the ambiguity:
+"there might not be a value and you have to check".
 
 Strictly, a `Maybe<T>` is an `IEnumerable<T>` which is either empty (no value) or has exactly one element.
 Because it is `IEnumerable` you can use certain LINQ operators:
@@ -83,12 +93,11 @@ Because it is `IEnumerable` you can use certain LINQ operators:
 - `maybe.Any()` will be true if there is a value.
 - `maybe.Single()` gets you the value.
 - `maybe.SingleOrDefault()` gets you the value or `null`.
-- extension method `maybe.None()` is `true` if there's no value.
 
 Creating a maybe can be done by:
 
-- `object.AsMaybe();` - convert a reference type.
-- `Maybe<int>.From(7);` - works with value types.
+- `object.AsMaybe();` - wrap a non-null object.
+- `Maybe<int>.From(7);` - works with value types, and also safe for null references.
 - `Maybe<T>.Empty` - a maybe without a value.
 
 `Maybe<T>` has a `ToString()` method so you can write it to a stream or use in a string interpolation, and you will get the serialized value or "`{no value}`".
@@ -102,16 +111,21 @@ You may find that your bug count tends to diminish.
 
 An `Octet` is an immutable type that represents 8 bits, or a byte.
 In most cases, it can be directly used in place of a `byte` as there are implicit conversions to and from a `byte`.
-There are also explicit conversions to and from `int` and `uint`.
-The latter are explicit because there is potentially data loss, so use with care.
+There are also explicit conversions to and from `int`.
+The latter is explicit because there is potentially data loss, so use with care.
 
-In an `Octet`, each bit position is directly addressable.
+Note that conversion from `uint` has been deprecated because `uint` is not CLS Compliant, which can cause issues with other languages.
+
+In an `Octet`, each bit position is directly addressable as an array element.
 You can access `octet[0]` through `octet[7]`.
 
-You can set a bit with `octet.WithBitSetTo(n, state)`.
-Remember `Octet` is immutable so this gives you a new `Octet` and leaves the original unchanged.
+You can set a bit with `octet.WithBitSet(n)`.
+You can clear a bit with `octet.WithBitClear(n)`.
+
+Remember `Octet` is _immutable_ so this gives you a new `Octet` and leaves the original unchanged.
 
 You can perform logical bitwise operations using the `&` anf `|` operators.
+You can test octets for equality and compare them using `==`, `!=`, `>`, `<`, etc.
 
 ### Diagnostics ###
 
@@ -132,18 +146,38 @@ You can always get the equivalent human-readable display text for an enumerated 
 This will return the display text if it has been set, or the name of the enum value otherwise.
 Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on each field of the enum.
 
+```csharp
+    [Subject(typeof(DisplayEquivalentAttribute))]
+    internal class when_displaying_an_enum_with_equivalent_text
+        {
+        It should_have_equivalent_text_when_the_attribute_is_present = () =>
+            TestCases.CaseWithEquivalentText.DisplayEquivalent().ShouldEqual("Equivalent Text");
+        It should_use_the_field_name_when_no_attribute_is_present = () =>
+            TestCases.CaseWithoutEquivalentText.DisplayEquivalent()
+                .ShouldEqual(nameof(TestCases.CaseWithoutEquivalentText));
+        }
+
+    internal enum TestCases
+        {
+        [DisplayEquivalent("Equivalent Text")] CaseWithEquivalentText,
+        CaseWithoutEquivalentText
+        }
+```
+
 ### Asynchrony and Threading ###
 
 #### ConfigureAwait ####
 
 There is an extension method in .NET used to configure awaitable tasks, called `ConfigureAwait(bool)`.
-THe method affects how the task awaiter schedules its continuation.
-With `ConfigureAwait(true)` the tasks continues on the current synchronization context.
+The method affects how the task awaiter schedules its continuation.
+With `ConfigureAwait(true)` the task continues on the current synchronization context.
 That usually means on the same thread, and is particularly relevant when the awaiter is a user interface thread.
-Conversely, `ConfigureAwait(false)` means that continuation can happen on any thread, and usually that will be a thread pool worker thread.
-The implications are quite profound. Consider the following method:
+Conversely, `ConfigureAwait(false)` means that continuation can happen on any thread, 
+and typically that will be a thread pool worker thread.
+The implications are quite profound, especially for apartment-threaded GUI applications such as WinForms or WPF. 
+Consider the following method:
 
-``` lang=cs
+```csharp
 public async Task SomeMethod()
     {
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
@@ -161,11 +195,12 @@ But it is not at all ovious how `ConfigureAwait()` should be used.
 What if you don't specifiy?
 Is the await configured or unconfigured?
 Does `ConfigureAwait(false)` mean you don't want to configure it, or that you want to configure it not to do something?
-It's just horrible, you can't read the code and instantly understand what it does, and that violates the _Principle of Least Astonishment_.
+It's just horrible.
+You can't read the code and instantly understand what it does, and that violates the _Principle of Least Astonishment_.
 
 So we made some extension methods that essentially do the same thing, but make more sense. Our aync method now becomes:
 
-``` lang=cs
+```csharp
 public async Task SomeMethod()
     {
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
@@ -181,7 +216,7 @@ and we get
 
 Alternatively:
 
-``` lang=cs
+```csharp
 public async Task SomeMethod()
     {
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
@@ -194,7 +229,7 @@ The await captures the current `SynchronizationContext` and uses it to schedule 
 What happens next depends on the application model and how it implements `SynchronizationContext`.
 For a user interface application, the UI generally runs in a Single Threaded Apartment (STA thread).
 In this model, asynchronous operations are posted to the message queue of the STA thread.
-The continuation will then happen on the UI thread once teh thread is idel and the message pump runs.
+The continuation will then happen on the UI thread once the thread is idle and the message pump runs.
 In a free-threaded application model such as a console application, the continuation will likely
 still happen on a different thread.
 
@@ -206,9 +241,10 @@ Therefore, best practice for library writers is to always use `ContinueOnAnyThre
 #### Cancel Culture ####
 
 One final extension method is `Task.WithCancellation(token)`.
-This takes a task that is not cancellable and adds cancellation to it.
-Note that this doesn't stop the task from running and it may still run to completion,
-but it means you don't have to wait for it.
+This takes a task that is not cancellable and wraps it in a cancellable task.
+Awaiters can then wait on the cancellable wrapper and will get to run if the wrapper is cancelled.
+Note that this doesn't stop the original task from running and it may still run to completion,
+but its result will be discarded as there should be nothing awaiting the result.
 
 #### Logging ####
 
@@ -228,14 +264,14 @@ whether the logger is null every time it is used.
 
 The interface supports semantic logging. You can use a simple format string like so:
 
-``` lang=cs
+```csharp
 log.Info().Message("Sending data {0}", data).Write();
 log.Error().Message("Exception {0} occurred with error code {1}", ex.Message, errorCode).Write();
 ```
 
 But this leaves useful information on the table. Extra rich information can be included like so:
 
-``` lang=cs
+```csharp
 log.Info().Message("Sending data {data}", data).Write();
 log.Error()
     .Message("Exception {exception} occurred with error code {error}")
@@ -275,7 +311,7 @@ For example:
 
 In most cases, the way in which log data is ultimately rendered is controlled by the application, often using a configuration file.
 As a library developer, you must accept that you have little to no control over this.
-Just concentrate in including appropriate and useful information and don't think about formatting or storage.
+Just concentrate on including appropriate and useful information and don't think about formatting or storage.
 
 [mit]: https://tigra.mit-license.org "Tigra MIT License"
 [semver]: https://semver.org/ "the rules of semantic versioning"

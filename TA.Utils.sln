@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30128.36
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34004.107
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Utils.Core", "TA.Utils.Core\TA.Utils.Core.csproj", "{4D49A7E7-DC29-4292-8D19-0B2F9D24BDE6}"
 EndProject
@@ -23,7 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Utils.Logging.NLog.SampleConsoleApp", "TA.Utils.Logging.NLog.SampleConsoleApp\TA.Utils.Logging.NLog.SampleConsoleApp.csproj", "{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Utils.Logging.NLog.SampleConsoleApp", "TA.Utils.Logging.NLog.SampleConsoleApp\TA.Utils.Logging.NLog.SampleConsoleApp.csproj", "{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Utils.Benchmarks", "TA.Utils.Benchmarks\TA.Utils.Benchmarks.csproj", "{8C4CF2BE-301A-4471-A574-846BFE537844}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C4CF2BE-301A-4471-A574-846BFE537844}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

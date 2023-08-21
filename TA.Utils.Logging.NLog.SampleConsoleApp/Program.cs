@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Utils.Logging.NLog.SampleConsoleApp
     {
@@ -23,7 +24,7 @@ namespace TA.Utils.Logging.NLog.SampleConsoleApp
         {
         static readonly List<int> SuperstitiousNumbers = new List<int> {13, 7, 666, 3, 8, 88, 888};
 
-        async static Task Main(string[] args)
+        static async Task Main(string[] args)
             {
             var log = new LoggingService();
             log.Info()

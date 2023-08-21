@@ -21,15 +21,14 @@ namespace TA.Utils.Core
         /// <seealso cref="DisplayEquivalentAttribute" />
         public static string DisplayEquivalent(this Enum en)
             {
-            string enumValueName = en.ToString();
+            var enumValueName = en.ToString();
             var type = en.GetType();
             var fields = type.GetTypeInfo().DeclaredFields;
             var fieldInfo = fields.Single(p => p.Name == enumValueName);
-            var attribute =
-                (DisplayEquivalentAttribute) fieldInfo?.GetCustomAttribute(typeof(DisplayEquivalentAttribute));
-            if (fieldInfo == null || attribute == null)
+            var attribute = (DisplayEquivalentAttribute) fieldInfo.GetCustomAttribute(typeof(DisplayEquivalentAttribute));
+            if (attribute == null)
                 return enumValueName;
-            string displayEquivalent = attribute.Value;
+            var displayEquivalent = attribute.Value;
             return string.IsNullOrWhiteSpace(displayEquivalent) ? enumValueName : displayEquivalent;
             }
         }

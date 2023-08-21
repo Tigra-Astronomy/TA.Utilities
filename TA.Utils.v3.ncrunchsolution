@@ -4,6 +4,11 @@
     <CustomBuildProperties>
       <Value>DisableGitVersionTask = true</Value>
     </CustomBuildProperties>
+    <MetricsExclusionList>
+      <Value>TA.Utils.Benchmarks\TA.Utils.Benchmarks.csproj</Value>
+      <Value>TA.Utils.Logging.NLog.SampleConsoleApp\TA.Utils.Logging.NLog.SampleConsoleApp.csproj</Value>
+      <Value>TA.Utils.Specifications\TA.Utils.Specifications.csproj</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

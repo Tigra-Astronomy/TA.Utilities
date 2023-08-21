@@ -72,7 +72,8 @@ namespace TA.Utils.Core
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Octet other)
             {
-            for (int i = 0; i < bits.Length; i++)
+            if (other is null) return false; // equality to a null object is false by definition
+            for (var i = 0; i < bits.Length; i++)
                 if (bits[i] != other[i])
                     return false;
             return true;
@@ -97,9 +98,9 @@ namespace TA.Utils.Core
         public static Octet FromInt(int source)
             {
             var bits = new bool[8];
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
                 {
-                int bit = source & 0x01;
+                var bit = source & 0x01;
                 bits[i] = bit != 0;
                 source >>= 1;
                 }
@@ -110,9 +111,10 @@ namespace TA.Utils.Core
         /// <summary>Factory method: create an Octet from an unsigned integer.</summary>
         /// <param name="source">The source.</param>
         /// <returns>Octet.</returns>
+        [CLSCompliant(false)]
         public static Octet FromUnsignedInt(uint source)
             {
-            return FromInt((int) source);
+            return FromInt((int)source);
             }
 
         /// <summary>
@@ -122,6 +124,8 @@ namespace TA.Utils.Core
         /// <param name="bit">The bit number to be modified.</param>
         /// <param name="value">The value of the specified bit number.</param>
         /// <returns>A new octet instance with the specified bit number set to the specified value.</returns>
+        [CLSCompliant(false)]
+        [Obsolete("Use WithBitSet() or WithBitClear() instead")]
         public Octet WithBitSetTo(ushort bit, bool value)
             {
             Contract.Requires(bit < 8);
@@ -132,16 +136,53 @@ namespace TA.Utils.Core
             }
 
         /// <summary>
+        ///     Returns a new Octet instance with the specified bit set to 1. Other bits are duplicated from the current instance.
+        /// </summary>
+        /// <param name="bitNumber">
+        ///     The bit position to be set, where 0 is the least significant bit and 7 is the most significant
+        ///     bit.
+        /// </param>
+        /// <returns>A new Octet instance with the specified bit set to 1.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when bitNumber is less than 0 or greater than 7.</exception>
+        public Octet WithBitSet(int bitNumber)
+            {
+            Contract.Requires(bitNumber >= 0 && bitNumber < 8);
+            if (bitNumber < 0 || bitNumber > 7)
+                throw new ArgumentOutOfRangeException(nameof(bitNumber), bitNumber,
+                    $"{bitNumber} is not a valid bit number. Must be [0..7]");
+            var newBits = new bool[8];
+            bits.CopyTo(newBits, 0);
+            newBits[bitNumber] = true;
+            return new Octet(newBits);
+            }
+
+        /// <summary>
+        ///     Returns a new Octet instance with the specified bit number cleared (set to false). Other bits are unchanged.
+        /// </summary>
+        /// <param name="bitNumber">The bit number to be cleared. Must be between 0 and 7 inclusive.</param>
+        /// <returns>A new Octet instance with the specified bit number cleared.</returns>
+        public Octet WithBitClear(int bitNumber)
+            {
+            Contract.Requires(bitNumber >= 0 && bitNumber < 8);
+            if (bitNumber < 0 || bitNumber > 7)
+                throw new ArgumentOutOfRangeException(nameof(bitNumber), bitNumber,
+                    $"{bitNumber} is not a valid bit number. Must be [0..7]");
+            var newBits = new bool[8];
+            bits.CopyTo(newBits, 0);
+            newBits[bitNumber] = false;
+            return new Octet(newBits);
+            }
+
+        /// <summary>
         ///     Returns a new octet with the specified bit number set to the specified value. Other bits are
         ///     duplicated.
         /// </summary>
-        /// <param name="bit">The bit number to be modified.</param>
+        /// <param name="bitNumber">The bit number to be modified.</param>
         /// <param name="value">The value of the specified bit number.</param>
         /// <returns>A new octet instance with the specified bit number set to the specified value.</returns>
-        public Octet WithBitSetTo(int bit, bool value)
+        public Octet WithBitSetTo(int bitNumber, bool value)
             {
-            Contract.Requires(bit >= 0 && bit < 8);
-            return WithBitSetTo((ushort) bit, value);
+            return value ? WithBitSet(bitNumber) : WithBitClear(bitNumber);
             }
 
         /// <summary>Returns a <see cref="T:System.String" /> that represents the octet instance.</summary>
@@ -149,7 +190,7 @@ namespace TA.Utils.Core
         public override string ToString()
             {
             var builder = new StringBuilder();
-            for (int i = 7; i >= 0; i--)
+            for (var i = 7; i >= 0; i--)
                 {
                 builder.Append(bits[i] ? '1' : '0');
                 builder.Append(' ');
@@ -186,11 +227,11 @@ namespace TA.Utils.Core
         /// <returns>The result of the conversion.</returns>
         public static implicit operator byte(Octet octet)
             {
-            int sum = 0;
-            for (int i = 0; i < 8; i++)
+            var sum = 0;
+            for (var i = 0; i < 8; i++)
                 if (octet[i])
                     sum += 1 << i;
-            return (byte) sum;
+            return (byte)sum;
             }
 
         /// <summary>Performs an implicit conversion from <see cref="byte" /> to <see cref="Octet" />.</summary>
@@ -210,7 +251,7 @@ namespace TA.Utils.Core
         public override bool Equals(object other)
             {
             if (ReferenceEquals(null, other)) return false;
-            return other is Octet && Equals((Octet) other);
+            return other is Octet && Equals((Octet)other);
             }
 
         /// <summary>Returns a hash code for this instance.</summary>
@@ -229,6 +270,8 @@ namespace TA.Utils.Core
         /// <returns><c>true</c> if the octets are equal; otherwise <c>false</c>.</returns>
         public static bool operator ==(Octet left, Octet right)
             {
+            if (left is null) return false;
+            if (right is null) return false;
             return left.Equals(right);
             }
 
@@ -238,6 +281,8 @@ namespace TA.Utils.Core
         /// <returns><c>true</c> if the octets are not equal; otherwise <c>false</c>.</returns>
         public static bool operator !=(Octet left, Octet right)
             {
+            if (left is null) return true; // Cannot be equal if either instance is null
+            if (right is null) return true;
             return !left.Equals(right);
             }
 
@@ -247,8 +292,8 @@ namespace TA.Utils.Core
         /// <returns>A new octet containing the result of the bitwise logical AND operation.</returns>
         public static Octet operator &(Octet left, Octet right)
             {
-            var result = (bool[]) left.bits.Clone();
-            for (int i = 0; i < 8; i++) result[i] &= right[i];
+            var result = (bool[])left.bits.Clone();
+            for (var i = 0; i < 8; i++) result[i] &= right[i];
             return new Octet(result);
             }
 
@@ -258,8 +303,8 @@ namespace TA.Utils.Core
         /// <returns>A new octet containing the result of the bitwise logical OR operation.</returns>
         public static Octet operator |(Octet left, Octet right)
             {
-            var result = (bool[]) left.bits.Clone();
-            for (int i = 0; i < 8; i++) result[i] |= right[i];
+            var result = (bool[])left.bits.Clone();
+            for (var i = 0; i < 8; i++) result[i] |= right[i];
             return new Octet(result);
             }
         }

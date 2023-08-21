@@ -8,7 +8,30 @@
 	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_LIMIT/@EntryValue">140</s:Int64>
 	<s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&#xD;
 &lt;Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns"&gt;&#xD;
-  &lt;TypePattern DisplayName="Machine.Specifications" Priority="100"&gt;&#xD;
+  &lt;FilePattern RemoveRegions="AllExceptGenerated"&gt;&#xD;
+    &lt;Region Name=" Context base classes"&gt;&#xD;
+      &lt;Entry DisplayName="with_"&gt;&#xD;
+        &lt;Entry.Match&gt;&#xD;
+          &lt;And&gt;&#xD;
+            &lt;Kind Is="Class" /&gt;&#xD;
+            &lt;Name Is="^with_.+$" IgnoreCase="True" /&gt;&#xD;
+          &lt;/And&gt;&#xD;
+        &lt;/Entry.Match&gt;&#xD;
+      &lt;/Entry&gt;&#xD;
+    &lt;/Region&gt;&#xD;
+    &lt;Entry DisplayName="when_"&gt;&#xD;
+      &lt;Entry.Match&gt;&#xD;
+        &lt;And&gt;&#xD;
+          &lt;Kind Is="Class" /&gt;&#xD;
+          &lt;Or&gt;&#xD;
+            &lt;HasAttribute Name="^Subject$" /&gt;&#xD;
+            &lt;Name Is="^when_.+$" IgnoreCase="True" /&gt;&#xD;
+          &lt;/Or&gt;&#xD;
+        &lt;/And&gt;&#xD;
+      &lt;/Entry.Match&gt;&#xD;
+    &lt;/Entry&gt;&#xD;
+  &lt;/FilePattern&gt;&#xD;
+  &lt;TypePattern DisplayName="Machine.Specifications"&gt;&#xD;
     &lt;TypePattern.Match&gt;&#xD;
       &lt;And&gt;&#xD;
         &lt;Kind Is="Class" /&gt;&#xD;
@@ -77,29 +100,6 @@
       &lt;/Entry.Match&gt;&#xD;
     &lt;/Entry&gt;&#xD;
   &lt;/TypePattern&gt;&#xD;
-  &lt;FilePattern RemoveRegions="AllExceptGenerated"&gt;&#xD;
-    &lt;Region Name=" Context base classes"&gt;&#xD;
-      &lt;Entry DisplayName="with_"&gt;&#xD;
-        &lt;Entry.Match&gt;&#xD;
-          &lt;And&gt;&#xD;
-            &lt;Kind Is="Class" /&gt;&#xD;
-            &lt;Name Is="^with_.+$" IgnoreCase="True" /&gt;&#xD;
-          &lt;/And&gt;&#xD;
-        &lt;/Entry.Match&gt;&#xD;
-      &lt;/Entry&gt;&#xD;
-    &lt;/Region&gt;&#xD;
-    &lt;Entry DisplayName="when_"&gt;&#xD;
-      &lt;Entry.Match&gt;&#xD;
-        &lt;And&gt;&#xD;
-          &lt;Kind Is="Class" /&gt;&#xD;
-          &lt;Or&gt;&#xD;
-            &lt;HasAttribute Name="^Subject$" /&gt;&#xD;
-            &lt;Name Is="^when_.+$" IgnoreCase="True" /&gt;&#xD;
-          &lt;/Or&gt;&#xD;
-        &lt;/And&gt;&#xD;
-      &lt;/Entry.Match&gt;&#xD;
-    &lt;/Entry&gt;&#xD;
-  &lt;/FilePattern&gt;&#xD;
 &lt;/Patterns&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateInstanceFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb"&gt;&lt;ExtraRule Prefix="should_" Suffix="" Style="aaBb" /&gt;&lt;ExtraRule Prefix="of" Suffix="" Style="aa_bb" /&gt;&lt;ExtraRule Prefix="context" Suffix="" Style="aa_bb" /&gt;&lt;ExtraRule Prefix="after" Suffix="" Style="aa_bb" /&gt;&lt;/Policy&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateStaticFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
