@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using NLog;
 using TA.Utils.Core.Diagnostics;
 
@@ -47,14 +48,14 @@ namespace TA.Utils.Logging.NLog
         }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Message(string message)
+        public IFluentLogBuilder Message([StructuredMessageTemplate] string message)
         {
             logEvent.Message = message;
             return this;
         }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Message(string format, params object[] args)
+        public IFluentLogBuilder Message([StructuredMessageTemplate] string format, params object[] args)
         {
             logEvent.Message = format;
             logEvent.Parameters = args;
