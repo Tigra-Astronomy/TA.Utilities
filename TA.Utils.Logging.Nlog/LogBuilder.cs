@@ -72,10 +72,21 @@ namespace TA.Utils.Logging.NLog
 
         /// <inheritdoc />
         public IFluentLogBuilder Property(string name, object value)
-        {
-            logEvent.Properties.Add(name, value);
-            return this;
-        }
+            {
+            try
+                {
+                logEvent.Properties.Add(name, value);
+                return this;
+                }
+            catch (ArgumentException ex)
+                {
+                // Augment the exception with a more useful message and include the LogEventInfo object.
+                var message = $"{ex.Message} name='{name}' value='{value}'";
+                var aex = new ArgumentException(message, ex);
+                aex.Data.Add("logEvent", logEvent);
+                throw aex;
+                }
+            }
 
         /// <inheritdoc />
         public IFluentLogBuilder Properties(IDictionary<string, object> properties)
