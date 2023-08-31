@@ -81,9 +81,8 @@ namespace TA.Utils.Logging.NLog
             catch (ArgumentException ex)
                 {
                 // Augment the exception with a more useful message and include the LogEventInfo object.
-                var message = $"{ex.Message} name='{name}' value='{value}'";
+                var message = $"{ex.Message} name='{name}' value='{value.ToString()}'";
                 var aex = new ArgumentException(message, ex);
-                aex.Data.Add("logEvent", logEvent);
                 throw aex;
                 }
             }
