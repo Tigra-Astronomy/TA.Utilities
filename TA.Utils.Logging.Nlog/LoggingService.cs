@@ -11,7 +11,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using NLog;
 using TA.Utils.Core.Diagnostics;
 
@@ -26,6 +25,7 @@ namespace TA.Utils.Logging.NLog
     {
         private static readonly ILogger DefaultLogger = LogManager.GetCurrentClassLogger();
         private readonly IDictionary<string, object> ambientProperties = new Dictionary<string, object>();
+        private readonly LogServiceOptions options;
         private string sourceName;
 
         /// <summary>
@@ -38,56 +38,57 @@ namespace TA.Utils.Logging.NLog
         }
 
         /// <summary>Static initializer can be used to perform 1-time NLog configurations.</summary>
-        public LoggingService()
+        public LoggingService(LogServiceOptions options = null)
         {
+            this.options = options ?? LogServiceOptions.DefaultOptions;
             // Reflect on the calling type and use its type name as the log source name.
             // This can be overridden later using the .WithName() method.
             var callerStackFrame = new StackFrame(1);
             var callerMethod = callerStackFrame.GetMethod();
-            var callerType = callerMethod.DeclaringType;
-            var callerTypeName = callerType.Name;
+            var callerType = callerMethod.ReflectedType?.DeclaringType;
+            var callerTypeName = callerType?.Name ?? string.Empty;
             sourceName = callerTypeName;
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null)
         {
-            return CreateLogBuilder(LogLevel.Trace, sourceNameOverride ?? sourceName)
+            return CreateLogBuilder(LogLevel.Trace, verbosity)
                 .Property(nameof(verbosity), verbosity);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null)
         {
-            return CreateLogBuilder(LogLevel.Debug, sourceNameOverride ?? sourceName)
+            return CreateLogBuilder(LogLevel.Debug, verbosity)
                 .Property(nameof(verbosity), verbosity);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null)
         {
-            return CreateLogBuilder(LogLevel.Info, sourceNameOverride ?? sourceName)
+            return CreateLogBuilder(LogLevel.Info, verbosity)
                 .Property(nameof(verbosity), verbosity);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null)
         {
-            return CreateLogBuilder(LogLevel.Warn, sourceNameOverride ?? sourceName)
+            return CreateLogBuilder(LogLevel.Warn, verbosity)
                 .Property(nameof(verbosity), verbosity);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null)
         {
-            return CreateLogBuilder(LogLevel.Error, sourceNameOverride ?? sourceName)
+            return CreateLogBuilder(LogLevel.Error, verbosity)
                 .Property(nameof(verbosity), verbosity);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null)
         {
-            return CreateLogBuilder(LogLevel.Fatal, sourceNameOverride ?? sourceName)
+            return CreateLogBuilder(LogLevel.Fatal, verbosity)
                 .Property(nameof(verbosity), verbosity);
         }
 
@@ -111,30 +112,13 @@ namespace TA.Utils.Logging.NLog
             return this;
         }
 
-        private IFluentLogBuilder CreateLogBuilder(LogLevel logLevel, string callerFilePath)
+        private IFluentLogBuilder CreateLogBuilder(LogLevel logLevel, int verbosity)
         {
-            var name = GetLoggerName(callerFilePath);
-            var logger = string.IsNullOrWhiteSpace(name) ? DefaultLogger : LogManager.GetLogger(name);
+            var logger = string.IsNullOrWhiteSpace(sourceName) ? DefaultLogger : LogManager.GetLogger(sourceName);
             var builder = new LogBuilder(logger, logLevel, ambientProperties);
+            if (options.VerbosityEnabled)
+                builder.Property(options.VerbosityPropertyName, verbosity);
             return builder;
-        }
-
-        /// <summary>
-        ///     Gets the name for this logger instance.
-        ///     Any explicitly set user preference takes priority.
-        ///     Otherwise, we try to build a logger name from the caller file path.
-        ///     If all else fails, we return <see cref="string.Empty" />.
-        /// </summary>
-        /// <param name="callerFilePath">The name of the caller's source file, if known.</param>
-        /// <returns>A string containing the suggested logger name.</returns>
-        private string GetLoggerName(string callerFilePath)
-        {
-            if (!string.IsNullOrWhiteSpace(sourceName))
-                return sourceName;
-            var name = !string.IsNullOrWhiteSpace(callerFilePath)
-                ? Path.GetFileNameWithoutExtension(callerFilePath)
-                : string.Empty;
-            return name;
         }
     }
 }
