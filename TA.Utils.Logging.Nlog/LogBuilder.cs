@@ -13,11 +13,23 @@ using TA.Utils.Core.Diagnostics;
 
 namespace TA.Utils.Logging.NLog
 {
+    /// <summary>
+    /// Provides a fluent interface for constructing log entries based on the NLog back-end logging service.
+    /// The fluent API is loosely based on the API used by NLog.
+    /// </summary>
     internal sealed class LogBuilder : IFluentLogBuilder
     {
         private readonly LogEventInfo logEvent;
         private readonly ILogger logger;
 
+        /// <summary>
+        /// Construct a new log event builder at a given logging verbosity level, ensuring that any ambient properties are used.
+        /// Instances of the builder object are typically created by the logging service, but can also be constructed on demand.
+        /// </summary>
+        /// <param name="logger">An instance of a logging service that will eventually accept the built log entry.</param>
+        /// <param name="level">The verbosity level of the log entry being built.</param>
+        /// <param name="ambientProperties">Any ambient properties that should be included in the log entry.</param>
+        /// <exception cref="ArgumentNullException">Thrown if there is no logging service or verbosity level specified.</exception>
         public LogBuilder(ILogger logger, LogLevel level, IDictionary<string, object> ambientProperties = null)
         {
             if (logger == null)

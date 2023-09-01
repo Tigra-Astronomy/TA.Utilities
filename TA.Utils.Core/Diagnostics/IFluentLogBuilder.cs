@@ -1,14 +1,13 @@
-﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-//
-// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
-//
+﻿// This file is part of the TA.Utils project
+// Copyright © 2015-2023 Timtek Systems Limited, all rights reserved.
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-//
-// File: IFluentLogBuilder.cs  Last modified: 2020-07-14@07:01 by Tim Long
+// 
+// File: IFluentLogBuilder.cs  Last modified: 2023-09-01@08:38 by Tim Long
 
 using System;
 using System.Collections.Generic;
@@ -17,12 +16,12 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace TA.Utils.Core.Diagnostics
-    {
+{
     /// <summary>
-    ///     Fluent Log Builder
+    ///     Fluent Log Builder, loosely based on the NLog fluent API, which is simple but effective.
     /// </summary>
     public interface IFluentLogBuilder
-        {
+    {
         /// <summary>
         ///     Add an exception to the log entry.
         /// </summary>
@@ -93,5 +92,5 @@ namespace TA.Utils.Core.Diagnostics
         /// </summary>
         void WriteIf(bool condition, [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);
-        }
     }
+}

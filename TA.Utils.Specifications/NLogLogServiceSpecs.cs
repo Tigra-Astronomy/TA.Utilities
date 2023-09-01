@@ -25,22 +25,22 @@ namespace TA.Utils.Specifications
     internal class when_building_a_default_logger : with_caller_info_context
         {
         Establish context = () => builder = (LogBuilder)new LoggingService().Info();
-        It should_have_the_file_name = () => builder.Build().LoggerName.ShouldEqual(CallerFileNameWithoutExtenstion());
+        It should_have_the_class_name_as_source = () => builder.Build().LoggerName.ShouldEqual("<>c");
         static LogBuilder builder;
         }
 
     internal class when_creating_a_named_logger : with_caller_info_context
         {
-        // ReSharper disable once ExplicitCallerInfoArgument
-        Establish context = () => builder = (LogBuilder)new LoggingService().Info("Roger");
-        It should_change_the_name = () => builder.Build().LoggerName.ShouldEqual("Roger");
+            // ReSharper disable once ExplicitCallerInfoArgument
+            Establish context = () => builder = (LogBuilder)new LoggingService().WithName("Roger").Info();
+            It should_change_the_name = () => builder.Build().LoggerName.ShouldEqual("Roger");
         static LogBuilder builder;
         }
 
-    internal class when_creating_and_building_a_named_logger : with_caller_info_context
-        {
+    class when_overriding_the_log_source_name : with_caller_info_context
+    {
         // ReSharper disable once ExplicitCallerInfoArgument
-        Establish context = () => builder = (LogBuilder)new LoggingService().Info("Roger");
+        Establish context = () => builder = (LogBuilder)new LoggingService().Info(sourceNameOverride: "Roger");
         Because of = () => builder.LoggerName("Jim");
         It should_change_the_name = () => builder.Build().LoggerName.ShouldEqual("Jim");
         static LogBuilder builder;
