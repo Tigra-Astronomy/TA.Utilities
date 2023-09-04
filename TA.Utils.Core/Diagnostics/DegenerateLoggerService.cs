@@ -19,23 +19,42 @@ namespace TA.Utils.Core.Diagnostics
     public sealed class DegenerateLoggerService : ILog
     {
         private static readonly IFluentLogBuilder builder = new DegenerateLogBuilder();
-        /// <inheritdoc />
-        public IFluentLogBuilder Trace(string callerFilePath = null) => builder;
 
         /// <inheritdoc />
-        public IFluentLogBuilder Debug(string callerFilePath = null) => builder;
+        public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null)
+        {
+            return builder;
+        }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Info(string callerFilePath = null) => builder;
+        public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null)
+        {
+            return builder;
+        }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Warn(string callerFilePath = null) => builder;
+        public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null)
+        {
+            return builder;
+        }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Error(string callerFilePath = null) => builder;
+        public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null)
+        {
+            return builder;
+        }
 
         /// <inheritdoc />
-        public IFluentLogBuilder Fatal(string callerFilePath = null) => builder;
+        public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null)
+        {
+            return builder;
+        }
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null)
+        {
+            return builder;
+        }
 
         /// <inheritdoc />
         public void Shutdown() { }
