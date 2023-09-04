@@ -1,46 +1,56 @@
-﻿using System.Runtime.CompilerServices;
+﻿// This file is part of the TA.Utils project
+// Copyright © 2015-2023 Timtek Systems Limited, all rights reserved.
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+// 
+// File: ILog.cs  Last modified: 2023-09-01@11:13 by Tim Long
 
 namespace TA.Utils.Core.Diagnostics
-    {
+{
     /// <summary>
-    ///     Logging service interface
+    ///     Abstract logging service interface.
     /// </summary>
     public interface ILog
-        {
+    {
         /// <summary>
         ///     Creates a log builder for a log entry with Trace severity.
         /// </summary>
-        /// <param name="callerFilePath">The caller file path.</param>
+        /// <param name="verbosity"></param>
+        /// <param name="sourceNameOverride"></param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Trace([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Debug severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Debug([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Information severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Info([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Warning severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Warn([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Error severity.
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Error([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Fatal severity.
@@ -48,7 +58,7 @@ namespace TA.Utils.Core.Diagnostics
         /// </summary>
         /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Fatal([CallerFilePath] string callerFilePath = null);
+        IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Instructs the logging service to shut down.
@@ -65,12 +75,12 @@ namespace TA.Utils.Core.Diagnostics
         ILog WithAmbientProperty(string name, object value);
 
         /// <summary>
-        /// Sets the name of the logger, which can be used by a logging back-end for filtering and routing
-        /// of log entries. If unset, then the value is implementation dependent and may default to the name
-        /// of the class or source file where the ILog instance is created or injected, or some other value.
+        ///     Sets the name of the logger, which can be used by a logging back-end for filtering and routing
+        ///     of log entries. If unset, then the value is implementation dependent and may default to the name
+        ///     of the class or source file where the ILog instance is created or injected, or some other value.
         /// </summary>
         /// <param name="logSourceName"></param>
         /// <returns></returns>
         ILog WithName(string logSourceName);
-        }
     }
+}

@@ -26,8 +26,17 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>TA.Utils.Core.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <PackageIcon>TA-Utilities-256x256.png</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

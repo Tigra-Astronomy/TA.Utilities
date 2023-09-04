@@ -248,7 +248,28 @@ but its result will be discarded as there should be nothing awaiting the result.
 
 #### Logging ####
 
-The `TA.Utils.Core.Diagnostics` namespace defines a pair of interfaces, `ILog` and `IFluentLogBuilder`, that define an abstract logging service.
+Logging is a big deal. It is an essential part of debugging during development,
+but can also be really useful or even essential in production.
+It needs to be easy to use, or developer's won't use it.
+It needs to not re-invent any wheels. There are plenty of good logging services out there.
+
+Our approach to logging is this:
+1. No dependency on any particular logging framework.
+   We define an abstract interface that can be adapted to any back-end logging engine.
+2. Follow the KISS principle: "Keep it simple, stupid".
+   Logging should be easy enough that people will use it, but have enough flexibility to be useful in the real world.
+
+We provide an abstract fluent builder pattern for easily constructing log entries and which provides an extensibility point
+for creating extension methods.
+
+Our fluent builder interface supports _semantic logging_ which enables the creation of rich logging data.
+
+Item (1) notwithstanding, we have based our fluent builder API loosely on the one used by NLog.
+We think it is the best balance of simplicity and flexibility. However, we do not depend on NLog
+and have made our own abstract interfaces that can target any logging framework.
+
+The `TA.Utils.Core.Diagnostics` namespace defines a pair of interfaces, `ILog` and `IFluentLogBuilder`,
+that define an abstract logging service which does not depend on any particular back-end.
 
 Libraries can perform logging through these interfaces without ever taking a dependency on any logging imnplementation.
 The actual implementation can be injected at runtime, typically in a constructor parameter.
@@ -261,6 +282,27 @@ A null implementation is provided in `DegenerateLoggerService` and `DegenerateLo
 The two classes do essentially nothing and produce no output; they are a data sink.
 Libraries can choose to use this as their default logging implementation, which is easier than checking
 whether the logger is null every time it is used.
+
+```csharp
+public class MyClassThatUsesLogging
+{
+    private ILog Log;
+
+    // Construct an instance and optionally inject the logging service implementation.
+    public MyClassThatUsesLogging(ILog logService = null)
+    {
+        // Use the supplied logging service, or fall back to the degenerate logger.
+        this.Log = logService ?? new DegenerateLoggerService();
+    }
+
+    public void MethodThatGeneratesLogEntries()
+    {
+        Log.Info()
+            .Message("I am loosely coupled. I do not depend on any logging back-end.")
+            .Write();
+    }
+}
+```
 
 The interface supports semantic logging. You can use a simple format string like so:
 
@@ -294,11 +336,11 @@ When developing adaptors for other logging frameworks, every attempt shouldbe ma
 Think of logging as occurring in two distinct stages.
 
 1. You build the log entry using `IFluentLogBuilder`, adding all of the relevant information as _Properties_ of the log entry.
-2. You send the log entry to the backend to be rendered.
+2. You send the log entry to the back-end to be rendered.
 
 The renderer may use none, some or all of the information you provided and it may even augment it with additional metadata.
 As a library developer, you shouldn't be concerned with how the entry will be rendered, stored or how it will be formatted.
-You should concentrate only on including as much relevant information as is appropriate.
+You should concentrate only on including as much relevant information as is appropriate in your log entries.
 
 Multiple renderers may be in use and different renderers will produce different output from the exact same log entry.
 For example:
@@ -309,10 +351,45 @@ For example:
 - A syslog rendere may include the host name of the originating computer.
 - A NoSQL database renderer may write out all of the properties as a JSON document.
 
-In most cases, the way in which log data is ultimately rendered is controlled by the application, often using a configuration file.
+In most cases, the way in which log data is ultimately rendered is outside of application control.
+Typically, a configuration file is used. The configuration file may be added or changed post-deployment.
 As a library developer, you must accept that you have little to no control over this.
 Just concentrate on including appropriate and useful information and don't think about formatting or storage.
 
+### A Note on Semantic Logging
+
+If you have always thought about logging as `Console.WriteLine()` statements, then you have probably focussed
+on formatting your output and given little thought to the content.
+You might struggle to see the point of semantic logging and you might be due for a paradigm shift.
+Forget about how your log output _looks_ and focus on what data it _contains_.
+Your responsibility as the log entry creator is to include as much relevant data as possible.
+Assume that formatting (rendering) and filtering will be done elsewhere and is outside your control.
+
+How useful would it be, for example, if when you logged an exception,
+it included all the exception metadata, any inner exceptions, and a full stack trace?
+You might struggle to achieve this using `Console.WriteLine()`.
+In our paradigm, that is as simple as adding `.Exception(ex)` to your log builder statement.
+
+Having done that, you might think "so what?". The log file produced still only shows the exception message,
+so what was the point? We struggled with this oursleves. You put the data in, but it doesn't easily come out
+in a meaningful way.
+Then one day we were "red-pilled" by [Seq][seq].
+We discovered the truth that flat files are an inadequate solution for rendering log output.
+
+We had our "Aha!" moment the first time we logged and exception to Seq and were able to view the full stack trace.
+There is so much more to Seq, but that was the moment we understood semantic logging.
+Seq unlocks the full usefulness of all that data and will change the way you write log entries.
+Once you see the truth, Neo, you cannot go back. You cannot "unsee" Seq.
+We realised that merely by changing a configuration file, i.e. with zero code impact,
+we could send our log entries across the network to a log server that could store them in a SQL database.
+We could then use our web browser to log into that server to view the log data, in real time,
+and be able to view, search, filter and query based on the full data that we put into our log entries.
+
+Seq can be used with our logging abstraction and the NLog adapter, and using the NLog.Targets.Seq NuGet package.
+You can then configure a Seq target for NLog in your NLog.config file (there is no special code needed).
+
+
+[seq]: https://datalust.co/seq "Seq semantic logging service"
 [mit]: https://tigra.mit-license.org "Tigra MIT License"
 [semver]: https://semver.org/ "the rules of semantic versioning"
 [gitversion]: https://gitversion.net/docs/ "GitVersion documentation"
