@@ -7,13 +7,13 @@ using System;
 namespace TA.Utils.Core
     {
     /// <summary>
-    ///     When applied to an enum member or field, specifies a string that should be used for display
-    ///     purposes instead of the identifier name. This can be useful within code that must render HTML
-    ///     markup from an enumerated type.
+    ///     When applied to an enum member, property or field, specifies a string that should be used for display
+    ///     purposes instead of the identifier name. This can be useful for rendering display content for
+    ///     reflected type information.
     /// </summary>
     /// <seealso cref="System.Attribute" />
     /// <seealso cref="EnumExtensions.DisplayEquivalent" />
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Enum)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class DisplayEquivalentAttribute : Attribute
         {
         /// <summary>
