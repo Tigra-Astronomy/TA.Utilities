@@ -13,7 +13,7 @@ namespace TA.Utils.Core
     /// </summary>
     /// <seealso cref="System.Attribute" />
     /// <seealso cref="EnumExtensions.DisplayEquivalent" />
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Enum)]
     public sealed class DisplayEquivalentAttribute : Attribute
         {
         /// <summary>
