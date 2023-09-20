@@ -27,28 +27,30 @@ namespace TA.Utils.Core.Diagnostics
         /// <summary>
         ///     Creates a log builder for a log entry with Debug severity.
         /// </summary>
-        /// <param name="callerFilePath">The caller file path.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Information severity.
         /// </summary>
-        /// <param name="callerFilePath">The caller file path.</param>
+        /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
+        /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Warning severity.
         /// </summary>
-        /// <param name="callerFilePath">The caller file path.</param>
+        /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
+        /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Error severity.
         /// </summary>
-        /// <param name="callerFilePath">The caller file path.</param>
+        /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
+        /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null);
 
@@ -56,7 +58,8 @@ namespace TA.Utils.Core.Diagnostics
         ///     Creates a log builder for a log entry with Fatal severity.
         ///     Writing a Fatal log entry also terminates the process.
         /// </summary>
-        /// <param name="callerFilePath">The caller file path.</param>
+        /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
+        /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
         IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null);
 
