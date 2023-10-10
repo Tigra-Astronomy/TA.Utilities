@@ -192,8 +192,8 @@ namespace TA.Utils.Core
             var builder = new StringBuilder();
             for (var i = 7; i >= 0; i--)
                 {
-                builder.Append(bits[i] ? '1' : '0');
-                builder.Append(' ');
+                    builder.Append(bits[i] ? '1' : '0');
+                    builder.Append(' ');
                 }
 
             builder.Length -= 1;
@@ -206,6 +206,7 @@ namespace TA.Utils.Core
         /// </summary>
         /// <param name="integer">The integer.</param>
         /// <returns>The result of the conversion.</returns>
+        [CLSCompliant(false)]
         public static explicit operator Octet(uint integer)
             {
             return FromUnsignedInt(integer);

@@ -9,6 +9,7 @@
 // 
 // File: LoggingService.cs  Last modified: 2023-09-01@11:46 by Tim Long
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using NLog;
@@ -41,13 +42,20 @@ namespace TA.Utils.Logging.NLog
         public LoggingService(LogServiceOptions options = null)
         {
             this.options = options ?? LogServiceOptions.DefaultOptions;
-            // Reflect on the calling type and use its type name as the log source name.
-            // This can be overridden later using the .WithName() method.
-            var callerStackFrame = new StackFrame(1);
-            var callerMethod = callerStackFrame.GetMethod();
-            var callerType = callerMethod.ReflectedType?.DeclaringType;
-            var callerTypeName = callerType?.Name ?? string.Empty;
-            sourceName = callerTypeName;
+            try
+            {
+                // Reflect on the calling type and use its type name as the log source name.
+                // This can be overridden later using the .WithName() method.
+                var callerStackFrame = new StackFrame(1);
+                var callerMethod = callerStackFrame.GetMethod();
+                var callerType = callerMethod.ReflectedType?.DeclaringType;
+                var callerTypeName = callerType?.Name ?? string.Empty;
+                sourceName = callerTypeName;
+            }
+            catch (Exception)
+            {
+                sourceName = "unknown";
+            }
         }
 
         /// <inheritdoc />
