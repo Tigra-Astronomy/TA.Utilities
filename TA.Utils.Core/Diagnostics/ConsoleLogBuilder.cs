@@ -86,7 +86,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
         var argsCount = args.Length;
         if (namesCount != argsCount)
             throw new ArgumentException(
-                $"Mismatched arguments. Format has {names} placeholders but there are {argsCount} arguments, the two should match.");
+                $"Mismatched arguments. Format has {namesCount} placeholders but there are {argsCount} arguments, the two should match.");
         for (var i = 0; i < argsCount; i++) properties[names[i]] = args[i];
         return this;
     }
