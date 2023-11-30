@@ -29,6 +29,7 @@
     <DocumentationFile></DocumentationFile>
     <PackageIcon>TA-Utilities-256x256.png</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
