@@ -17,4 +17,8 @@
     <ProjectReference Include="..\TA.Utils.Logging.Nlog\TA.Utils.Logging.Nlog.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>
