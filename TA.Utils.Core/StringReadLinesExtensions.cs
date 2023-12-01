@@ -14,18 +14,52 @@ using System.IO;
 
 namespace TA.Utils.Core;
 
+/// <summary>
+///     Extensions for splitting newline-separated text into an enumerable collection of lines.
+/// </summary>
 public static class StringReadLinesExtension
-    {
+{
+    /// <summary>
+    ///     Splits a string into lines at newline characters and returns an enumerable collection of the lines.
+    /// </summary>
+    /// <remarks>
+    ///     A line is defined as a sequence of characters followed by a carriage return (0x000d), a line feed (0x000a), a
+    ///     carriage return followed by a line feed, <c>Environment.NewLine</c>, or the end of the string. The string that
+    ///     is returned does not contain the terminating carriage return or line feed.
+    /// </remarks>
+    /// <param name="text">The source string containing zero or more lines of text.</param>
+    /// <returns>An <see cref="IEnumerable{String}" /> containing the lines of text.</returns>
     public static IEnumerable<string> GetLines(this string text)
         {
         return GetLines(new StringReader(text));
         }
 
+    /// <summary>
+    ///     Parses a stream of text into lines (broken on newline characters) and returns the lines as an enumerable collection
+    ///     of strings.
+    /// </summary>
+    /// <remarks>
+    ///     A line is defined as a sequence of characters followed by a carriage return (0x000d), a line feed (0x000a), a
+    ///     carriage return followed by a line feed, <c>Environment.NewLine</c>, or the end-of-stream marker. The string that
+    ///     is returned does not contain the terminating carriage return or line feed.
+    /// </remarks>
+    /// <param name="stm">The readable source stream.</param>
+    /// <returns>An <see cref="IEnumerable{String}" /> containing lines of text from the source stream.</returns>
     public static IEnumerable<string> GetLines(this Stream stm)
         {
         return GetLines(new StreamReader(stm));
         }
 
+    /// <summary>
+    ///     Gets an <see cref="IEnumerable{String}" /> that returns each line in the original text as a separate string.
+    /// </summary>
+    /// <remarks>
+    ///     A line is defined as a sequence of characters followed by a carriage return (0x000d), a line feed (0x000a), a
+    ///     carriage return followed by a line feed, <c>Environment.NewLine</c>, or the end-of-stream marker. The string that
+    ///     is returned does not contain the terminating carriage return or line feed.
+    /// </remarks>
+    /// <param name="reader">A <see cref="TextReader" /> that will be used to read the source content.</param>
+    /// <returns>An enumerable collection of lines of text.</returns>
     public static IEnumerable<string> GetLines(this TextReader reader)
         {
         string line;
