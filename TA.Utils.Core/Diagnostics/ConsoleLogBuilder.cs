@@ -233,18 +233,23 @@ public class ConsoleLogBuilder : IFluentLogBuilder
                     // Copy in the preceding template literal text followed by the property value.
                     var head = messageTemplate.Substring(cursor, match.Index - cursor);
                     builder.Append(head);
-                    builder.AppendFormat(formatter, "{0}", valueObject);
-                    cursor += match.Length;
                 }
-                else
-                {
-                    // There is no matching property value, so render it as literal text.
-                    builder.Append('{').Append(property).Append('}');
-                    cursor = match.Index + match.Length;
-                }
+
+                // Copy in the substituted property value and move the cursor up to the end of the match.
+                builder.AppendFormat(formatter, "{0}", valueObject);
+                cursor = match.Index + match.Length;
+            }
+
+            else
+            {
+                // There is no matching property value, so render it as literal text.
+                builder.Append('{').Append(property).Append('}');
+                cursor = match.Index + match.Length;
             }
         }
 
-        builder.AppendLine();
+        if (cursor < messageTemplate.Length)
+            builder.Append(messageTemplate.Substring(cursor));
+        builder.AppendLine(); // Add a final newline.
     }
 }

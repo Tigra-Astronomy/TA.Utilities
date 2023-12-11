@@ -121,3 +121,18 @@ class when_building_a_log_entry_with_a_custom_formatter : with_console_logger_co
     It should_render_usa_date = () => RenderResult.ShouldContain("At 12/30/2000");
     static Exception exception;
 }
+
+class when_logging_with_a_complex_message_template : with_console_logger_context
+{
+    const string expectedOutput = "[Info] Source[1]: Subscribe()";
+
+    Because of = () => builder
+            .Message("{source}[{id}]: {action}({content})",
+            "Source",
+            1,
+            "Subscribe",
+            string.Empty)
+            .Write();
+
+    It should_produce_the_expected_output = () => RenderResult.ShouldContain(expectedOutput);
+}
