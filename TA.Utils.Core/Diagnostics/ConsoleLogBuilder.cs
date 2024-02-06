@@ -31,6 +31,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
 
     private static readonly Regex PropertyNameMatcher = new(PropertyTemplatePattern, PropertyTemplateOptions);
+    private readonly ConsoleLoggerOptions options;
     private readonly ConsoleLogSeverity severity;
     private readonly int verbosity;
     private string sourceName;
@@ -44,8 +45,10 @@ public class ConsoleLogBuilder : IFluentLogBuilder
 
     internal Task<string> RenderTask { get; private set; }
 
-    public ConsoleLogBuilder(ConsoleLogSeverity severity, int verbosity = 0, string sourceName = null)
+    public ConsoleLogBuilder(ConsoleLoggerOptions options, ConsoleLogSeverity severity, int verbosity = 0,
+        string sourceName = null)
     {
+        this.options = options;
         this.severity = severity;
         this.verbosity = verbosity;
         this.sourceName = sourceName ?? Unnamed;
@@ -158,9 +161,10 @@ public class ConsoleLogBuilder : IFluentLogBuilder
     {
         var builder = new StringBuilder();
         await RenderMessageTemplateAsync(builder).ContinueOnAnyThread();
-        await RenderException(builder);
-        await RenderStackTrace(builder);
-        await RenderPropertiesAsync(builder).ContinueOnAnyThread();
+        await RenderException(builder).ContinueOnAnyThread();
+        await RenderStackTrace(builder).ContinueOnAnyThread();
+        if (options.renderProperties)
+            await RenderPropertiesAsync(builder).ContinueOnAnyThread();
         var renderedLogEntry = builder.ToString();
         Console.WriteLine(renderedLogEntry);
         return renderedLogEntry;

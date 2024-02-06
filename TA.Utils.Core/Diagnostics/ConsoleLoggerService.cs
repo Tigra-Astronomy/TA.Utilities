@@ -19,41 +19,50 @@ namespace TA.Utils.Core.Diagnostics
     public class ConsoleLoggerService : ILog
         {
         private readonly Stream outStream;
+        private readonly ConsoleLoggerOptions options;
+
+        /// <summary>
+        ///     Initialize the instance and optionally inject options.
+        ///     If no options are supplied, then <see cref="ConsoleLoggerOptions.DefaultOptions" /> is used.
+        /// </summary>
+        /// <param name="options">Options that configure the logging service.</param>
+        public ConsoleLoggerService(ConsoleLoggerOptions options = null) =>
+            this.options = options ?? ConsoleLoggerOptions.DefaultOptions;
 
         /// <inheritdoc />
         public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null)
-            {
-            return new ConsoleLogBuilder(ConsoleLogSeverity.Trace, verbosity, sourceNameOverride);
-            }
+        {
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Trace, verbosity, sourceNameOverride);
+        }
 
         /// <inheritdoc />
         public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(ConsoleLogSeverity.Debug, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Debug, verbosity, sourceNameOverride);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null)
-            {
-            return new ConsoleLogBuilder(ConsoleLogSeverity.Info, verbosity, sourceNameOverride);
-            }
+        {
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Info, verbosity, sourceNameOverride);
+        }
 
         /// <inheritdoc />
         public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(ConsoleLogSeverity.Warning, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Warning, verbosity, sourceNameOverride);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(ConsoleLogSeverity.Error, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Error, verbosity, sourceNameOverride);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(ConsoleLogSeverity.Fatal, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Fatal, verbosity, sourceNameOverride);
         }
 
         /// <inheritdoc />
