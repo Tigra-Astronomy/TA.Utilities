@@ -9,6 +9,9 @@
 // 
 // File: ConsoleLogSeverity.cs  Last modified: 2023-11-13@11:37 by Tim Long
 
+// ReSharper disable MissingXmlDoc
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace TA.Utils.Core.Diagnostics
     {
     /// <summary>
