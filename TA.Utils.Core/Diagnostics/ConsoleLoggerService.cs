@@ -10,59 +10,62 @@
 // File: ConsoleLoggerService.cs  Last modified: 2023-11-13@10:22 by Tim Long
 
 using System;
-using System.IO;
 using JetBrains.Annotations;
 
 namespace TA.Utils.Core.Diagnostics
     {
-    [UsedImplicitly]
+        /// <summary>
+        ///     A logging service that emits output directly to the console.
+        ///     The service is completely self-contained and does not rely on any external logging back-end.
+        ///     Useful as a light-weight solution for console applications.
+        /// </summary>
+        [UsedImplicitly]
     public class ConsoleLoggerService : ILog
         {
-        private readonly Stream outStream;
-        private readonly ConsoleLoggerOptions options;
+            private readonly ConsoleLoggerOptions options;
 
-        /// <summary>
-        ///     Initialize the instance and optionally inject options.
-        ///     If no options are supplied, then <see cref="ConsoleLoggerOptions.DefaultOptions" /> is used.
-        /// </summary>
-        /// <param name="options">Options that configure the logging service.</param>
-        public ConsoleLoggerService(ConsoleLoggerOptions options = null) =>
-            this.options = options ?? ConsoleLoggerOptions.DefaultOptions;
+            /// <summary>
+            ///     Initialize the instance and optionally inject options.
+            ///     If no options are supplied, then <see cref="ConsoleLoggerOptions.DefaultOptions" /> is used.
+            /// </summary>
+            /// <param name="options">Options that configure the logging service.</param>
+            public ConsoleLoggerService(ConsoleLoggerOptions options = null) =>
+                this.options = options ?? ConsoleLoggerOptions.DefaultOptions;
 
-        /// <inheritdoc />
+            /// <inheritdoc />
         public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Trace, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Trace);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Debug, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Debug);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Info, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Info);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Warning, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Warning);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Error, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Error);
         }
 
         /// <inheritdoc />
         public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null)
         {
-            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Fatal, verbosity, sourceNameOverride);
+            return new ConsoleLogBuilder(options, ConsoleLogSeverity.Fatal);
         }
 
         /// <inheritdoc />
