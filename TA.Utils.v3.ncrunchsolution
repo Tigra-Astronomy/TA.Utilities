@@ -9,6 +9,8 @@
       <Value>TA.Utils.Logging.NLog.SampleConsoleApp\TA.Utils.Logging.NLog.SampleConsoleApp.csproj</Value>
       <Value>TA.Utils.Specifications\TA.Utils.Specifications.csproj</Value>
     </MetricsExclusionList>
+    <RdiConfigured>True</RdiConfigured>
+    <RestrictToString>False</RestrictToString>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
