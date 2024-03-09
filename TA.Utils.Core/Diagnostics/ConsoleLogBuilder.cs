@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,35 +20,39 @@ using System.Threading.Tasks;
 
 namespace TA.Utils.Core.Diagnostics;
 
+/// <summary>
+///     A fluent log builder for the <see cref="ConsoleLoggerService" />.
+/// </summary>
 public class ConsoleLogBuilder : IFluentLogBuilder
 {
     private const string NoMessage = "(no message)";
-    private const string Unnamed = "(unnamed)";
     private const string PropertyTemplatePattern = @"\{(?<propertyName>\w+)\}";
 
     private const RegexOptions PropertyTemplateOptions =
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
 
     private static readonly Regex PropertyNameMatcher = new(PropertyTemplatePattern, PropertyTemplateOptions);
+    private readonly ConsoleLoggerOptions options;
     private readonly ConsoleLogSeverity severity;
-    private readonly int verbosity;
-    private string sourceName;
     private Maybe<Exception> maybeException = Maybe<Exception>.Empty;
     private string messageTemplate = NoMessage;
     private readonly IDictionary<string, object> properties = new Dictionary<string, object>();
     private Maybe<DateTime> maybeTimeStamp = Maybe<DateTime>.Empty;
     private Maybe<StackTrace> maybeStackTrace = Maybe<StackTrace>.Empty;
-    private readonly Stream outStream;
     private IFormatProvider formatter = CultureInfo.CurrentCulture;
 
     internal Task<string> RenderTask { get; private set; }
 
-    public ConsoleLogBuilder(ConsoleLogSeverity severity, int verbosity = 0, string sourceName = null)
+    /// <summary>
+    ///     Create and initialize a new instance.
+    /// </summary>
+    /// <param name="options">Console logger options.</param>
+    /// <param name="severity"></param>
+    public ConsoleLogBuilder(ConsoleLoggerOptions options, ConsoleLogSeverity severity)
     {
+        this.options = options;
         this.severity = severity;
-        this.verbosity = verbosity;
-        this.sourceName = sourceName ?? Unnamed;
-        outStream = Console.OpenStandardOutput();
+        Console.OpenStandardOutput();
     }
 
     /// <inheritdoc />
@@ -62,7 +65,6 @@ public class ConsoleLogBuilder : IFluentLogBuilder
     /// <inheritdoc />
     public IFluentLogBuilder LoggerName(string loggerName)
     {
-        sourceName = loggerName;
         return this;
     }
 
@@ -136,31 +138,35 @@ public class ConsoleLogBuilder : IFluentLogBuilder
         return this;
     }
 
+    /// <inheritdoc />
     public void Write(string callerMemberName = null, string callerFilePath = null, int callerLineNumber = default)
     {
         RenderTask = RenderLogEntry();
     }
 
+    /// <inheritdoc />
     public void WriteIf(Func<bool> condition, string callerMemberName = null, string callerFilePath = null,
         int callerLineNumber = default)
     {
         if (condition())
-            RenderLogEntry();
+            RenderTask = RenderLogEntry();
     }
 
+    /// <inheritdoc />
     public void WriteIf(bool condition, string callerMemberName = null, string callerFilePath = null,
         int callerLineNumber = default)
     {
-        if (condition) RenderLogEntry();
+        if (condition) RenderTask = RenderLogEntry();
     }
 
     private async Task<string> RenderLogEntry()
     {
         var builder = new StringBuilder();
         await RenderMessageTemplateAsync(builder).ContinueOnAnyThread();
-        await RenderException(builder);
-        await RenderStackTrace(builder);
-        await RenderPropertiesAsync(builder).ContinueOnAnyThread();
+        await RenderException(builder).ContinueOnAnyThread();
+        await RenderStackTrace(builder).ContinueOnAnyThread();
+        if (options.renderProperties)
+            await RenderPropertiesAsync(builder).ContinueOnAnyThread();
         var renderedLogEntry = builder.ToString();
         Console.WriteLine(renderedLogEntry);
         return renderedLogEntry;
@@ -173,6 +179,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
         var trace = maybeStackTrace.Single();
         builder.AppendLine("  Stack trace:");
         foreach (var frame in trace.GetFrames()) builder.Append("    ").AppendLine(frame.ToString());
+        await Task.CompletedTask.ContinueOnAnyThread();
     }
 
     private async Task RenderException(StringBuilder builder)
@@ -181,6 +188,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
             return;
         builder.Append("  Exception: ")
             .AppendLine(maybeException.Single().Message);
+        await Task.CompletedTask.ContinueOnAnyThread();
     }
 
     private async Task RenderMessageTemplateAsync(StringBuilder builder)
@@ -205,6 +213,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
                 .Append(property.Key).Append(": ")
                 .AppendFormat(formatter, "{0}", property.Value)
                 .AppendLine();
+        await Task.CompletedTask.ContinueOnAnyThread();
     }
 
     private async Task RenderMessageTemplateArgumentsAsync(StringBuilder builder)
@@ -233,18 +242,24 @@ public class ConsoleLogBuilder : IFluentLogBuilder
                     // Copy in the preceding template literal text followed by the property value.
                     var head = messageTemplate.Substring(cursor, match.Index - cursor);
                     builder.Append(head);
-                    builder.AppendFormat(formatter, "{0}", valueObject);
-                    cursor += match.Length;
                 }
-                else
-                {
-                    // There is no matching property value, so render it as literal text.
-                    builder.Append('{').Append(property).Append('}');
-                    cursor = match.Index + match.Length;
-                }
+
+                // Copy in the substituted property value and move the cursor up to the end of the match.
+                builder.AppendFormat(formatter, "{0}", valueObject);
+                cursor = match.Index + match.Length;
+            }
+
+            else
+            {
+                // There is no matching property value, so render it as literal text.
+                builder.Append('{').Append(property).Append('}');
+                cursor = match.Index + match.Length;
             }
         }
 
-        builder.AppendLine();
+        if (cursor < messageTemplate.Length)
+            builder.Append(messageTemplate.Substring(cursor));
+        builder.AppendLine(); // Add a final newline.
+        await Task.CompletedTask.ContinueOnAnyThread();
     }
 }

@@ -190,13 +190,11 @@ namespace TA.Utils.Core
         public override string ToString()
             {
             var builder = new StringBuilder();
-            for (var i = 7; i >= 0; i--)
-                {
-                    builder.Append(bits[i] ? '1' : '0');
-                    builder.Append(' ');
-                }
-
+            for (var i = 7; i >= 0; i--) builder.Append(bits[i] ? '1' : '0');
+            //builder.Append(' ');
             builder.Length -= 1;
+            var value = (byte)this;
+            builder.Append($"b {value:X2}x {value}d");
             return builder.ToString();
             }
 
