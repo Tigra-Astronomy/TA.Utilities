@@ -129,6 +129,17 @@ You can test octets for equality and compare them using `==`, `!=`, `>`, `<`, et
 
 ### Diagnostics ###
 
+#### `ConsoleLoggerService` implements `ILog`
+
+One step up from the `DegenerateLoggerService`, enables easy rudimentatary logging to the console
+without depending on any logging framework or configurations files. This is meant to be a light-weight
+stop-gap logging solution for projects that never get large enough to warrant full structured logging.
+
+`ConsoleLoggerService` is fully compatible with and interchangeable with any logging back-end built on the `ILog` interface.
+The _Liskov Subsitution Principle_ is observed, so it remains easy to switch logging back-ends just by changing a binding in your
+IOC container. Start yoru console app with a `ConsoleLoggingService`, then when it becomes a limitation, simply plug-in a full-blown
+logger such as the NLog implementation founf in `TA.Utils.Logging.NLog`.
+
 #### ASCII Mnemonic Expansion ####
 
 When dealing with streams of ASCII-encoded data, it is often helpful to be able to see non-printing and white space characters.
