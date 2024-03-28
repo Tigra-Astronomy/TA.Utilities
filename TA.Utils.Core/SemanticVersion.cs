@@ -55,6 +55,7 @@ namespace TA.Utils.Core
             @"^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<prerelease>[A-Za-z0-9\-\.]+))?(\+(?<build>[A-Za-z0-9\-\.]+))?$";
 
         private const string AllDigitsPattern = @"^[0-9]+$";
+        private static readonly SemanticVersion unknownVersion = new SemanticVersion("0.0.0-unknown");
 
         private static readonly Regex SemanticVersionRegex = new Regex(
             SemanticVersionPattern,
@@ -63,6 +64,12 @@ namespace TA.Utils.Core
         private static readonly Regex AllDigitsRegex = new Regex(
             AllDigitsPattern,
             RegexOptions.Compiled | RegexOptions.Singleline);
+
+        /// <summary>
+        /// A standard fixed version string that can be used to represent an unknown or unset version.
+        /// Use in preference to null.
+        /// </summary>
+        public static SemanticVersion UnknownVersion => unknownVersion;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SemanticVersion" /> class from a version encoded
