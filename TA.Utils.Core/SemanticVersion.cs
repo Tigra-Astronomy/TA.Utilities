@@ -65,6 +65,14 @@ namespace TA.Utils.Core
             RegexOptions.Compiled | RegexOptions.Singleline);
 
         /// <summary>
+        ///     A standard fixed version string that can be used to represent an unknown or unset version.
+        ///     Use in preference to null.
+        /// </summary>
+        public static SemanticVersion UnknownVersion { get; }
+
+        static SemanticVersion() => UnknownVersion = new SemanticVersion("0.0.0-unknown");
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="SemanticVersion" /> class from a version encoded
         ///     in a string.
         /// </summary>
