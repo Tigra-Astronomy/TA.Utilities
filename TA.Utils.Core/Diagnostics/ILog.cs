@@ -64,6 +64,16 @@ namespace TA.Utils.Core.Diagnostics
         IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null);
 
         /// <summary>
+        ///     Specify a custom log level for a log entry. The results are provider-specific and if the logging provider is unable
+        ///     to render the custom level, then it will use "Info".
+        /// </summary>
+        /// <param name="levelName">The name of a custom logging level.</param>
+        /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
+        /// <param name="sourceNameOverride">Optional; override the log source name.</param>
+        /// <returns>IFluentLogBuilder.</returns>
+        IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null);
+
+        /// <summary>
         ///     Instructs the logging service to shut down.
         ///     This should flush any buffered log entries and close any open files or streams.
         ///     It is best practice to call <c>Shutdown</c> before exiting from the program.

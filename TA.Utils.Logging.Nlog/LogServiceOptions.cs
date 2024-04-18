@@ -46,5 +46,23 @@ namespace TA.Utils.Logging.NLog
             VerbosityPropertyName = verbosityPropertyName;
             return this;
         }
+
+        /// <summary>
+        ///     Set the name of the log property that will be used for custom severity levels.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public LogServiceOptions CustomSeverityPropertyName(string propertyName = CustomLevelDefaultPropertyName)
+        {
+            CustomLevelPropertyName = propertyName;
+            return this;
+        }
+
+        /// <summary>
+        ///     The name of the property that will hold any custom severity level.
+        /// </summary>
+        public string CustomLevelPropertyName { get; set; } = CustomLevelDefaultPropertyName;
+
+        private const string CustomLevelDefaultPropertyName = "CustomLevel";
     }
 }
