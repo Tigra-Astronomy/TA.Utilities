@@ -2,6 +2,7 @@
 	<s:Boolean x:Key="/Default/CodeStyle/CodeCleanup/CleanupOnSave/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/CodeCleanup/PartCleanupOnRecentlyModifiedFiles/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/CodeCleanup/PartCleanupOnSave/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpCodeStyle/METHOD_OR_OPERATOR_BODY/@EntryValue">ExpressionBody</s:String>
 	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ALLOW_COMMENT_AFTER_LBRACE/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/EMPTY_BLOCK_STYLE/@EntryValue">TOGETHER_SAME_LINE</s:String>
 	<s:Boolean x:Key="/Default/CodeStyle/EditorConfig/EnableClangFormatSupport/@EntryValue">False</s:Boolean>
@@ -32,5 +33,7 @@ File: ${File.FileName}  Last modified: ${CurrentDate.Year}-${CurrentDate.Month}-
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpPlaceEmbeddedOnSameLineMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpUseContinuousIndentInsideBracesMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EMigrateBlankLinesAroundFieldToBlankLinesAroundProperty/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/StructuredLogging/IgnoredPropertiesRegex/@EntryValue">CustomLevel</s:String>
+	<s:String x:Key="/Default/Environment/StructuredLogging/PropertyNamingType/@EntryValue">CamelCase</s:String>
 	<s:String x:Key="/Default/Housekeeping/ProjectModelSynchronizer/UseMsbuildStrategy/@EntryValue">AUTO</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=versioning/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

@@ -56,7 +56,7 @@ namespace TA.Utils.Logging.NLog
         ///     demand.
         /// </summary>
         /// <param name="logger">An instance of a logging service that will eventually accept the built log entry.</param>
-        /// <param name="level">
+        /// <param name="logLevel">
         ///     The severity level of the log entry being built, as a string. The string can take any value, but
         ///     ideally it should be short and one word with no punctuation or spaces. NLOG cannot render custom severities so the
         ///     NLog severity is set to "Info" and the custom severity tag is added as a property named "CustomLevel".
@@ -67,11 +67,9 @@ namespace TA.Utils.Logging.NLog
         /// <exception cref="ArgumentNullException">Thrown if there is no logging service or verbosity level specified.</exception>
         public LogBuilder(ILogger logger, string logLevel, IDictionary<string, object> ambientProperties)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             if (string.IsNullOrWhiteSpace(logLevel))
                 throw new ArgumentNullException(nameof(logLevel));
-            this.logger = logger;
             PeekLogEvent = new LogEventInfo { LoggerName = logger.Name, Level = LogLevel.Info };
             // Add ambient properties to the log event, if there are any.
             if (ambientProperties?.Any() ?? false)

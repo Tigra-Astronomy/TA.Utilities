@@ -1,5 +1,5 @@
 ﻿// This file is part of the TA.Utils project
-// Copyright © 2015-2023 Timtek Systems Limited, all rights reserved.
+// Copyright © 2015-2024 Timtek Systems Limited, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -7,7 +7,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: ConsoleLoggerService.cs  Last modified: 2023-11-13@10:22 by Tim Long
+// File: ConsoleLoggerService.cs  Last modified: 2024-4-19@10:5 by tim.long
 
 using JetBrains.Annotations;
 
@@ -32,57 +32,39 @@ public class ConsoleLoggerService : ILog
         this.options = options ?? ConsoleLoggerOptions.DefaultOptions;
 
     /// <inheritdoc />
-    public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null)
-    {
-        return new ConsoleLogBuilder(options, ConsoleLogSeverity.Trace);
-    }
+    public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, ConsoleLogSeverity.Trace);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null)
-    {
-        return new ConsoleLogBuilder(options, ConsoleLogSeverity.Debug);
-    }
+    public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, ConsoleLogSeverity.Debug);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null)
-    {
-        return new ConsoleLogBuilder(options, ConsoleLogSeverity.Info);
-    }
+    public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, ConsoleLogSeverity.Info);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null)
-    {
-        return new ConsoleLogBuilder(options, ConsoleLogSeverity.Warning);
-    }
+    public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, ConsoleLogSeverity.Warning);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null)
-    {
-        return new ConsoleLogBuilder(options, ConsoleLogSeverity.Error);
-    }
+    public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, ConsoleLogSeverity.Error);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null)
-    {
-        return new ConsoleLogBuilder(options, ConsoleLogSeverity.Fatal);
-    }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null) =>
-            throw new NotImplementedException();
-
-        /// <inheritdoc />
-        public void Shutdown() { }
+    public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, ConsoleLogSeverity.Fatal);
 
     /// <inheritdoc />
-    public ILog WithAmbientProperty(string name, object value)
-    {
-        return this;
-    }
+    public IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null) =>
+        new ConsoleLogBuilder(options, levelName);
 
     /// <inheritdoc />
-    public ILog WithName(string logSourceName)
-    {
-        return this;
-    }
+    public void Shutdown() { }
+
+    /// <inheritdoc />
+    public ILog WithAmbientProperty(string name, object value) => this;
+
+    /// <inheritdoc />
+    public ILog WithName(string logSourceName) => this;
 }

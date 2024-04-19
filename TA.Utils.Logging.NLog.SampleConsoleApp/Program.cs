@@ -85,7 +85,12 @@ internal class Program
             log.Debug(1).Message("Finished iteration {iteration}", i).Write();
         }
 
-        log.Info().Message("Program terminated").Write();
+        // Log program exit using a custom severity level of "Important".
+        // This works for the Seq target and the ConsoleLoggerService, but other NLog-based
+        // renderers will emit the event at "Info" severity.
+        // See also: configuration for the Seq target in NLog.config.
+        // See also: LogServiceOptions.CustomSeverityPropertyName property.
+        log.Level("Important").Message("Program terminated").Write();
         log.Shutdown();
     }
 }
