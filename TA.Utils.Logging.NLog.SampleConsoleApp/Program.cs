@@ -39,7 +39,7 @@ internal class Program
         // If this doesn't seem useful, try running two simultaneous instances of the program
         // and then try to sort out which log entry came from which instance.
         // The correlation ID makes this trivial.
-        var options = LogServiceOptions.DefaultOptions.UseVerbosity();
+        var options = LogServiceOptions.DefaultOptions.UseVerbosity().CustomSeverityPropertyName("SeqLevel");
         var log = new LoggingService(options).WithAmbientProperty("CorrelationId", Guid.NewGuid());
         log.Info()
             .Message("Application starting - version {Version}", GitVersion.GitInformationalVersion)

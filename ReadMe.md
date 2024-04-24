@@ -4,6 +4,37 @@ This library represents a collection of classes factored out of our production p
 Rather than re-using the code at source level, it is now collected together in this package as a general purpose reusable library and made freely available for you to use at no cost and with no obligation. The only stipulation is that you can't sue the author or Timtek Systems Limited
 if anything bad happens as a result of you using the code. It's up to you to determine suitability for your purpose.
 
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Timtek Commonly Used Helpers and Utilities](#timtek-commonly-used-helpers-and-utilities)
+  - [Software Re-use at the Object Code level](#software-re-use-at-the-object-code-level)
+  - [Licensing](#licensing)
+  - [Description of Classes](#description-of-classes)
+    - [Versioning](#versioning)
+    - [Readability and Intention-revealing Code](#readability-and-intention-revealing-code)
+      - [Maybe?](#maybe)
+    - [Bit Manipulation](#bit-manipulation)
+      - [Octet](#octet)
+    - [Diagnostics](#diagnostics)
+      - [`ConsoleLoggerService` implements `ILog`](#consoleloggerservice-implements-ilog)
+      - [ASCII Mnemonic Expansion](#ascii-mnemonic-expansion)
+      - [Display Equivalence for Enumerated Types](#display-equivalence-for-enumerated-types)
+    - [Asynchrony and Threading](#asynchrony-and-threading)
+      - [ConfigureAwait](#configureawait)
+      - [Cancel Culture](#cancel-culture)
+      - [Logging](#logging)
+    - [Two-stage Approach to Logging](#two-stage-approach-to-logging)
+    - [A Note on Semantic Logging](#a-note-on-semantic-logging)
+    - [Seq Special Considerations](#seq-special-considerations)
+      - [TL;DR](#tldr)
+      - [Log Correlation](#log-correlation)
+      - [Custom Severity Levels](#custom-severity-levels)
+
+<!-- /code_chunk_output -->
+
+
 ## Software Re-use at the Object Code level
 
 This was always the promise of _Object Oriented Design_, but it was not until the advent of [NuGet][nuget] and its widespread adoption that this became a practical reality.
@@ -19,7 +50,7 @@ We push both prerelease and release versions to [MyGet][myget].
 When we make an official release, we promote that package from [MyGet][myget] to [NuGet][nuget].
 You can consume our packages from either location, but if you want betas and release candidates, then you'll need to use [our MyGet feed][myget].
 
-## Licensing ##
+## Licensing
 
 This software is released under the [Tigra MIT License][mit], which (in summary) means:
 "Anyone can do anything at all with this software without limitation, but it's not our fault if anything goes wrong".
@@ -35,9 +66,9 @@ I also wouldn't mind you giving us a mention, if you feel you are able to, as it
 
 If you are a company and need some work done, then consider hiring me as a freelance developer. I have decades of experience in product design, firmware development for embedded systems and PC driver and software development. I'm a professional; I believe in doing what's right, not what's expedient and I support my software.
 
-## Description of Classes ##
+## Description of Classes
 
-### Versioning ###
+### Versioning
 
 Timtek has settled on a versioning strategy based on [Semantic Versioning 2.0.0][semver].
 
@@ -64,9 +95,9 @@ There's no mistaking where that build came from.
 This information can be a little tricky to get at, because it doesn't exist at compile time so you can't easily reference it. You have to use Reflection to get at it.
 Our `GitVersion` class contains static properties for getting your semantic version metadata at runtime. We use it to write the log entries as shown above.
 
-### Readability and Intention-revealing Code ###
+### Readability and Intention-revealing Code
 
-#### Maybe? ####
+#### Maybe?
 
 One of the most insideous bug producers in .NET code is the null value.
 Do you return `null` to mean "no value"?
@@ -105,9 +136,9 @@ Creating a maybe can be done by:
 Try returning a `Maybe<T>` whenever you have a situation wehere there may be no value, instead of `null`.
 You may find that your bug count tends to diminish.
 
-### Bit Manipulation ###
+### Bit Manipulation
 
-#### Octet ####
+#### Octet
 
 An `Octet` is an immutable type that represents 8 bits, or a byte.
 In most cases, it can be directly used in place of a `byte` as there are implicit conversions to and from a `byte`.
@@ -127,7 +158,7 @@ Remember `Octet` is _immutable_ so this gives you a new `Octet` and leaves the o
 You can perform logical bitwise operations using the `&` anf `|` operators.
 You can test octets for equality and compare them using `==`, `!=`, `>`, `<`, etc.
 
-### Diagnostics ###
+### Diagnostics
 
 #### `ConsoleLoggerService` implements `ILog`
 
@@ -140,7 +171,7 @@ The _Liskov Subsitution Principle_ is observed, so it remains easy to switch log
 IOC container. Start yoru console app with a `ConsoleLoggingService`, then when it becomes a limitation, simply plug-in a full-blown
 logger such as the NLog implementation founf in `TA.Utils.Logging.NLog`.
 
-#### ASCII Mnemonic Expansion ####
+#### ASCII Mnemonic Expansion
 
 When dealing with streams of ASCII-encoded data, it is often helpful to be able to see non-printing and white space characters.
 This is especially useful when logging.
@@ -149,7 +180,7 @@ Us `string.ExpansAscii()` and cahacters such as carriage return, for example, wi
 
 `ExpandAscii()` uses the mnemonics defined in the `AsciiSymbols` enumerated type.
 
-#### Display Equivalence for Enumerated Types ####
+#### Display Equivalence for Enumerated Types
 
 The `[DisplayEquivalent("text")]` Attribute works with the `EnumExtensions.DisplayEquivalent()` extension method.
 This can be useful for building drop-down lists and Combo box contents for enumerated types.
@@ -175,9 +206,9 @@ Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on ea
         }
 ```
 
-### Asynchrony and Threading ###
+### Asynchrony and Threading
 
-#### ConfigureAwait ####
+#### ConfigureAwait
 
 There is an extension method in .NET used to configure awaitable tasks, called `ConfigureAwait(bool)`.
 The method affects how the task awaiter schedules its continuation.
@@ -249,7 +280,7 @@ If the continuation is queued in the message queue waiting for messages to be pu
 The task is prevented from completing and we are in deadlock.
 Therefore, best practice for library writers is to always use `ContinueOnAnyThread()`.
 
-#### Cancel Culture ####
+#### Cancel Culture
 
 One final extension method is `Task.WithCancellation(token)`.
 This takes a task that is not cancellable and wraps it in a cancellable task.
@@ -257,7 +288,7 @@ Awaiters can then wait on the cancellable wrapper and will get to run if the wra
 Note that this doesn't stop the original task from running and it may still run to completion,
 but its result will be discarded as there should be nothing awaiting the result.
 
-#### Logging ####
+#### Logging
 
 Logging is a big deal. It is an essential part of debugging during development,
 but can also be really useful or even essential in production.
@@ -342,24 +373,24 @@ So if in doubt, include extra information where it is appropriate.
 Again, this feature set is native to NLog so makes for a very lightweight adaptor.
 When developing adaptors for other logging frameworks, every attempt shouldbe made to preserve as much of the information as possible.
 
-### Two-stage Approach to Logging ###
+### Two-stage Approach to Logging
 
 Think of logging as occurring in two distinct stages.
 
 1. You build the log entry using `IFluentLogBuilder`, adding all of the relevant information as _Properties_ of the log entry.
-2. You send the log entry to the back-end to be rendered.
+2. You send the log entry to the back-end to be rendered on one or more _Targets_.
 
-The renderer may use none, some or all of the information you provided and it may even augment it with additional metadata.
+Each target may use none, some or all of the information you provided and it may even augment it with additional metadata.
 As a library developer, you shouldn't be concerned with how the entry will be rendered, stored or how it will be formatted.
 You should concentrate only on including as much relevant information as is appropriate in your log entries.
 
-Multiple renderers may be in use and different renderers will produce different output from the exact same log entry.
+Multiple targets may be in use and different targets will produce different output from the exact same log entry.
 For example:
 
-- A file renderer may include a timestamp and perform log file rotation so that a new file is created each day.
+- A file target may include a timestamp and perform log file rotation so that a new file is created each day.
 - A debug output stream may include the name of the class where the log entry originated and print only the message portion.
 - A console logger may write different lines in different colours accoring to the severity level.
-- A syslog rendere may include the host name of the originating computer.
+- A syslog target may include the host name of the originating computer.
 - A NoSQL database renderer may write out all of the properties as a JSON document.
 
 In most cases, the way in which log data is ultimately rendered is outside of application control.
@@ -399,6 +430,87 @@ and be able to view, search, filter and query based on the full data that we put
 Seq can be used with our logging abstraction and the NLog adapter, and using the NLog.Targets.Seq NuGet package.
 You can then configure a Seq target for NLog in your NLog.config file (there is no special code needed).
 
+### Seq Special Considerations
+
+We highly recommend Seq. It's free for a single user and can be set up in a few moments using Docker. This section contains some of our explorations with Seq.
+
+#### TL;DR
+
+- Add and ambient property called `CorrelationId` to all log entries and set it to a new `Guid` each time the program starts. This helps you find all the log entries relating to a particular run of the program.
+- Register a _Last Chance Exception Handler_ as soon as your program starts; this will let you catch and log any program crashes as they happen. Have your handler log the exception and display a message to the user with the `CorrelationId` that they should use in any bug reports. This will make it trivial to find the error in the logs.
+- When reporting a `CorrelationId` to the user, you can use just the last few digits (we use 6) of the `CorrelationId`, this is usually enough to uniquely identify a log session.
+- Use _dependency injection_ and have your IOC container create loggers for injection into class constructors.
+
+ This method may be useful. It was written for use with Ninject, but you can distill out the approach  of looking at the stack frame to work out the calling type and set the logger name from that.
+
+ ```csharp
+/// <summary>
+///     Get an instance of a service from the dependency injection kernel.
+///     Special handling for logging services.
+/// </summary>
+/// <typeparam name="TService">The type of service requested.</typeparam>
+/// <returns>An instance of the requested service.</returns>
+public static TService Get<TService>()
+{
+    if (typeof(ILog).IsAssignableFrom(typeof(TService)))
+    {
+        // Special handling for request for ILog.
+        // Try to determine the calling type by examining the stack, and pass it to the kernel as a binding parameter.
+        var callerStackFrame = new StackFrame(1);
+        var callingMethod = callerStackFrame.GetMethod();
+        // MethodBase.ReflectedType is more reliable than the direct Type property and less likely to return an "un-utterable name".
+        var callerType = callingMethod.ReflectedType;
+        var callerTypeName = callerType?.Name ?? string.Empty;
+        if (!string.IsNullOrEmpty(callerTypeName))
+        {
+            var logServiceNameParameter = new Parameter(LogSourceParameterName, callerTypeName, false);
+            return Kernel.Get<TService>(logServiceNameParameter);
+        }
+    }
+
+    // For all other requests, simply request the type from the DI kernel.
+    return Kernel.Get<TService>();
+}
+ ```
+
+#### Log Correlation
+
+We use a global static readonly GUID called something like `CorrelationId`.
+We initialize this with a new `Guid` as early as possible in the program execution, usually in a static initializer, so that it has a new value for each run of the program. We then add this to every instance of `ILog` as an Ambient Property.
+
+This way, every log entry we write contains a `CorrelationId` value which is unique for each run of the program. In Seq, you can Expand a log entry, find the `CorrelationId` property, and click the checkmark next to it, then select "Find". This will find all the log entries for one run of the program.
+
+![Correlation of log entries](Assets/Find-CorrelationId.png)
+
+#### Custom Severity Levels
+
+NLog has fice severity levels: `Trace`, `Debug`, `Info`, `Warning`, `Error` and a pseudo-level `Fatal` which actually causes the program to exit, so can't really be used as a normal severity level.
+
+We find this a bit limiting and would like to be able to create our own levels, such as `Note` and `Important`.
+
+The `NLog.Targets.Seq` logging target has support for this, and we also support it in our `ILog` interface via the `ILog.Level(string levelName)` method.
+
+The way this works is to create an additional log event property, by default named "CustomLevel", containing the level name. The Seq target then uses this property as the level when it posts the data to the Seq server. If the default property name is no good for some reason, it can be changed using a `LogServiceOptions` instance and setting `LogServiceOptions.CustomSeverityPropertyName` property to the preferred name, like so:
+
+```csharp
+var options = LogServiceOptions.DefaultOptions.CustomSeverityPropertyName("SeqLevel");
+var log = new LoggingService(options);
+```
+
+A small bit of configuration is needed to wire this up, in the Seq target in the `NLog.config` file, like so:
+
+```xml
+      <target xsi:type="Seq" name="seq" 
+      serverUrl="http://your-server-url:5341"
+      apiKey="your-seq-api-key"
+      seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}">
+```
+
+The magic is in `seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}`
+
+This uses the value of `CustomLevel` as the Seq level, unless it is empty or missing, in which case it defaults to the NLog level.
+
+In targets other than Seq, this will just appear as yet another log event property.
 
 [seq]: https://datalust.co/seq "Seq semantic logging service"
 [mit]: https://tigra.mit-license.org "Tigra MIT License"
