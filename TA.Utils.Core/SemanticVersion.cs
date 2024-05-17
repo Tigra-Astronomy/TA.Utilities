@@ -51,14 +51,18 @@ namespace TA.Utils.Core
     /// </remarks>
     public sealed class SemanticVersion : IEquatable<SemanticVersion>, IComparable, IComparable<SemanticVersion>
         {
-        internal const string SemanticVersionPattern =
-            @"^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<prerelease>[A-Za-z0-9\-\.]+))?(\+(?<build>[A-Za-z0-9\-\.]+))?$";
+            /// <summary>
+            ///     Regular expression match pattern for semantic version strings. Published at:
+            ///     https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+            /// </summary>
+            public const string SemanticVersionRegexPattern =
+                @"^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<build>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$";
 
-        private const string AllDigitsPattern = @"^[0-9]+$";
+            private const string AllDigitsPattern = @"^[0-9]+$";
 
-        private static readonly Regex SemanticVersionRegex = new Regex(
-            SemanticVersionPattern,
-            RegexOptions.Compiled | RegexOptions.Singleline);
+            private static readonly Regex SemanticVersionRegex = new(
+                SemanticVersionRegexPattern,
+                RegexOptions.Compiled | RegexOptions.Singleline);
 
         private static readonly Regex AllDigitsRegex = new Regex(
             AllDigitsPattern,
@@ -93,10 +97,10 @@ namespace TA.Utils.Core
 
             var match = SemanticVersionRegex.Match(version);
             if (!match.Success)
-                {
-                string message = $"The version number '{version}' is not a valid semantic version number.";
+            {
+                var message = $"The version number '{version}' is not a valid semantic version number.";
                 throw new ArgumentException(message, nameof(version));
-                }
+            }
 
             MajorVersion = int.Parse(match.Groups["major"].Value, CultureInfo.InvariantCulture);
             MinorVersion = int.Parse(match.Groups["minor"].Value, CultureInfo.InvariantCulture);
