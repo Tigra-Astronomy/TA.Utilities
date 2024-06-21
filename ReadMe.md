@@ -91,6 +91,18 @@ If you examine one of our log files, you may well find something like this:
 
 There's no mistaking where that build came from.
 
+#### `SemanticVersion` class
+
+Since we rely heavily on semantic versioning, it is useful to have a class that encapsulates all the rules for parsing, outputting, comparing and sorting semantic versions. That is the function of the `SemanticVersion` class. With it you can:
+
+- Parse a semantic version string;
+- Validate a semantic version string;
+- Format a version for display, logging or printing;
+- Test the equality of two versions using the correct comparison rules;
+- Sort versions using the correct collation rules.
+
+#### GitVersion Support
+
 [GitVersion][gitversion] also injects a static class into the assembly containing all the versioning information it computed based on your Git commit history.
 This information can be a little tricky to get at, because it doesn't exist at compile time so you can't easily reference it. You have to use Reflection to get at it.
 Our `GitVersion` class contains static properties for getting your semantic version metadata at runtime. We use it to write the log entries as shown above.
