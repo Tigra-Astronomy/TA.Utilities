@@ -50,6 +50,34 @@ namespace TA.Utils.Logging.NLog
                     PeekLogEvent.Properties[property.Key] = property.Value;
         }
 
+        /// <summary>
+        ///     Construct a new log event builder at a given logging verbosity level, ensuring that any ambient properties are
+        ///     used. Instances of the builder object are typically created by the logging service, but can also be constructed on
+        ///     demand.
+        /// </summary>
+        /// <param name="logger">An instance of a logging service that will eventually accept the built log entry.</param>
+        /// <param name="logLevel">
+        ///     The severity level of the log entry being built, as a string. The string can take any value, but
+        ///     ideally it should be short and one word with no punctuation or spaces. NLOG cannot render custom severities so the
+        ///     NLog severity is set to "Info" and the custom severity tag is added as a property named "CustomLevel".
+        ///     NLog.Targets.Seq, via an appropriate layout renderer configuration, is able to render this property into the Seq
+        ///     level, since Seq supports any text as a severity.
+        /// </param>
+        /// <param name="ambientProperties">Any ambient properties that should be included in the log entry.</param>
+        /// <exception cref="ArgumentNullException">Thrown if there is no logging service or verbosity level specified.</exception>
+        public LogBuilder(ILogger logger, string logLevel, IDictionary<string, object> ambientProperties)
+        {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            if (string.IsNullOrWhiteSpace(logLevel))
+                throw new ArgumentNullException(nameof(logLevel));
+            PeekLogEvent = new LogEventInfo { LoggerName = logger.Name, Level = LogLevel.Info };
+            // Add ambient properties to the log event, if there are any.
+            if (ambientProperties?.Any() ?? false)
+                foreach (var property in ambientProperties)
+                    PeekLogEvent.Properties[property.Key] = property.Value;
+            PeekLogEvent.Properties["CustomLevel"] = logLevel;
+        }
+
         /// <inheritdoc />
         public IFluentLogBuilder Exception(Exception exception)
         {

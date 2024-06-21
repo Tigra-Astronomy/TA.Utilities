@@ -57,6 +57,9 @@ namespace TA.Utils.Core.Diagnostics
         }
 
         /// <inheritdoc />
+        public IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null) => builder;
+
+        /// <inheritdoc />
         public void Shutdown() { }
 
         /// <inheritdoc />

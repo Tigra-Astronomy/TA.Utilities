@@ -39,7 +39,7 @@ internal class Program
         // If this doesn't seem useful, try running two simultaneous instances of the program
         // and then try to sort out which log entry came from which instance.
         // The correlation ID makes this trivial.
-        var options = LogServiceOptions.DefaultOptions.UseVerbosity();
+        var options = LogServiceOptions.DefaultOptions.UseVerbosity().CustomSeverityPropertyName("SeqLevel");
         var log = new LoggingService(options).WithAmbientProperty("CorrelationId", Guid.NewGuid());
         log.Info()
             .Message("Application starting - version {Version}", GitVersion.GitInformationalVersion)
@@ -85,7 +85,12 @@ internal class Program
             log.Debug(1).Message("Finished iteration {iteration}", i).Write();
         }
 
-        log.Info().Message("Program terminated").Write();
+        // Log program exit using a custom severity level of "Important".
+        // This works for the Seq target and the ConsoleLoggerService, but other NLog-based
+        // renderers will emit the event at "Info" severity.
+        // See also: configuration for the Seq target in NLog.config.
+        // See also: LogServiceOptions.CustomSeverityPropertyName property.
+        log.Level("Important").Message("Program terminated").Write();
         log.Shutdown();
     }
 }

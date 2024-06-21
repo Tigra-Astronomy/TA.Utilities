@@ -101,6 +101,10 @@ namespace TA.Utils.Logging.NLog
         }
 
         /// <inheritdoc />
+        public IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null) =>
+            CreateLogBuilder(levelName, verbosity);
+
+        /// <inheritdoc />
         public void Shutdown()
         {
             LogManager.Shutdown();
@@ -121,6 +125,15 @@ namespace TA.Utils.Logging.NLog
         }
 
         private IFluentLogBuilder CreateLogBuilder(LogLevel logLevel, int verbosity)
+        {
+            var logger = string.IsNullOrWhiteSpace(sourceName) ? DefaultLogger : LogManager.GetLogger(sourceName);
+            var builder = new LogBuilder(logger, logLevel, ambientProperties);
+            if (options.VerbosityEnabled)
+                builder.Property(options.VerbosityPropertyName, verbosity);
+            return builder;
+        }
+
+        private IFluentLogBuilder CreateLogBuilder(string logLevel, int verbosity)
         {
             var logger = string.IsNullOrWhiteSpace(sourceName) ? DefaultLogger : LogManager.GetLogger(sourceName);
             var builder = new LogBuilder(logger, logLevel, ambientProperties);

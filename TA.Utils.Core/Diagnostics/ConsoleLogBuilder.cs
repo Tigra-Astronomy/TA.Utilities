@@ -33,7 +33,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
 
     private static readonly Regex PropertyNameMatcher = new(PropertyTemplatePattern, PropertyTemplateOptions);
     private readonly ConsoleLoggerOptions options;
-    private readonly ConsoleLogSeverity severity;
+    private readonly string severity;
     private Maybe<Exception> maybeException = Maybe<Exception>.Empty;
     private string messageTemplate = NoMessage;
     private readonly IDictionary<string, object> properties = new Dictionary<string, object>();
@@ -48,7 +48,14 @@ public class ConsoleLogBuilder : IFluentLogBuilder
     /// </summary>
     /// <param name="options">Console logger options.</param>
     /// <param name="severity"></param>
-    public ConsoleLogBuilder(ConsoleLoggerOptions options, ConsoleLogSeverity severity)
+    public ConsoleLogBuilder(ConsoleLoggerOptions options, ConsoleLogSeverity severity) : this(options, severity.ToString()) { }
+
+    /// <summary>
+    ///     Create and initialize a new instance.
+    /// </summary>
+    /// <param name="options">Console logger options.</param>
+    /// <param name="severity"></param>
+    public ConsoleLogBuilder(ConsoleLoggerOptions options, string severity)
     {
         this.options = options;
         this.severity = severity;
