@@ -13,6 +13,8 @@ if anything bad happens as a result of you using the code. It's up to you to det
   - [Licensing](#licensing)
   - [Description of Classes](#description-of-classes)
     - [Versioning](#versioning)
+      - [`SemanticVersion` class](#semanticversion-class)
+      - [GitVersion Support](#gitversion-support)
     - [Readability and Intention-revealing Code](#readability-and-intention-revealing-code)
       - [Maybe?](#maybe)
     - [Bit Manipulation](#bit-manipulation)
@@ -31,6 +33,7 @@ if anything bad happens as a result of you using the code. It's up to you to det
       - [TL;DR](#tldr)
       - [Log Correlation](#log-correlation)
       - [Custom Severity Levels](#custom-severity-levels)
+  - [Release Notes](#release-notes)
 
 <!-- /code_chunk_output -->
 
@@ -523,6 +526,15 @@ The magic is in `seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}`
 This uses the value of `CustomLevel` as the Seq level, unless it is empty or missing, in which case it defaults to the NLog level.
 
 In targets other than Seq, this will just appear as yet another log event property.
+
+## Release Notes
+
+2.8.0
+: Fixed a formatting bug in `Octet.ToString()`
+
+2.7.0
+: Added support for custom severity levels in the `ILog` abstraction and NLog implementation.
+: Used the "official" regular expression to validate semantic version strings. Note: some strings that were previously accepted, such as "01.02.03" will no longer be accepted as valid.
 
 [seq]: https://datalust.co/seq "Seq semantic logging service"
 [mit]: https://tigra.mit-license.org "Tigra MIT License"
