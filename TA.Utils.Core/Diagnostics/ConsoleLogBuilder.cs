@@ -23,10 +23,10 @@ namespace TA.Utils.Core.Diagnostics;
 /// <summary>
 ///     A fluent log builder for the <see cref="ConsoleLoggerService" />.
 /// </summary>
-public class ConsoleLogBuilder : IFluentLogBuilder
+public sealed class ConsoleLogBuilder : IFluentLogBuilder
 {
     private const string NoMessage = "(no message)";
-    private const string PropertyTemplatePattern = @"\{(?<propertyName>\w+)\}";
+    private const string PropertyTemplatePattern = @"\{[@$]?(?<propertyName>\w+)\}";
 
     private const RegexOptions PropertyTemplateOptions =
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
@@ -36,7 +36,7 @@ public class ConsoleLogBuilder : IFluentLogBuilder
     private readonly string severity;
     private Maybe<Exception> maybeException = Maybe<Exception>.Empty;
     private string messageTemplate = NoMessage;
-    private readonly IDictionary<string, object> properties = new Dictionary<string, object>();
+    internal readonly IDictionary<string, object> properties = new Dictionary<string, object>();
     private Maybe<DateTime> maybeTimeStamp = Maybe<DateTime>.Empty;
     private Maybe<StackTrace> maybeStackTrace = Maybe<StackTrace>.Empty;
     private IFormatProvider formatter = CultureInfo.CurrentCulture;

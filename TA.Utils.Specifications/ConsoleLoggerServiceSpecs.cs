@@ -38,6 +38,17 @@ class with_console_logger_context
 
 #endregion
 
+[Subject(typeof(ConsoleLoggerService), "Message Template Parsing")]
+class when_building_a_log_entry_with_annotated_template_placeholders : with_console_logger_context
+{
+    const int ExpectedPropertyValue = 17;
+    const string ExpectedPropertyName = "myValue";
+    const string ExpectedRenderedProperty = "  myValue: 17";
+    Because of = () => { builder.Message("Template {$string} {@json}", 0, 0); };
+    It should_contain_the_unannotated_string_property_name = () => builder.properties.First().Key.ShouldEqual("string");
+    It should_contain_the_unannotated_json_property_name = () => builder.properties.Last().Key.ShouldEqual("json");
+}
+
 [Subject(typeof(ConsoleLoggerService), "Rendering")]
 class when_building_a_log_entry_with_one_property_at_info_severity : with_console_logger_context
 {
