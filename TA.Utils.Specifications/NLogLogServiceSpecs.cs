@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Machine.Specifications;
+using NLog;
 using TA.Utils.Core.Diagnostics;
 using TA.Utils.Logging.NLog;
 
@@ -94,4 +95,37 @@ class when_adding_many_conflicting_properties
         var builder = new LoggingService().Info();
         for (var i = 0; i < 1000; ++i) builder.Property("conflictedName", 99);
     }
+}
+
+class when_logging_with_nonstandard_severity_and_default_options
+{
+    const string customSeverity = "UnitTest";
+    Establish    context        = () => log = new LoggingService(options);
+    Because      of             = () => logEvent = ((LogBuilder)log.Level(customSeverity)).PeekLogEvent;
+
+    It should_add_the_default_custom_level_property =
+        () => logEvent.Properties.ContainsKey(LogServiceOptions.CustomLevelDefaultPropertyName).ShouldBeTrue();
+
+    It should_set_the_standard_severity_to_info = () => logEvent.Level.ShouldEqual(LogLevel.Info);
+    It should_set_the_custom_severity = () => logEvent.Properties[options.CustomLevelPropertyName].ShouldEqual(customSeverity);
+    static          LogEventInfo logEvent;
+    static          LoggingService log;
+    static readonly LogServiceOptions options = LogServiceOptions.DefaultOptions;
+}
+
+class when_logging_with_nonstandard_severity_and_custom_severity_property_name
+{
+    const string customSeverity     = "UnitTest2";
+    const string CustomPropertyName = "UnitTestSeverity";
+    Establish    context            = () => log = new LoggingService(options);
+    Because      of                 = () => logEvent = ((LogBuilder)log.Level(customSeverity)).PeekLogEvent;
+
+    It should_add_the_custom_level_property =
+        () => logEvent.Properties.ContainsKey(CustomPropertyName).ShouldBeTrue();
+
+    It should_set_the_standard_severity_to_info = () => logEvent.Level.ShouldEqual(LogLevel.Info);
+    It should_set_the_custom_severity = () => logEvent.Properties[options.CustomLevelPropertyName].ShouldEqual(customSeverity);
+    static          LogEventInfo logEvent;
+    static          LoggingService log;
+    static readonly LogServiceOptions options = LogServiceOptions.DefaultOptions.CustomSeverityPropertyName(CustomPropertyName);
 }

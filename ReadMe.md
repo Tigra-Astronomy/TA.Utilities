@@ -529,6 +529,9 @@ In targets other than Seq, this will just appear as yet another log event proper
 
 ## Release Notes
 
+2.8.1
+ : Fixed an issue that caused a custom severity property name option to be ignored. 
+
 2.8.0
 : Fixed a formatting bug in `Octet.ToString()`
 

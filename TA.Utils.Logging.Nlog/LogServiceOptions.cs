@@ -16,9 +16,10 @@ namespace TA.Utils.Logging.NLog
     /// </summary>
     public class LogServiceOptions
     {
-        private const string VerbosityDefaultPropertyName = "verbosity";
-        internal bool VerbosityEnabled;
-        internal string VerbosityPropertyName = VerbosityDefaultPropertyName;
+        internal const string VerbosityDefaultPropertyName   = "verbosity";
+        internal const string CustomLevelDefaultPropertyName = "CustomLevel";
+        internal       bool   VerbosityEnabled;
+        internal       string VerbosityPropertyName = VerbosityDefaultPropertyName;
 
         private LogServiceOptions() { } // prevent use of the  except within the class itself.
 
@@ -62,7 +63,5 @@ namespace TA.Utils.Logging.NLog
         ///     The name of the property that will hold any custom severity level.
         /// </summary>
         public string CustomLevelPropertyName { get; set; } = CustomLevelDefaultPropertyName;
-
-        private const string CustomLevelDefaultPropertyName = "CustomLevel";
     }
 }
