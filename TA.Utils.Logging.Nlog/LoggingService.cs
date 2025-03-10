@@ -133,10 +133,34 @@ namespace TA.Utils.Logging.NLog
             return builder;
         }
 
+        /// <summary>
+        ///     Creates a fluent log builder for constructing and writing log entries with the specified log level and verbosity.
+        /// </summary>
+        /// <param name="logLevel">
+        ///     The name of a nonstandard logging level to be used for the log entry.
+        ///     When nonstandard severity levels are used, the level name is added to a property named (by default) "CustomLevel".
+        ///     However, this can be overridden in the <see cref="LogServiceOptions" />.
+        /// </param>
+        /// <param name="verbosity">
+        ///     An integer representing the verbosity level of the log entry. This value is used to provide additional context
+        ///     or granularity for the log entry.
+        /// </param>
+        /// <returns>
+        ///     An instance of <see cref="TA.Utils.Core.Diagnostics.IFluentLogBuilder" /> that can be used to build and write
+        ///     the log entry.
+        /// </returns>
+        /// <remarks>
+        ///     This method utilizes the NLog logging framework to create a log builder. If a source name is specified for the
+        ///     logger, it will use that; otherwise, it defaults to the current class logger. Ambient properties and verbosity
+        ///     settings are applied to the log builder if configured.
+        /// </remarks>
         private IFluentLogBuilder CreateLogBuilder(string logLevel, int verbosity)
         {
-            var logger = string.IsNullOrWhiteSpace(sourceName) ? DefaultLogger : LogManager.GetLogger(sourceName);
-            var builder = new LogBuilder(logger, logLevel, ambientProperties);
+            var logger                 = string.IsNullOrWhiteSpace(sourceName) ? DefaultLogger : LogManager.GetLogger(sourceName);
+            var propsToAdd             = new Dictionary<string, object>(ambientProperties);
+            var customLogLevelProperty = options.CustomLevelPropertyName;
+            propsToAdd[customLogLevelProperty] = logLevel;
+            var builder = new LogBuilder(logger, propsToAdd);
             if (options.VerbosityEnabled)
                 builder.Property(options.VerbosityPropertyName, verbosity);
             return builder;

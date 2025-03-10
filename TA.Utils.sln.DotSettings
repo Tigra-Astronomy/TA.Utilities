@@ -21,6 +21,7 @@ You make use of the Software entirely at your own risk and assume all liability 
 File: ${File.FileName}  Last modified: ${CurrentDate.Year}-${CurrentDate.Month}-${CurrentDate.Day}@${CurrentDate.Hour}:${CurrentDate.Minute} by ${User.Name}&#xD;
 </s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateStaticFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/UserRules/=f9fce829_002De6f4_002D4cb2_002D80f1_002D5497c44f51df/@EntryIndexedValue">&lt;Policy&gt;&lt;Descriptor Staticness="Static" AccessRightKinds="Private" Description="Static fields (private)"&gt;&lt;ElementKinds&gt;&lt;Kind Name="FIELD" /&gt;&lt;/ElementKinds&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" WarnAboutPrefixesAndSuffixes="False" Prefix="" Suffix="" Style="aaBb" /&gt;&lt;/Policy&gt;</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=C416A94FC578474BAE38CF2376C5BEA9/AbsolutePath/@EntryValue">C:\Users\Tim\source\repos\TA.Utils\TA.Utils.Specifications\TA.Utils.Specifications.csproj.DotSettings</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=C416A94FC578474BAE38CF2376C5BEA9/RelativePath/@EntryValue">..\TA.Utils.Specifications\TA.Utils.Specifications.csproj.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=C416A94FC578474BAE38CF2376C5BEA9/@KeyIndexDefined">True</s:Boolean>
@@ -33,6 +34,7 @@ File: ${File.FileName}  Last modified: ${CurrentDate.Year}-${CurrentDate.Month}-
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpPlaceEmbeddedOnSameLineMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpUseContinuousIndentInsideBracesMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EMigrateBlankLinesAroundFieldToBlankLinesAroundProperty/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EPredefinedNamingRulesToUserRulesUpgrade/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/StructuredLogging/IgnoredPropertiesRegex/@EntryValue">CustomLevel</s:String>
 	<s:String x:Key="/Default/Environment/StructuredLogging/PropertyNamingType/@EntryValue">CamelCase</s:String>
 	<s:String x:Key="/Default/Housekeeping/ProjectModelSynchronizer/UseMsbuildStrategy/@EntryValue">AUTO</s:String>

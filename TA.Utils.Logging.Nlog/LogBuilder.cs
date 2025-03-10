@@ -65,17 +65,14 @@ namespace TA.Utils.Logging.NLog
         /// </param>
         /// <param name="ambientProperties">Any ambient properties that should be included in the log entry.</param>
         /// <exception cref="ArgumentNullException">Thrown if there is no logging service or verbosity level specified.</exception>
-        public LogBuilder(ILogger logger, string logLevel, IDictionary<string, object> ambientProperties)
+        internal LogBuilder(ILogger logger, IDictionary<string, object> ambientProperties)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            if (string.IsNullOrWhiteSpace(logLevel))
-                throw new ArgumentNullException(nameof(logLevel));
             PeekLogEvent = new LogEventInfo { LoggerName = logger.Name, Level = LogLevel.Info };
             // Add ambient properties to the log event, if there are any.
             if (ambientProperties?.Any() ?? false)
                 foreach (var property in ambientProperties)
                     PeekLogEvent.Properties[property.Key] = property.Value;
-            PeekLogEvent.Properties["CustomLevel"] = logLevel;
         }
 
         /// <inheritdoc />
