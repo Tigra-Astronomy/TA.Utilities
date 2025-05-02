@@ -18,49 +18,36 @@ namespace TA.Utils.Core.Diagnostics
     /// </summary>
     public sealed class DegenerateLoggerService : ILog
     {
-        private static readonly IFluentLogBuilder builder = new DegenerateLogBuilder();
+        private static readonly IFluentLogBuilder Builder = new DegenerateLogBuilder();
 
         /// <inheritdoc />
-        public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null)
+        public IFluentLogBuilder Trace(int verbosity = 0, string? sourceNameOverride = null) => Builder;
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Debug(int verbosity = 0, string? sourceNameOverride = null) => Builder;
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Info(int verbosity = 0, string? sourceNameOverride = null) => Builder;
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Warn(int verbosity = 0, string? sourceNameOverride = null) => Builder;
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Error(int verbosity = 0, string? sourceNameOverride = null) => Builder;
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Fatal(int verbosity = 0, string? sourceNameOverride = null) => Builder;
+
+        /// <inheritdoc />
+        public IFluentLogBuilder Level(string levelName, int verbosity = 0, string? sourceNameOverride = null) =>
+            Builder;
+
+        /// <inheritdoc />
+        public void Shutdown()
         {
-            return builder;
+            // This logger service does not maintain any state or resources that require cleanup.
+            // Therefore, this method intentionally does nothing.
         }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null)
-        {
-            return builder;
-        }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null)
-        {
-            return builder;
-        }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null)
-        {
-            return builder;
-        }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null)
-        {
-            return builder;
-        }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null)
-        {
-            return builder;
-        }
-
-        /// <inheritdoc />
-        public IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null) => builder;
-
-        /// <inheritdoc />
-        public void Shutdown() { }
 
         /// <inheritdoc />
         public ILog WithAmbientProperty(string name, object value) => this;

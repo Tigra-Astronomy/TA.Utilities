@@ -83,10 +83,10 @@ namespace TA.Utils.Core
             return GetEnumerator();
             }
 
-        /// <summary>Creates a new <see cref="Maybe{T}" /> from an instance of <typeparamref name="T" />.</summary>
-        /// <param name="source">The source instance to wrap in a Maybe.</param>
-        /// <returns>A new <see cref="Maybe{T}" /> containing the source item.</returns>
-        public static Maybe<T> From(T source)
+            /// <summary>Creates a new <see cref="Maybe{T}" /> from an instance of <typeparamref name="T" />.</summary>
+            /// <param name="source">The source instance to wrap in a Maybe.</param>
+            /// <returns>A new <see cref="Maybe{T}" /> containing the source item.</returns>
+            public static Maybe<T> From(T? source)
             {
             if (source == null)
                 return Empty;
@@ -102,11 +102,9 @@ namespace TA.Utils.Core
         /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         [System.Diagnostics.Contracts.Pure]
-        public override string ToString()
-            {
-            Contract.Ensures(Contract.Result<string>() != null);
-            return IsEmpty ? "{no value}" : this.Single().ToString();
-            }
+        public override string ToString() =>
+            //Contract.Ensures(Contract.Result<string>() != null);
+            this.SingleOrDefault()?.ToString() ?? "{no value}";
         }
 
     /// <summary>Helper methods for working with <see cref="Maybe{T}" /></summary>

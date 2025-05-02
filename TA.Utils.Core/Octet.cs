@@ -25,25 +25,28 @@ namespace TA.Utils.Core
         /// <param name="bits">The bits; there must be exactly 8.</param>
         private Octet(bool[] bits)
             {
-            Contract.Requires(bits != null);
-            Contract.Requires(bits.Length == 8);
-            this.bits = bits;
+                bits.ContractAssertNotNull();
+                bits.ContractAssert(p => p.Length == 8, "Octet must have exactly 8 bits");
+                this.bits = bits;
             }
 
-        /// <summary>
-        ///     Prevents a default instance of the <see cref="Octet" /> class from being created. Use one of
-        ///     the static factory methods or conversion operators instead.
-        /// </summary>
-        /// <seealso cref="Max" />
-        /// <seealso cref="Zero" />
-        /// <seealso cref="FromInt" />
-        /// <seealso cref="FromUnsignedInt" />
-        /// <seealso cref="op_Implicit(byte)" />
-        /// <seealso cref="op_Explicit(int)" />
-        /// <seealso cref="op_Explicit(uint)" />
-        private Octet() { }
+            /// <summary>
+            ///     Prevents a default instance of the <see cref="Octet" /> class from being created. Use one of
+            ///     the static factory methods or conversion operators instead.
+            /// </summary>
+            /// <seealso cref="Max" />
+            /// <seealso cref="Zero" />
+            /// <seealso cref="FromInt" />
+            /// <seealso cref="FromUnsignedInt" />
+            /// <seealso cref="op_Implicit(byte)" />
+            /// <seealso cref="op_Explicit(int)" />
+            /// <seealso cref="op_Explicit(uint)" />
+            private Octet()
+            {
+                bits = new bool[8];
+            }
 
-        /// <summary>Gets an Octet with all the bits set to zero.</summary>
+            /// <summary>Gets an Octet with all the bits set to zero.</summary>
         public static Octet Zero { get; } = FromInt(0);
 
         /// <summary>Gets an Octet set to the maximum value (i.e. all the bits set to one).</summary>
@@ -79,31 +82,24 @@ namespace TA.Utils.Core
             return true;
             }
 
-        [ContractInvariantMethod]
-        private void ObjectInvariant()
-            {
-            Contract.Invariant(bits != null);
-            Contract.Invariant(bits.Length == 8, "Consider using Octet.FromInt() instead of new Octet()");
-            }
-
-        /// <summary>
-        ///     Factory method: create an Octet from an integer. The integer two's complement binary value is
-        ///     simply truncated and the resultant octet will be the least significant byte. Take care with
-        ///     negative values as this may not produce the expected result. For example,
-        ///     <c>Octet.FromInt(int.Min)</c> is <c>Octet.Zero</c> whereas <c>Octet.FromInt(int.Max)</c> is
-        ///     <c>Octet.Max</c>
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <returns>Octet.</returns>
-        public static Octet FromInt(int source)
+            /// <summary>
+            ///     Factory method: create an Octet from an integer. The integer two's complement binary value is
+            ///     simply truncated and the resultant octet will be the least significant byte. Take care with
+            ///     negative values as this may not produce the expected result. For example,
+            ///     <c>Octet.FromInt(int.Min)</c> is <c>Octet.Zero</c> whereas <c>Octet.FromInt(int.Max)</c> is
+            ///     <c>Octet.Max</c>
+            /// </summary>
+            /// <param name="source">The source.</param>
+            /// <returns>Octet.</returns>
+            public static Octet FromInt(int source)
             {
             var bits = new bool[8];
             for (var i = 0; i < 8; i++)
-                {
+            {
                 var bit = source & 0x01;
                 bits[i] = bit != 0;
                 source >>= 1;
-                }
+            }
 
             return new Octet(bits);
             }

@@ -28,39 +28,46 @@ public class ConsoleLoggerService : ILog
     ///     If no options are supplied, then <see cref="ConsoleLoggerOptions.DefaultOptions" /> is used.
     /// </summary>
     /// <param name="options">Options that configure the logging service.</param>
-    public ConsoleLoggerService(ConsoleLoggerOptions options = null) =>
+    public ConsoleLoggerService(ConsoleLoggerOptions? options = null)
+    {
         this.options = options ?? ConsoleLoggerOptions.DefaultOptions;
+    }
 
     /// <inheritdoc />
-    public IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Trace(int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, ConsoleLogSeverity.Trace);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Debug(int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, ConsoleLogSeverity.Debug);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Info(int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, ConsoleLogSeverity.Info);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Warn(int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, ConsoleLogSeverity.Warning);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Error(int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, ConsoleLogSeverity.Error);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Fatal(int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, ConsoleLogSeverity.Fatal);
 
     /// <inheritdoc />
-    public IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null) =>
+    public IFluentLogBuilder Level(string levelName, int verbosity = 0, string? sourceNameOverride = null) =>
         new ConsoleLogBuilder(options, levelName);
 
     /// <inheritdoc />
-    public void Shutdown() { }
+    public void Shutdown()
+    {
+        // Since this is a console logger, there might not be any buffered logs or open streams to flush.
+        // However, if there are any resources to clean up, they should be handled here.
+        // For now, this method does nothing as the console logger doesn't maintain state requiring cleanup.
+    }
 
     /// <inheritdoc />
     public ILog WithAmbientProperty(string name, object value) => this;

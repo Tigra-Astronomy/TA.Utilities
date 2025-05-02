@@ -41,7 +41,7 @@ public sealed class ConsoleLogBuilder : IFluentLogBuilder
     private Maybe<StackTrace> maybeStackTrace = Maybe<StackTrace>.Empty;
     private IFormatProvider formatter = CultureInfo.CurrentCulture;
 
-    internal Task<string> RenderTask { get; private set; }
+    internal Task<string>? RenderTask { get; private set; }
 
     /// <summary>
     ///     Create and initialize a new instance.
@@ -125,9 +125,9 @@ public sealed class ConsoleLogBuilder : IFluentLogBuilder
     }
 
     /// <inheritdoc />
-    public IFluentLogBuilder Properties(IDictionary<string, object> properties)
+    public IFluentLogBuilder Properties(IDictionary<string, object> props)
     {
-        foreach (var property in properties) Property(property.Key, property.Value);
+        foreach (var property in props) Property(property.Key, property.Value);
         return this;
     }
 
@@ -146,13 +146,13 @@ public sealed class ConsoleLogBuilder : IFluentLogBuilder
     }
 
     /// <inheritdoc />
-    public void Write(string callerMemberName = null, string callerFilePath = null, int callerLineNumber = default)
+    public void Write(string? callerMemberName = null, string? callerFilePath = null, int callerLineNumber = default)
     {
         RenderTask = RenderLogEntry();
     }
 
     /// <inheritdoc />
-    public void WriteIf(Func<bool> condition, string callerMemberName = null, string callerFilePath = null,
+    public void WriteIf(Func<bool> condition, string? callerMemberName = null, string? callerFilePath = null,
         int callerLineNumber = default)
     {
         if (condition())
@@ -160,7 +160,7 @@ public sealed class ConsoleLogBuilder : IFluentLogBuilder
     }
 
     /// <inheritdoc />
-    public void WriteIf(bool condition, string callerMemberName = null, string callerFilePath = null,
+    public void WriteIf(bool condition, string? callerMemberName = null, string? callerFilePath = null,
         int callerLineNumber = default)
     {
         if (condition) RenderTask = RenderLogEntry();

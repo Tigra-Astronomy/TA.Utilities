@@ -71,6 +71,19 @@ If you are a company and need some work done, then consider hiring me as a freel
 
 ## Description of Classes
 
+### Code Contract Assertions
+
+A set of extension methods for making runtime assertions that can help to catch code contract violations.
+
+```csharp
+void AddUserToDatabase(User user)
+{
+    // Check that the user is not null and that the age is greater than 18.
+    user.ContractAssertNotNull();
+    user.Age.ContractAssert(p => p > 18, "Age must be greater than 18");
+}
+```
+
 ### Versioning
 
 Timtek has settled on a versioning strategy based on [Semantic Versioning 2.0.0][semver].
