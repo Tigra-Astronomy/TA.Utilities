@@ -127,7 +127,7 @@ public static class AsyncExtensions
     ///     directly.
     /// </summary>
     /// <param name="task">The task to execute synchronously.</param>
-    public static void RunSynchronously(this Task task)
+    public static void WaitForCompletion(this Task task)
     {
         try
         {
@@ -140,13 +140,16 @@ public static class AsyncExtensions
     }
 
     /// <summary>
-    ///     Executes a task synchronously and unwraps any <see cref="AggregateException" /> to throw the inner exception
-    ///     directly.
+    ///     Executes a task synchronously and returns the result value.
+    ///     The result is awaited in a way that would lead to any exceptions being thrown directly, without wrapping in an
+    ///     <see cref="AggregateException" /> shouyld not normally occur, buyt if it does it is caught and unwrapped.Unwraps
+    ///     any <see cref="AggregateException" />.. However, if an <see cref="AggregateException" /> somehow occurs, then it is
+    ///     unwrapped and the first inner exception is re-thrown.
     /// </summary>
     /// <typeparam name="TResult">The type of the task result.</typeparam>
     /// <param name="task">The task to execute synchronously.</param>
     /// <returns>The result of the task.</returns>
-    public static TResult RunSynchronously<TResult>(this Task<TResult> task)
+    public static TResult WaitForResult<TResult>(this Task<TResult> task)
     {
         try
         {
