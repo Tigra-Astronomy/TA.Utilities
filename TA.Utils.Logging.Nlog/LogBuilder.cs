@@ -160,7 +160,7 @@ namespace TA.Utils.Logging.NLog
         public IFluentLogBuilder StackTrace(StackTrace stackTrace, int userStackFrame)
         {
             //PeekLogEvent.SetStackTrace(stackTrace, userStackFrame);
-            PeekLogEvent.SetStackTrace(stackTrace);
+            PeekLogEvent.SetStackTrace(stackTrace, userStackFrame);
             return this;
         }
 
