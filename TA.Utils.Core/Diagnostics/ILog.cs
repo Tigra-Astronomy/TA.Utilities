@@ -22,13 +22,13 @@ namespace TA.Utils.Core.Diagnostics
         /// <param name="verbosity"></param>
         /// <param name="sourceNameOverride"></param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Trace(int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Trace(int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Debug severity.
         /// </summary>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Debug(int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Debug(int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Information severity.
@@ -36,7 +36,7 @@ namespace TA.Utils.Core.Diagnostics
         /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
         /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Info(int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Info(int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Warning severity.
@@ -44,7 +44,7 @@ namespace TA.Utils.Core.Diagnostics
         /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
         /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Warn(int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Warn(int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Error severity.
@@ -52,7 +52,7 @@ namespace TA.Utils.Core.Diagnostics
         /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
         /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Error(int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Error(int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Creates a log builder for a log entry with Fatal severity.
@@ -61,7 +61,7 @@ namespace TA.Utils.Core.Diagnostics
         /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
         /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Fatal(int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Fatal(int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Specify a custom log level for a log entry. The results are provider-specific and if the logging provider is unable
@@ -71,7 +71,7 @@ namespace TA.Utils.Core.Diagnostics
         /// <param name="verbosity">Optional; specify the log verbosity level (default 0).</param>
         /// <param name="sourceNameOverride">Optional; override the log source name.</param>
         /// <returns>IFluentLogBuilder.</returns>
-        IFluentLogBuilder Level(string levelName, int verbosity = 0, string sourceNameOverride = null);
+        IFluentLogBuilder Level(string levelName, int verbosity = 0, string? sourceNameOverride = null);
 
         /// <summary>
         ///     Instructs the logging service to shut down.

@@ -3,8 +3,8 @@
 This is a logging service implementation that uses *NLog* as the back-end.
 
 The fluent interface defined in `TA.Utils.Diagnostics.IFluentLogBuilder` was modeled on the NLog fluent interface,
-so it is a very natural fit.
-However, the interface has enough flexibility to adapr to other logging backends without too much trouble.
+so it is a very natural fit. However, the interface has enough flexibility to adapt to other logging backends
+without too much trouble.
 
 NLog supports semantic logging. You can use a simple format string like so:
 

@@ -64,12 +64,27 @@ We have no time for "copyleft" licenses which we find irksome.
 So here it is, for you to use however you like, no strings attached.
 
 I tend to use "we" and "our" when talking about the company, but Timtek Systems Limited is a one-man operation run by me, Tim Long.
-I hope you find the software useful, and if you feel that my efforts are worth supporting, then it would make my day if you would [buying me some coffee][coffee].
+I hope you find the software useful, and if you feel that my efforts are worth supporting, then it would make my day if you would [buy me some coffee][coffee].
 I also wouldn't mind you giving us a mention, if you feel you are able to, as it helps the company grow. Donations and mentions really make a difference, so please think about it and do what you can.
 
 If you are a company and need some work done, then consider hiring me as a freelance developer. I have decades of experience in product design, firmware development for embedded systems and PC driver and software development. I'm a professional; I believe in doing what's right, not what's expedient and I support my software.
 
 ## Description of Classes
+
+### Code Contract Assertions
+
+A set of extension methods for making runtime assertions that can help to catch code contract violations.
+
+```csharp
+void AddUserToDatabase(User user)
+{
+    // Check that the user is not null and that the age is greater than 18.
+    user.ContractAssertNotNull();
+    user.Age.ContractAssert(p => p > 18, "Age must be greater than 18");
+}
+```
+
+Any assertion failure will result in a `ContractViolationException` being thrown. It is recommended not to catch these exceptions, but to let them bubble up to the application root where they can be logged and the application terminated cleanly. A `ContractViolationException` is an unequivocal indication of a bug in the code, so it should never be caught and handled. It is a failure of the code contract, not a runtime error that can be recovered from.
 
 ### Versioning
 

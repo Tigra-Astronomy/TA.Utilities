@@ -85,7 +85,7 @@ public class PropertyBinder : IPropertyBinder
     ///     Initializes a new instance of the <see cref="PropertyBinder" /> class.
     /// </summary>
     /// <param name="log">A logging service (optional).</param>
-    public PropertyBinder([CanBeNull] ILog log = null)
+    public PropertyBinder(ILog? log = null)
     {
         this.log = log ?? new DegenerateLoggerService();
     }
@@ -157,9 +157,8 @@ public class PropertyBinder : IPropertyBinder
     private void BindProperty(IEnumerable<KeyValueDataRecord> keyValueRecords, PropertyInfo property,
         object target)
     {
-        Contract.Requires(keyValueRecords != null);
-        Contract.Requires(property != null);
-        Contract.Requires(target != null);
+        property.ContractAssertNotNull();
+        target.ContractAssertNotNull();
         try
         {
             var targetType = PropertyTypeOrUnderlyingCollectionType(property);
@@ -205,7 +204,7 @@ public class PropertyBinder : IPropertyBinder
     /// <returns>The underlying type of the property.</returns>
     private Type PropertyTypeOrUnderlyingCollectionType(PropertyInfo property)
     {
-        Contract.Requires(property != null);
+        property.ContractAssertNotNull();
         var propertyType = property.PropertyType;
         if (IsAssignableToList(property))
         {
@@ -239,9 +238,8 @@ public class PropertyBinder : IPropertyBinder
     private void PopulateTargetCollection(object target, PropertyInfo property,
         IEnumerable<object> values)
     {
-        Contract.Requires(target != null);
-        Contract.Requires(property != null);
-        Contract.Requires(values != null);
+        target.ContractAssertNotNull();
+        property.ContractAssertNotNull();
         var propertyType = property.PropertyType;
         IList collection;
         if (propertyType.IsInterface)
@@ -309,11 +307,10 @@ public class PropertyBinder : IPropertyBinder
     /// <param name="valueString">String containing a serialized data value.</param>
     /// <param name="targetType">Target type to attempt to deserialize into.</param>
     /// <returns>A populated new instance of the target type, or null if deserialization failed.</returns>
-    [CanBeNull]
-    private object DeserializeToType(string valueString, Type targetType)
+    private object? DeserializeToType(string valueString, Type targetType)
     {
-        Contract.Requires(!string.IsNullOrEmpty(valueString));
-        Contract.Requires(targetType != null);
+        valueString.ContractAssertNotEmpty();
+        targetType.ContractAssertNotNull();
         // Special handling for strings, just return the trimmed string.
         if (targetType == typeof(string))
             return valueString.Trim(); // Remove leading and trailing white space.
@@ -330,7 +327,7 @@ public class PropertyBinder : IPropertyBinder
     /// <returns>A collection of candidate data key names.</returns>
     private IEnumerable<string> GetKeywordNamesFromPropertyNameOrAttributes(PropertyInfo property)
     {
-        Contract.Requires(property != null);
+        property.ContractAssertNotNull();
         var attributes = property.GetCustomAttributes(typeof(DataKeyAttribute), false);
         if (attributes.Length == 0)
             return new List<string> { property.Name };
@@ -344,11 +341,10 @@ public class PropertyBinder : IPropertyBinder
     /// <param name="value">The serialized value string.</param>
     /// <param name="destinationType">Type of the destination scalar type.</param>
     /// <returns>A new <see cref="object" /> containing the value, or null if conversion failed.</returns>
-    [CanBeNull]
-    private object ConvertStringToScalarObject(string value, Type destinationType)
+    private object? ConvertStringToScalarObject(string value, Type destinationType)
     {
-        Contract.Requires(value != null);
-        Contract.Requires(destinationType != null);
+        value.ContractAssertNotNull();
+        destinationType.ContractAssertNotNull();
         // Shortcut the case where the target type is a string.
         if (destinationType.IsInstanceOfType(value))
             return value;

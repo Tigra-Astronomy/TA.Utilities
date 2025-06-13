@@ -27,6 +27,8 @@
     <DocumentationFile></DocumentationFile>
     <PackageIcon>TA-Utilities-256x256.png</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>An ILog implementation that uses NLog as the back-end, which enables rich semantic logging to services like Seq.</Title>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,12 +40,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
+    <PackageReference Include="GitVersion.MsBuild">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
-    <PackageReference Include="NLog" Version="5.2.8" />
+    <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="NLog" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +56,13 @@
     <None Include="..\Assets\TA-Utilities-256x256.png">
       <Pack>True</Pack>
       <PackagePath>/</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

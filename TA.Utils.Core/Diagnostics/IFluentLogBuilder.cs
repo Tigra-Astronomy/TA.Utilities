@@ -78,19 +78,19 @@ namespace TA.Utils.Core.Diagnostics
         /// <summary>
         ///     Writes the log entry.
         /// </summary>
-        void Write([CallerMemberName] string callerMemberName = null, [CallerFilePath] string callerFilePath = null,
+        void Write([CallerMemberName] string? callerMemberName = null, [CallerFilePath] string? callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = default);
 
         /// <summary>
         ///     Writes the log entry if the supplied predicate is true.
         /// </summary>
-        void WriteIf(Func<bool> condition, [CallerMemberName] string callerMemberName = null,
-            [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);
+        void WriteIf(Func<bool> condition, [CallerMemberName] string? callerMemberName = null,
+            [CallerFilePath] string? callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);
 
         /// <summary>
         ///     Writes the log entry if the boolean condition is true.
         /// </summary>
-        void WriteIf(bool condition, [CallerMemberName] string callerMemberName = null,
-            [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);
+        void WriteIf(bool condition, [CallerMemberName] string? callerMemberName = null,
+            [CallerFilePath] string? callerFilePath = null, [CallerLineNumber] int callerLineNumber = default);
     }
 }

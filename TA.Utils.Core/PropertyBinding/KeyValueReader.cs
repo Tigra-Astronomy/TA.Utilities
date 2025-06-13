@@ -33,7 +33,7 @@ public class KeyValueReader : IDisposable
     ///     Characters that will be treated as opening a comment line if they are the first
     ///     non-whitespace character on a line. Optional; default= {'#'}. Comment lines are ignored.
     /// </param>
-    public KeyValueReader(Stream input, [CanBeNull] char[] delimiters = null, [CanBeNull] char[] commentChars = null)
+    public KeyValueReader(Stream input, char[]? delimiters = null, char[]? commentChars = null)
     {
         this.delimiters = delimiters ?? DefaultDelimiters;
         this.commentChars = commentChars ?? DefaultCommentChars;

@@ -52,15 +52,15 @@ namespace TA.Utils.Core.Diagnostics
         public IFluentLogBuilder StackTrace(StackTrace stackTrace, int userStackFrame) => this;
 
         /// <inheritdoc />
-        public void Write(string callerMemberName = null, string callerFilePath = null,
+        public void Write(string? callerMemberName = null, string? callerFilePath = null,
             int callerLineNumber = default) { }
 
         /// <inheritdoc />
-        public void WriteIf(Func<bool> condition, string callerMemberName = null, string callerFilePath = null,
+        public void WriteIf(Func<bool> condition, string? callerMemberName = null, string? callerFilePath = null,
             int callerLineNumber = default) { }
 
         /// <inheritdoc />
-        public void WriteIf(bool condition, string callerMemberName = null, string callerFilePath = null,
+        public void WriteIf(bool condition, string? callerMemberName = null, string? callerFilePath = null,
             int callerLineNumber = default) { }
         }
     }

@@ -56,13 +56,6 @@ namespace TA.Utils.Logging.NLog
         ///     demand.
         /// </summary>
         /// <param name="logger">An instance of a logging service that will eventually accept the built log entry.</param>
-        /// <param name="logLevel">
-        ///     The severity level of the log entry being built, as a string. The string can take any value, but
-        ///     ideally it should be short and one word with no punctuation or spaces. NLOG cannot render custom severities so the
-        ///     NLog severity is set to "Info" and the custom severity tag is added as a property named "CustomLevel".
-        ///     NLog.Targets.Seq, via an appropriate layout renderer configuration, is able to render this property into the Seq
-        ///     level, since Seq supports any text as a severity.
-        /// </param>
         /// <param name="ambientProperties">Any ambient properties that should be included in the log entry.</param>
         /// <exception cref="ArgumentNullException">Thrown if there is no logging service or verbosity level specified.</exception>
         internal LogBuilder(ILogger logger, IDictionary<string, object> ambientProperties)
@@ -166,6 +159,7 @@ namespace TA.Utils.Logging.NLog
         /// <inheritdoc />
         public IFluentLogBuilder StackTrace(StackTrace stackTrace, int userStackFrame)
         {
+            //PeekLogEvent.SetStackTrace(stackTrace, userStackFrame);
             PeekLogEvent.SetStackTrace(stackTrace, userStackFrame);
             return this;
         }

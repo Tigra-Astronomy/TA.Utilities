@@ -16,7 +16,7 @@ namespace TA.Utils.Core
     public static class GitVersion
     {
         /// <summary>The type injected by GitVersion during the build process, containing version information.</summary>
-        private static Type injectedVersion = ReflectInjectedGitVersionType();
+        private static Type? injectedVersion = ReflectInjectedGitVersionType();
 
         /// <summary>Gets the git informational version.</summary>
         /// <value>The git informational version.</value>
