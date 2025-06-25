@@ -168,6 +168,8 @@ public sealed class ConsoleLogBuilder : IFluentLogBuilder
 
     private async Task<string> RenderLogEntry()
     {
+        if (!options.ShouldRenderLevel(severity))
+            return string.Empty;
         var builder = new StringBuilder();
         await RenderMessageTemplateAsync(builder).ContinueOnAnyThread();
         await RenderException(builder).ContinueOnAnyThread();
