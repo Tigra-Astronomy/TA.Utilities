@@ -13,16 +13,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 namespace TA.Utils.Core;
 
 /// <summary>
-///     Methods that provide a way to declare "code contracts" in code.
-///     Contracts make assertions about runtime state, e.g. parameter values, during debugging.
-///     They can be used to validate entry and exit conditions of methods,
-///     The methods are only effective in Debug builds so code should not rely on the outcome of these methods.
+///     Methods that provide a way to declare "code contracts" in code. These are really just convenient wrappers around
+///     assertions.
+///     Contracts make assertions about runtime state, e.g. parameter values, method entry and exit requirements, etc.
 ///     If any contract assertion fails, it will throw a <see cref="CodeContractViolationException" />.
+///     It is recommended that this exception is never caught or handled in any way, except possibly to log it, as it an
+///     unambiguous indication of a bug in the code and execution should not be allowed to continue after a contract
+///     violation.
 /// </summary>
 public static class CodeContracts
 {
@@ -32,20 +35,30 @@ public static class CodeContracts
     /// </summary>
     /// <typeparam name="T">The type of the value being tested.</typeparam>
     /// <param name="value">The value to be tested against the condition.</param>
-    /// <param name="condition">The predicate that defines the condition to be tested.</param>
+    /// <param name="condition">The predicate expression that defines the condition to be tested.</param>
     /// <param name="message">The message to include in the exception if the condition is not met.</param>
-    /// <param name="source">
+    /// <param name="caller">
     ///     The name of the caller member where the assertion is made. This parameter is optional and
     ///     will be automatically populated by the compiler if not provided.
     /// </param>
     /// <exception cref="CodeContractViolationException">
     ///     Thrown when the specified condition is not met for the given value.
     /// </exception>
-    public static void ContractAssert<T>(this T value, Predicate<T> condition, string message,
-        [CallerMemberName] string? source = null)
+    public static void ContractAssert<T>(this T       value, Expression<Func<T, bool>> condition, string message,
+        [CallerMemberName]                    string? caller = null)
     {
-        if (!condition.Invoke(value))
-            ThrowException(value?.ToString() ?? "null", condition, message, source ?? string.Empty);
+        // condition() may throw an exception, so we need to catch it and rethrow as a CodeContractViolationException
+        try
+        {
+            var predicate = condition.Compile(); // Compile the expression tree to a delegate for evaluation
+            if (!predicate(value))
+                ThrowContractException(value?.ToString() ?? "null", condition, message, caller);
+        }
+        catch (Exception ex) when (ex is not CodeContractViolationException)
+        {
+            throw new CodeContractViolationException(
+                "An error occurred while checking a code contract - see inner exception for details", ex);
+        }
     }
 
     /// <summary>
@@ -53,35 +66,33 @@ public static class CodeContracts
     /// </summary>
     /// <param name="value">A reference.</param>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public static void ContractAssertNotNull<T>(this T value) where T : class =>
-        value.ContractAssert(p => p is not null, "Reference type cannot be null.");
+    public static void ContractAssertNotNull<T>(this T value, [CallerMemberName] string? caller = null) where T : class =>
+        value.ContractAssert(p => p != null, "Reference type must not be null.", caller);
 
     /// <summary>
     ///     Asserts that a nullable value type has a value.
     /// </summary>
     /// <param name="value">A nullable struct.</param>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public static void ContractAssertNotNull<T>(this T? value) where T : struct =>
-        value.ContractAssert(p => !p.HasValue, "nullable value type must have a value.");
+    public static void ContractAssertNotNull<T>(this T? value, [CallerMemberName] string? caller = null) where T : struct =>
+        value.ContractAssert(p => !p.HasValue, "nullable value type must have a value.", caller);
 
     /// <summary>
     ///     Asserts that a collection is not empty (A null reference is empty by definition).
     /// </summary>
     /// <param name="collection">The collection being tested.</param>
-    public static void ContractAssertNotEmpty(this ICollection collection)
+    public static void ContractAssertNotEmpty(this ICollection collection, [CallerMemberName] string? caller = null)
     {
-        collection.ContractAssertNotNull();
-        collection.ContractAssert(p => p.Count > 0, "Collection must not be empty");
+        collection.ContractAssertNotNull(caller);
+        collection.ContractAssert(p => p.Count > 0, "Collection must not be empty", caller);
     }
 
     /// <summary>
     ///     Asserts that a collection is not empty (A null reference is empty by definition).
     /// </summary>
     /// <param name="collection">The collection being tested.</param>
-    public static void ContractAssertNotEmpty<T>(this IEnumerable<T> collection)
-    {
-        collection.ContractAssert(p => p is not null && p.Any(), "Enumerable must not be empty");
-    }
+    public static void ContractAssertNotEmpty<T>(this IEnumerable<T> collection, [CallerMemberName] string? caller = null) =>
+        collection.ContractAssert(p => p != null && p.Any(), "Enumerable must not be empty", caller);
 
     /// <summary>
     ///     Asserts that a source enumerable sequence contains the specified item at least once. Note: potentially expensive
@@ -90,8 +101,9 @@ public static class CodeContracts
     /// <param name="source">The source sequence.</param>
     /// <param name="item">The required item.</param>
     /// <typeparam name="TItem">The type of items in the collection.</typeparam>
-    public static void ContractAssertContains<TItem>(this IEnumerable<TItem> source, TItem item) =>
-        source.ContractAssert(p => p.Contains(item), "The source collection must contain the specified item");
+    public static void ContractAssertContains<TItem>(this IEnumerable<TItem> source, TItem item,
+        [CallerMemberName]                                string?            caller = null) =>
+        source.ContractAssert(p => p.Contains(item), "The source collection must contain the specified item", caller);
 
     /// <summary>
     ///     Asserts that a source enumerable sequence does not contain the specified item. Note: potentially expensive
@@ -100,15 +112,17 @@ public static class CodeContracts
     /// <param name="source">The source sequence.</param>
     /// <param name="item">The disallowed item.</param>
     /// <typeparam name="TItem">The type of items in the collection.</typeparam>
-    public static void ContractAssertDoesNotContain<TItem>(this IEnumerable<TItem> source, TItem item) =>
-        source.ContractAssert(p => !p.Contains(item), "The source collection must not contain the specified item");
+    public static void ContractAssertDoesNotContain<TItem>(this IEnumerable<TItem> source, TItem item,
+        [CallerMemberName]                                      string?            caller = null) =>
+        source.ContractAssert(p => !p.Contains(item), "The source collection must not contain the specified item", caller);
 
-    private static void ThrowException<T>(string? value, Predicate<T> condition, string message, string source)
+    private static void ThrowContractException<T>(string? value, Expression<Func<T, bool>> condition, string message,
+        string?                                           caller)
     {
         var ex = new CodeContractViolationException(message);
-        ex.Data["Condition"] = condition.ToString();
+        ex.Data["Condition"] = condition.ToString(); // this should serialize the expression tree.
         ex.Data["Value"] = value;
-        ex.Data["Caller"] = source;
+        ex.Data["Caller"] = caller ?? "(unknown caller)";
         throw ex;
     }
 }
