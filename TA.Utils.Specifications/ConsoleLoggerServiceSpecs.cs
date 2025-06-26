@@ -147,3 +147,44 @@ class when_logging_with_a_complex_message_template : with_console_logger_context
 
     It should_produce_the_expected_output = () => RenderResult.ShouldContain(expectedOutput);
 }
+
+class when_logging_at_trace_severity_and_trace_is_ignored_in_options : with_console_logger_context
+{
+    Establish context = () =>
+    {
+        var options = ConsoleLoggerOptions.DefaultOptions.IgnoreSeverityLevels("Trace");
+        var logger  = new ConsoleLoggerService(options);
+        builder = (ConsoleLogBuilder)logger.Trace();
+    };
+
+    Because of                        = () => builder.Message("Should not produce output").Write();
+    It      should_not_produce_output = () => RenderResult.ShouldBeEmpty();
+}
+
+class when_logging_at_trace_severity_and_only_debug_is_enabled_in_options : with_console_logger_context
+{
+    Establish context = () =>
+    {
+        var options = ConsoleLoggerOptions.DefaultOptions.RenderSeverityLevels("Debug");
+        var logger  = new ConsoleLoggerService(options);
+        builder = (ConsoleLogBuilder)logger.Trace();
+    };
+
+    Because of                        = () => builder.Message("Should not produce output").Write();
+    It      should_not_produce_output = () => RenderResult.ShouldBeEmpty();
+}
+
+class when_logging_at_trace_severity_with_default_options : with_console_logger_context
+{
+    const string ExpectedResponse = "Should produce output";
+
+    Establish context = () =>
+    {
+        var options = ConsoleLoggerOptions.DefaultOptions;
+        var logger  = new ConsoleLoggerService(options);
+        builder = (ConsoleLogBuilder)logger.Trace();
+    };
+
+    Because of                        = () => builder.Message(ExpectedResponse).Write();
+    It      should_not_produce_output = () => RenderResult.ShouldContain(ExpectedResponse);
+}

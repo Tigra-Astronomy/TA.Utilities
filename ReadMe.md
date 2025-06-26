@@ -74,16 +74,12 @@ If you are a company and need some work done, then consider hiring me as a freel
 ### Code Contract Assertions
 
 A set of extension methods for making runtime assertions that can help to catch code contract violations.
-
-```csharp
 void AddUserToDatabase(User user)
 {
     // Check that the user is not null and that the age is greater than 18.
     user.ContractAssertNotNull();
     user.Age.ContractAssert(p => p > 18, "Age must be greater than 18");
 }
-```
-
 Any assertion failure will result in a `ContractViolationException` being thrown. It is recommended not to catch these exceptions, but to let them bubble up to the application root where they can be logged and the application terminated cleanly. A `ContractViolationException` is an unequivocal indication of a bug in the code, so it should never be caught and handled. It is a failure of the code contract, not a runtime error that can be recovered from.
 
 ### Versioning
@@ -96,8 +92,6 @@ We never manually set the version number, it happens as part of the build proces
 So we can never forget to "bump the version" and we can never forget to set it.
 Total automation.
 If you examine one of our log files, you may well find something like this:
-
-```log
 21:16:59.2909|INFO |Server          |Git Commit ID: "229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
 21:16:59.3069|INFO |Server          |Git Short ID: "229c1ac"
 21:16:59.3069|INFO |Server          |Commit Date: "2020-07-11"
@@ -105,8 +99,6 @@ If you examine one of our log files, you may well find something like this:
 21:16:59.3069|INFO |Server          |Full Semantic version: "0.1.0-alpha.1"
 21:16:59.3069|INFO |Server          |Build metadata: "Branch.develop.Sha.229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
 21:16:59.3069|INFO |Server          |Informational Version: "0.1.0-alpha.1+Branch.develop.Sha.229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
-```
-
 There's no mistaking where that build came from.
 
 #### `SemanticVersion` class
@@ -217,8 +209,6 @@ This can be useful for building drop-down lists and Combo box contents for enume
 You can always get the equivalent human-readable display text for an enumerated value using `value.DisplayEquivalent()`.
 This will return the display text if it has been set, or the name of the enum value otherwise.
 Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on each field of the enum.
-
-```csharp
     [Subject(typeof(DisplayEquivalentAttribute))]
     internal class when_displaying_an_enum_with_equivalent_text
         {
@@ -234,8 +224,6 @@ Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on ea
         [DisplayEquivalent("Equivalent Text")] CaseWithEquivalentText,
         CaseWithoutEquivalentText
         }
-```
-
 ### Asynchrony and Threading
 
 #### ConfigureAwait
@@ -248,16 +236,12 @@ Conversely, `ConfigureAwait(false)` means that continuation can happen on any th
 and typically that will be a thread pool worker thread.
 The implications are quite profound, especially for apartment-threaded GUI applications such as WinForms or WPF. 
 Consider the following method:
-
-```csharp
 public async Task SomeMethod()
     {
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
 	await Task.Delay(1000).ConfigureAwait(false);
 	Console.WriteLine("Continuing on thread {0}", Thread.CurrentThread.ManagedThreadId);
     }
-```
-
 When you run this, you may get something like
 
 > Starting on thread 14  
@@ -271,32 +255,24 @@ It's just horrible.
 You can't read the code and instantly understand what it does, and that violates the _Principle of Least Astonishment_.
 
 So we made some extension methods that essentially do the same thing, but make more sense. Our aync method now becomes:
-
-```csharp
 public async Task SomeMethod()
     {
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
 	await Task.Delay(1000).ContinueOnAnyThread();
 	Console.WriteLine("Continuing on thread {0}", Thread.CurrentThread.ManagedThreadId);
     }
-```
-
 and we get
 
 > Starting on thread 15  
 > Continuing on thread 13
 
 Alternatively:
-
-```csharp
 public async Task SomeMethod()
     {
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
 	await Task.Delay(1000).ContinueInCurrentContext();
 	Console.WriteLine("Continuing on thread {0}", Thread.CurrentThread.ManagedThreadId);
     }
-```
-
 The await captures the current `SynchronizationContext` and uses it to schedule the continuation.
 What happens next depends on the application model and how it implements `SynchronizationContext`.
 For a user interface application, the UI generally runs in a Single Threaded Apartment (STA thread).
@@ -354,8 +330,6 @@ A null implementation is provided in `DegenerateLoggerService` and `DegenerateLo
 The two classes do essentially nothing and produce no output; they are a data sink.
 Libraries can choose to use this as their default logging implementation, which is easier than checking
 whether the logger is null every time it is used.
-
-```csharp
 public class MyClassThatUsesLogging
 {
     private ILog Log;
@@ -374,18 +348,10 @@ public class MyClassThatUsesLogging
             .Write();
     }
 }
-```
-
 The interface supports semantic logging. You can use a simple format string like so:
-
-```csharp
 log.Info().Message("Sending data {0}", data).Write();
 log.Error().Message("Exception {0} occurred with error code {1}", ex.Message, errorCode).Write();
-```
-
 But this leaves useful information on the table. Extra rich information can be included like so:
-
-```csharp
 log.Info().Message("Sending data {data}", data).Write();
 log.Error()
     .Message("Exception {exception} occurred with error code {error}")
@@ -393,8 +359,6 @@ log.Error()
     .Property("error", errorCode)
     .Exception(ex)
     .Write();
-```
-
 In both statements, we are adding property-value pairs to the log.
 In the first `Log.Info()` statement this is implicit, whereas in the `Log.Error()` statement it is made explicit.
 This extra information may or may not be used by the log renderer, but if its not there then it can't be used!
@@ -472,8 +436,6 @@ We highly recommend Seq. It's free for a single user and can be set up in a few 
 - Use _dependency injection_ and have your IOC container create loggers for injection into class constructors.
 
  This method may be useful. It was written for use with Ninject, but you can distill out the approach  of looking at the stack frame to work out the calling type and set the logger name from that.
-
- ```csharp
 /// <summary>
 ///     Get an instance of a service from the dependency injection kernel.
 ///     Special handling for logging services.
@@ -482,27 +444,25 @@ We highly recommend Seq. It's free for a single user and can be set up in a few 
 /// <returns>An instance of the requested service.</returns>
 public static TService Get<TService>()
 {
-    if (typeof(ILog).IsAssignableFrom(typeof(TService)))
-    {
-        // Special handling for request for ILog.
-        // Try to determine the calling type by examining the stack, and pass it to the kernel as a binding parameter.
-        var callerStackFrame = new StackFrame(1);
-        var callingMethod = callerStackFrame.GetMethod();
-        // MethodBase.ReflectedType is more reliable than the direct Type property and less likely to return an "un-utterable name".
-        var callerType = callingMethod.ReflectedType;
-        var callerTypeName = callerType?.Name ?? string.Empty;
-        if (!string.IsNullOrEmpty(callerTypeName))
-        {
-            var logServiceNameParameter = new Parameter(LogSourceParameterName, callerTypeName, false);
-            return Kernel.Get<TService>(logServiceNameParameter);
-        }
-    }
+   if (typeof(ILog).IsAssignableFrom(typeof(TService)))
+   {
+       // Special handling for request for ILog.
+       // Try to determine the calling type by examining the stack, and pass it to the kernel as a binding parameter.
+       var callerStackFrame = new StackFrame(1);
+       var callingMethod = callerStackFrame.GetMethod();
+       // MethodBase.ReflectedType is more reliable than the direct Type property and less likely to return an "un-utterable name".
+       var callerType = callingMethod.ReflectedType;
+       var callerTypeName = callerType?.Name ?? string.Empty;
+       if (!string.IsNullOrEmpty(callerTypeName))
+       {
+           var logServiceNameParameter = new Parameter(LogSourceParameterName, callerTypeName, false);
+           return Kernel.Get<TService>(logServiceNameParameter);
+       }
+   }
 
-    // For all other requests, simply request the type from the DI kernel.
+   // For all other requests, simply request the type from the DI kernel.
     return Kernel.Get<TService>();
 }
- ```
-
 #### Log Correlation
 
 We use a global static readonly GUID called something like `CorrelationId`.
@@ -521,21 +481,13 @@ We find this a bit limiting and would like to be able to create our own levels, 
 The `NLog.Targets.Seq` logging target has support for this, and we also support it in our `ILog` interface via the `ILog.Level(string levelName)` method.
 
 The way this works is to create an additional log event property, by default named "CustomLevel", containing the level name. The Seq target then uses this property as the level when it posts the data to the Seq server. If the default property name is no good for some reason, it can be changed using a `LogServiceOptions` instance and setting `LogServiceOptions.CustomSeverityPropertyName` property to the preferred name, like so:
-
-```csharp
 var options = LogServiceOptions.DefaultOptions.CustomSeverityPropertyName("SeqLevel");
 var log = new LoggingService(options);
-```
-
 A small bit of configuration is needed to wire this up, in the Seq target in the `NLog.config` file, like so:
-
-```xml
       <target xsi:type="Seq" name="seq" 
       serverUrl="http://your-server-url:5341"
       apiKey="your-seq-api-key"
       seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}">
-```
-
 The magic is in `seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}`
 
 This uses the value of `CustomLevel` as the Seq level, unless it is empty or missing, in which case it defaults to the NLog level.
@@ -543,16 +495,28 @@ This uses the value of `CustomLevel` as the Seq level, unless it is empty or mis
 In targets other than Seq, this will just appear as yet another log event property.
 
 ## Release Notes
+2.10.0
+ - Improved how code contracts handle recording the contract data in the `CodeContractViolationException`.  
+ - Added the ability to configure logging levels in ConsoleLoggerOptions. The default is to log everything.
+   - Specific severity levels can be included using RenderSeverityLevels(). Once configured with any value, the default no longer applies so all levels to be logged must be included.
+   - Specific levels may also be ignored using IgnoreSeverityLevels(). The ignore list takes precedence over the include list.
+
+2.9.0
+- Added Code Contract assertions that can be used for enforcing code contracts at runtime.
+  Contract failures result in a `CodeContractViolationException` being thrown.
+  The exception records the value being tested, any predicate expression that was used in the test,
+  and the message that was passed to the assertion method. Any occurrence of a `CodeContractViolationException`
+  should be treated as an unambiguous bug in the code and not caught or handled, except to write it out to a log.
 
 2.8.1
- : Fixed an issue that caused a custom severity property name option to be ignored. 
+- Fixed an issue that caused a custom severity property name option to be ignored. 
 
 2.8.0
-: Fixed a formatting bug in `Octet.ToString()`
+- Fixed a formatting bug in `Octet.ToString()`
 
 2.7.0
-: Added support for custom severity levels in the `ILog` abstraction and NLog implementation.
-: Used the "official" regular expression to validate semantic version strings. Note: some strings that were previously accepted, such as "01.02.03" will no longer be accepted as valid.
+- Added support for custom severity levels in the `ILog` abstraction and NLog implementation.
+- Used the "official" regular expression to validate semantic version strings. Note: some strings that were previously accepted, such as "01.02.03" will no longer be accepted as valid.
 
 [seq]: https://datalust.co/seq "Seq semantic logging service"
 [mit]: https://tigra.mit-license.org "Tigra MIT License"

@@ -9,6 +9,8 @@
 // 
 // File: ConsoleLoggerOptions.cs  Last modified: 2024-2-6@11:37 by tim.long
 
+using System.Collections.Generic;
+
 namespace TA.Utils.Core.Diagnostics;
 
 /// <summary>
@@ -16,10 +18,12 @@ namespace TA.Utils.Core.Diagnostics;
 /// </summary>
 public class ConsoleLoggerOptions
 {
-    private const string VerbosityDefaultPropertyName = "verbosity";
-    internal bool VerbosityEnabled;
-    internal string VerbosityPropertyName = VerbosityDefaultPropertyName;
-    internal bool renderProperties = true;
+    private const string       VerbosityDefaultPropertyName = "verbosity";
+    internal      bool         VerbosityEnabled;
+    internal      string       VerbosityPropertyName = VerbosityDefaultPropertyName;
+    internal      bool         renderProperties      = true;
+    internal      List<string> logLevelsToRender     = [];
+    internal      List<string> logLevelsToIgnore     = [];
 
     private ConsoleLoggerOptions() { } // prevent use of the constructor except within the class itself.
 
@@ -59,5 +63,72 @@ public class ConsoleLoggerOptions
     {
         renderProperties = enable;
         return this;
+    }
+
+    /// <summary>
+    ///     Configures the logger to render all severity levels to the console output.
+    ///     This method clears any previously specified severity levels, ensuring that all levels are rendered.
+    ///     This is the default behavior unless modified by <see cref="RenderSeverityLevels" /> or
+    ///     <see cref="IgnoreSeverityLevels" />.
+    /// </summary>
+    /// <returns>The updated <see cref="ConsoleLoggerOptions" /> instance.</returns>
+    public ConsoleLoggerOptions RenderAllSeverityLevels()
+    {
+        logLevelsToRender.Clear();
+        return this;
+    }
+
+    /// <summary>
+    ///     Specifies which severity levels should be rendered to the console output.
+    ///     By default, all severity levels are rendered unless explicitly modified.
+    /// </summary>
+    /// <param name="levels">
+    ///     An array of severity level names to render. If a level is not already included, it will be added.
+    /// </param>
+    /// <returns>The updated <see cref="ConsoleLoggerOptions" /> instance.</returns>
+    public ConsoleLoggerOptions RenderSeverityLevels(params string[] levels)
+    {
+        foreach (var level in levels)
+        {
+            if (!logLevelsToRender.Contains(level))
+                logLevelsToRender.Add(level);
+            while (logLevelsToIgnore.Contains(level))
+                logLevelsToIgnore.Remove(level);
+        }
+
+        return this;
+    }
+
+    public ConsoleLoggerOptions IgnoreSeverityLevels(params string[] levels)
+    {
+        foreach (var level in levels)
+        {
+            while (logLevelsToRender.Contains(level))
+                logLevelsToRender.Remove(level);
+            if (!logLevelsToIgnore.Contains(level))
+                logLevelsToIgnore.Add(level);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Determines whether the specified log level should be rendered to the console output.
+    /// </summary>
+    /// <param name="level">The log level to evaluate.</param>
+    /// <returns>
+    ///     <c>true</c> if the specified log level should be rendered; otherwise, <c>false</c>.
+    /// </returns>
+    /// <remarks>
+    ///     If the log level is included in the list of levels to ignore, this method returns <c>false</c>.
+    ///     If no specific levels to render are defined, all levels are rendered by default.
+    /// </remarks>
+    internal bool ShouldRenderLevel(string level)
+    {
+        if (logLevelsToIgnore.Contains(level))
+            return false;
+        if (logLevelsToRender.Count == 0)
+            return true; // render all levels if none specified
+        return logLevelsToRender.Contains(level);
     }
 }
