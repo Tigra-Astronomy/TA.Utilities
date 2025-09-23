@@ -1,7 +1,7 @@
 # Display Equivalence for Enumerated Types
 
 The `[DisplayEquivalent("text")]` Attribute works with the `EnumExtensions.DisplayEquivalent()` extension method.
-This can be useful for building drop-down lists and Combo box contents for enumerated types.
+This can be useful for building drop-down lists and Combo box contents for enumerated types, or anywhere that a human-readable version of an Enum member name is needed.
 You can always get the equivalent human-readable display text for an enumerated value using `value.DisplayEquivalent()`.
 This will return the display text if it has been set, or the name of the enum value otherwise.
 Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on each field of the enum.

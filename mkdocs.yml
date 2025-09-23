@@ -26,7 +26,6 @@ extra:
 
 nav:
   - Home: index.md
-  - Overview: Overview.md
   - Versioning: Versioning.md
   - Diagnostics and Logging: Diagnostics and Logging.md
   - Core:
@@ -38,6 +37,11 @@ nav:
     - ASCII Mnemonic Expansion: Core/ASCII Mnemonic Expansion.md
     - Async Helpers: Core/Async Helpers.md
     - Property Binding: Core/Property Binding.md
+    - String Extensions: Core/String Extensions.md
+    - Math Extensions: Core/Math Extensions.md
+    - Console Logger (Diagnostics): Core/Console Logger (Diagnostics).md
     - Finite State Machine: Core/Finite State Machine.md
+  - Logging:
+    - NLog Adapter: Logging/NLog Adapter.md
   - Areas for Improvement:
     - FSM SOLID Analysis: Areas for Improvement/FSM SOLID Analysis.md

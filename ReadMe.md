@@ -1,44 +1,16 @@
-# Timtek Commonly Used Helpers and Utilities
+# Timtek Utilities
 
 This library represents a collection of classes factored out of our production projects, that we found were being used over and over again.
 Rather than re-using the code at source level, it is now collected together in this package as a general purpose reusable library and made freely available for you to use at no cost and with no obligation. The only stipulation is that you can't sue the author or Timtek Systems Limited
 if anything bad happens as a result of you using the code. It's up to you to determine suitability for your purpose.
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-<!-- code_chunk_output -->
+A collection of commonly used helper and utility classes factored out of production projects and published as reusable .NET libraries.
 
-- [Timtek Commonly Used Helpers and Utilities](#timtek-commonly-used-helpers-and-utilities)
-  - [Software Re-use at the Object Code level](#software-re-use-at-the-object-code-level)
-  - [Licensing](#licensing)
-  - [Description of Classes](#description-of-classes)
-    - [Versioning](#versioning)
-      - [`SemanticVersion` class](#semanticversion-class)
-      - [GitVersion Support](#gitversion-support)
-    - [Readability and Intention-revealing Code](#readability-and-intention-revealing-code)
-      - [Maybe?](#maybe)
-    - [Bit Manipulation](#bit-manipulation)
-      - [Octet](#octet)
-    - [Diagnostics](#diagnostics)
-      - [`ConsoleLoggerService` implements `ILog`](#consoleloggerservice-implements-ilog)
-      - [ASCII Mnemonic Expansion](#ascii-mnemonic-expansion)
-      - [Display Equivalence for Enumerated Types](#display-equivalence-for-enumerated-types)
-    - [Asynchrony and Threading](#asynchrony-and-threading)
-      - [ConfigureAwait](#configureawait)
-      - [Cancel Culture](#cancel-culture)
-      - [Logging](#logging)
-    - [Two-stage Approach to Logging](#two-stage-approach-to-logging)
-    - [A Note on Semantic Logging](#a-note-on-semantic-logging)
-    - [Seq Special Considerations](#seq-special-considerations)
-      - [TL;DR](#tldr)
-      - [Log Correlation](#log-correlation)
-      - [Custom Severity Levels](#custom-severity-levels)
-  - [Release Notes](#release-notes)
+Documentation site
+- GitHub Pages: https://tigra-astronomy.github.io/TA.Utilities/
 
-<!-- /code_chunk_output -->
-
-
-## Software Re-use at the Object Code level
+## Release Notes
 
 This was always the promise of _Object Oriented Design_, but it was not until the advent of [NuGet][nuget] and its widespread adoption that this became a practical reality.
 It is easy to overlook the impact of [NuGet][nuget], as it seems so obvious and natural once you've used it.
