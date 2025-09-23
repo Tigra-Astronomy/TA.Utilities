@@ -7,8 +7,7 @@ if anything bad happens as a result of you using the code. It's up to you to det
 
 A collection of commonly used helper and utility classes factored out of production projects and published as reusable .NET libraries.
 
-Documentation site
-- GitHub Pages: https://tigra-astronomy.github.io/TA.Utilities/
+Documentation site: https://tigra-astronomy.github.io/TA.Utilities/
 
 ## Release Notes
 
