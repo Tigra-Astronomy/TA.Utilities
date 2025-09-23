@@ -9,12 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Utils.Specifications", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{22935A98-C6AD-4424-B288-56C89E864321}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		Directory.Packages.props = Directory.Packages.props
+		.github\workflows\docs.yml = .github\workflows\docs.yml
+		mkdocs.yml = mkdocs.yml
 		Push-Packages.ps1 = Push-Packages.ps1
+		ReadMe.md = ReadMe.md
 		TA.Utils.sln.DotSettings = TA.Utils.sln.DotSettings
 		TA.Utils.v3.ncrunchsolution = TA.Utils.v3.ncrunchsolution
+		WARP.md = WARP.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Utils.Logging.Nlog", "TA.Utils.Logging.Nlog\TA.Utils.Logging.Nlog.csproj", "{57DD1805-E4A4-4D7C-94CD-E01498222640}"
