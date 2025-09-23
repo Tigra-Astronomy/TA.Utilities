@@ -10,3 +10,7 @@ Welcome to the Obsidian vault for TA.Utilities documentation.
   - release/* -> published/aliased as beta.
 
 Start by adding Markdown notes here. Folders and pages you add under this directory will appear in the site’s navigation (per mkdocs.yml nav, or auto if you expand it).
+
+---
+
+CI test: trigger docs build for alpha.
