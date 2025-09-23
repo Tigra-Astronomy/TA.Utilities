@@ -1,5 +1,6 @@
 site_name: Timtek Utilities
 repo_url: https://github.com/Tigra-Astronomy/TA.Utilities
+site_url: https://tigra-astronomy.github.io/TA.Utilities/
 # Render from the Obsidian vault directory (note the space in the path)
 docs_dir: "Documentation/Timtek Utilities"
 use_directory_urls: true
