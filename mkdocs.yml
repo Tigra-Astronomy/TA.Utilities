@@ -10,6 +10,7 @@ theme:
 plugins:
   - search
   - mike
+  - roamlinks
 
 markdown_extensions:
   - admonition
@@ -24,3 +25,18 @@ extra:
 
 nav:
   - Home: index.md
+  - Overview: Overview.md
+  - Versioning: Versioning.md
+  - Diagnostics and Logging: Diagnostics and Logging.md
+  - Core:
+    - SemanticVersion: Core/SemanticVersion.md
+    - Maybe: Core/Maybe.md
+    - Octet: Core/Octet.md
+    - Code Contracts: Core/Code Contracts.md
+    - Display Equivalent: Core/Display Equivalent.md
+    - ASCII Mnemonic Expansion: Core/ASCII Mnemonic Expansion.md
+    - Async Helpers: Core/Async Helpers.md
+    - Property Binding: Core/Property Binding.md
+  - Finite State Machine: Core/Finite State Machine.md
+- Areas for Improvement:
+  - FSM SOLID Analysis: Areas for Improvement/FSM SOLID Analysis.md

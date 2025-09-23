@@ -36,7 +36,7 @@ jobs:
       - name: Install MkDocs and plugins
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs mkdocs-material mike
+          pip install mkdocs mkdocs-material mike mkdocs-roamlinks-plugin
 
       - name: Setup GitVersion
         uses: gittools/actions/gitversion/setup@v0
@@ -71,6 +71,10 @@ jobs:
             # Develop -> rolling 'alpha' alias pointing to the GitVersion-computed SemVer
             VERSION="$SEMVER"
             mike deploy --push --update-aliases "$VERSION" alpha
+            # Set default to 'alpha' only if a 'latest' alias (from a tagged release) does not exist yet
+            if ! mike list | grep -q 'latest'; then
+              mike set-default alpha --push
+            fi
 
           elif [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
             # Any release/* -> rolling 'beta' alias pointing to the GitVersion-computed SemVer

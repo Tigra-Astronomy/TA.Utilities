@@ -1,16 +1,24 @@
-# Timtek Utilities
+# Timtek Utilities Documentation
 
-Welcome to the Obsidian vault for TA.Utilities documentation.
+Welcome. This index serves as the table of contents for the full documentation set.
 
-- This vault is the single source of truth for project docs.
-- GitHub Actions builds the site with MkDocs + Material and publishes with mike to GitHub Pages.
-- Versioning policy:
-  - Tags on master/main -> published as the tagged version and aliased to latest.
-  - develop -> published/aliased as alpha.
-  - release/* -> published/aliased as beta.
-
-Start by adding Markdown notes here. Folders and pages you add under this directory will appear in the site’s navigation (per mkdocs.yml nav, or auto if you expand it).
-
----
-
-CI test: trigger docs build for alpha.
+- Overview
+  - [[Overview|Project Overview]]
+- [[Versioning|Versioning (GitVersion + SemVer)]]
+  - [[About GitVersion|Why GitVersion (automation vs. manual)]]
+- Diagnostics and Logging
+  - [[Diagnostics and Logging]]
+- Core Utilities
+  - [[Core/SemanticVersion|SemanticVersion]]
+  - [[Maybe|Maybe<T>]]
+  - [[Core/Octet|Octet]]
+  - [[Core/Code Contracts|Code Contracts]]
+  - [[Core/Display Equivalent|Display Equivalent]]
+  - [[Core/ASCII Mnemonic Expansion|ASCII Mnemonic Expansion]]
+  - [[Core/Async Helpers|Async Helpers]]
+  - [[Core/Property Binding|Property Binding]]
+  - [[Core/Finite State Machine|Finite State Machine]]
+- Release Notes
+  - [[Release Notes]]
+- Areas for Improvement
+  - [[Areas for Improvement/FSM SOLID Analysis|FSM SOLID analysis for Finite State Machine]]
