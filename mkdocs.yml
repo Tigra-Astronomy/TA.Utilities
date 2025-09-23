@@ -37,6 +37,6 @@ nav:
     - ASCII Mnemonic Expansion: Core/ASCII Mnemonic Expansion.md
     - Async Helpers: Core/Async Helpers.md
     - Property Binding: Core/Property Binding.md
-  - Finite State Machine: Core/Finite State Machine.md
-- Areas for Improvement:
-  - FSM SOLID Analysis: Areas for Improvement/FSM SOLID Analysis.md
+    - Finite State Machine: Core/Finite State Machine.md
+  - Areas for Improvement:
+    - FSM SOLID Analysis: Areas for Improvement/FSM SOLID Analysis.md
