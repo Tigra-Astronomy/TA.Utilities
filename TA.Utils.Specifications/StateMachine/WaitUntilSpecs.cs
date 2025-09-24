@@ -17,7 +17,7 @@ namespace TA.Utils.Specifications.StateMachine
 
         Establish context = () =>
         {
-            fsm = new FiniteStateMachine<WUState>(new DegenerateLoggerService());
+            fsm = new FiniteStateMachine<WUState>(Support.TestLog.Log);
             first = new WUState("First");
             second = new WUState("Second");
         };
@@ -43,7 +43,7 @@ namespace TA.Utils.Specifications.StateMachine
 
         Establish context = () =>
         {
-            fsm = new FiniteStateMachine<WUState>(new DegenerateLoggerService());
+            fsm = new FiniteStateMachine<WUState>(Support.TestLog.Log);
             fsm.StartStateMachine(new WUState("Alpha"));
         };
 

@@ -19,7 +19,7 @@ namespace TA.Utils.Specifications.StateMachine
 
         Establish context = () =>
         {
-            fsm = new FiniteStateMachine<ConcurrencyState>(new DegenerateLoggerService());
+            fsm = new FiniteStateMachine<ConcurrencyState>(Support.TestLog.Log);
             states = Enumerable.Range(1, 10).Select(i => new ConcurrencyState($"S{i}")).ToList();
             total = states.Count;
         };

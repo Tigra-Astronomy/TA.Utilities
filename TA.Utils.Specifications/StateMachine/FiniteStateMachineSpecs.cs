@@ -24,7 +24,7 @@ public class when_transitioning_between_two_states
     {
         events = new List<string>();
         observed = new List<TestState>();
-        fsm = new FiniteStateMachine<TestState>(new DegenerateLoggerService());
+        fsm = new FiniteStateMachine<TestState>(Support.TestLog.Log);
         first = new TestState("First", events);
         second = new TestState("Second", events);
         subscription = fsm.ObservableStates.Subscribe(observed.Add);
@@ -68,7 +68,7 @@ public class when_stopping_the_state_machine
         Establish context = () =>
         {
             events = new List<string>();
-            fsm    = new FiniteStateMachine<TestState>(new DegenerateLoggerService());
+            fsm    = new FiniteStateMachine<TestState>(Support.TestLog.Log);
             state  = new TestState("Running", events) { SimulateWork = true };
             completed = false;
             subscription = fsm.ObservableStates.Subscribe(_ => { }, () => completed = true);
