@@ -33,9 +33,9 @@ public class when_transitioning_between_two_states
     Because of = () =>
     {
         fsm.StartStateMachine(first);
-        fsm.StateChanged.WaitOne(); // initial activation complete
+        FsmSpecHelpers.WaitForActivation(fsm, TimeSpan.FromSeconds(2)); // initial activation complete
         fsm.TransitionTo(second);
-        fsm.StateChanged.WaitOne(); // second activation complete
+        FsmSpecHelpers.WaitForState(fsm, "Second", TimeSpan.FromSeconds(2)); // second activation complete
     };
 
     Cleanup cleanup = () =>
