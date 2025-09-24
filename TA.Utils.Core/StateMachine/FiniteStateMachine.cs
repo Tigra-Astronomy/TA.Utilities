@@ -11,6 +11,7 @@ namespace TA.Utils.Core.StateMachine;
 ///     Concrete implementation of a generic finite state machine.
 ///     Orchestrates cancellation, orderly exit/enter, and asynchronous run for each state.
 /// </summary>
+/// <typeparam name="TState">The state type managed by this state machine. Must implement <see cref="IState"/>.</typeparam>
 public sealed class FiniteStateMachine<TState> : IFiniteStateMachine<TState> where TState : class, IState
 {
     private readonly ILog            log;
@@ -36,6 +37,10 @@ public sealed class FiniteStateMachine<TState> : IFiniteStateMachine<TState> whe
 
     private Task? currentStateTask;
 
+    /// <summary>
+    ///     Creates a new finite state machine.
+    /// </summary>
+    /// <param name="log">Optional logger instance. When omitted, a degenerate (no-op) logger is used.</param>
     public FiniteStateMachine(ILog? log = null) => this.log = log ?? new DegenerateLoggerService();
 
     /// <summary>
