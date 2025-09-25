@@ -20,6 +20,8 @@ I tend to use “we” and “our” when talking about the company, but Timtek 
 
 If you are a company and need some work done, then consider hiring me as a freelance developer. I have decades of experience in product design, firmware development for embedded systems and PC driver and software development. I am a professional; I believe in doing what is right, not what is expedient, and I support my software.
 
+See also: [[Release Notes]].
+
 [nuget]: https://www.nuget.org/ "NuGet gallery"
 [myget]: https://www.myget.org/feed/Packages/tigra-astronomy "Tigra Astronomy public package feed"
 [mit]: https://tigra.mit-license.org "Tigra MIT Licence"

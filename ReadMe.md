@@ -11,6 +11,8 @@ Documentation site: https://tigra-astronomy.github.io/TA.Utilities/
 
 ## Release Notes
 
+Release notes: https://tigra-astronomy.github.io/TA.Utilities/Release%20Notes/
+
 This was always the promise of _Object Oriented Design_, but it was not until the advent of [NuGet][nuget] and its widespread adoption that this became a practical reality.
 It is easy to overlook the impact of [NuGet][nuget], as it seems so obvious and natural once you've used it.
 
