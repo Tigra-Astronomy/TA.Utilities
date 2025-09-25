@@ -14,7 +14,18 @@ public sealed class TrafficController
     private readonly Action<IState> go;
     private CancellationTokenSource? cts;
 
-    public bool PrimaryIsA { get; private set; } = true; // A starts Green; B starts Red
+    /// <summary>
+    /// Gets the index of the approach currently permitted to proceed during non-red phases.
+    /// 0 corresponds to approach A, 1 corresponds to approach B.
+    /// </summary>
+    public int ActiveApproachIndex { get; private set; } = 0;
+
+    private const int ApproachCount = 2;
+
+    /// <summary>
+    /// Advances the active approach to the next approach in a round-robin fashion.
+    /// </summary>
+    public void AdvanceToNextApproach() => ActiveApproachIndex = (ActiveApproachIndex + 1) % ApproachCount;
 
     public TrafficController(MainViewModel vm)
     {
@@ -27,7 +38,8 @@ public sealed class TrafficController
     public void Start()
     {
         cts = new CancellationTokenSource();
-        var initial = new States.GreenPhaseState(go, this, vm);
+        // Start with both directions red for the configured dead time
+        var initial = new States.RedPhaseState(go, this, vm);
         fsm.StartStateMachine(initial);
     }
 
@@ -37,33 +49,31 @@ public sealed class TrafficController
         fsm.StopStateMachine();
     }
 
-    public void FlipPrimary() => PrimaryIsA = !PrimaryIsA;
-
     public void ApplyLights()
     {
         var state = fsm.CurrentState;
         if (state is null) return;
 
-        // Determine colours for A and B from current phase and PrimaryIsA flag
+        // Determine colours for A and B from current phase and ActiveApproachIndex
         bool aRed = false, aAmber = false, aGreen = false;
         bool bRed = false, bAmber = false, bGreen = false;
 
         switch (state)
         {
             case States.GreenPhaseState:
-                if (PrimaryIsA) { aGreen = true; bRed = true; }
-                else            { bGreen = true; aRed = true; }
+                if (ActiveApproachIndex == 0) { aGreen = true; bRed = true; }
+                else                         { bGreen = true; aRed = true; }
                 break;
             case States.AmberPhaseState:
-                if (PrimaryIsA) { aAmber = true; bRed = true; }
-                else            { bAmber = true; aRed = true; }
+                if (ActiveApproachIndex == 0) { aAmber = true; bRed = true; }
+                else                         { bAmber = true; aRed = true; }
                 break;
             case States.RedPhaseState:
                 aRed = true; bRed = true;
                 break;
             case States.RedAmberPhaseState:
-                if (PrimaryIsA) { aRed = true; aAmber = true; bRed = true; }
-                else            { bRed = true; bAmber = true; aRed = true; }
+                if (ActiveApproachIndex == 0) { aRed = true; aAmber = true; bRed = true; }
+                else                         { bRed = true; bAmber = true; aRed = true; }
                 break;
         }
 
@@ -74,8 +84,26 @@ public sealed class TrafficController
         });
     }
 
+    /// <summary>
+    /// Gets the current green phase duration.
+    /// </summary>
     public TimeSpan CurrentGreenDuration => TimeSpan.FromSeconds(vm.GreenDurationSeconds);
-    public TimeSpan CurrentAmberDuration => TimeSpan.FromSeconds(2); // fixed
+
+    private const double AmberSeconds = 2.0;
+    private const double RedAmberSeconds = 2.0;
+
+    /// <summary>
+    /// Gets the current amber phase duration. This is fixed at two seconds but can be adjusted in code.
+    /// </summary>
+    public TimeSpan CurrentAmberDuration => TimeSpan.FromSeconds(AmberSeconds);
+
+    /// <summary>
+    /// Gets the current red (dead time) duration where all approaches show red.
+    /// </summary>
     public TimeSpan CurrentRedDuration   => TimeSpan.FromSeconds(vm.RedDurationSeconds);
-    public TimeSpan CurrentRedAmberDuration => TimeSpan.FromSeconds(2); // fixed
+
+    /// <summary>
+    /// Gets the current red+amber phase duration. This is fixed at two seconds but can be adjusted in code.
+    /// </summary>
+    public TimeSpan CurrentRedAmberDuration => TimeSpan.FromSeconds(RedAmberSeconds);
 }

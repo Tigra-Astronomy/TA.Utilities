@@ -28,8 +28,7 @@ public sealed class RedAmberPhaseState : IState
         try
         {
             await Task.Delay(controller.CurrentRedAmberDuration, cancelOnExit).ConfigureAwait(false);
-            // Flip primary side and go to Green
-            controller.FlipPrimary();
+            // Proceed to Green for the current active approach
             go(new GreenPhaseState(go, controller, vm));
         }
         catch (OperationCanceledException) { }

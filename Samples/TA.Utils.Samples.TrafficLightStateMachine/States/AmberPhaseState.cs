@@ -28,6 +28,8 @@ public sealed class AmberPhaseState : IState
         try
         {
             await Task.Delay(controller.CurrentAmberDuration, cancelOnExit).ConfigureAwait(false);
+            // After amber completes, rotate to the next approach, then enter the red (dead time)
+            controller.AdvanceToNextApproach();
             go(new RedPhaseState(go, controller, vm));
         }
         catch (OperationCanceledException) { }

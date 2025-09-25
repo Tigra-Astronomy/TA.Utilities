@@ -70,9 +70,9 @@ public sealed class SimulationService
                 continue;
             }
 
-            // Pick which queue can depart based on which side is currently green
-            bool aGreen = controller.PrimaryIsA && vm.AGreenOn;
-            bool bGreen = !controller.PrimaryIsA && vm.BGreenOn;
+            // Pick which queue can depart based on which approach is currently green
+            bool aGreen = controller.ActiveApproachIndex == 0 && vm.AGreenOn;
+            bool bGreen = controller.ActiveApproachIndex == 1 && vm.BGreenOn;
 
             if (aGreen && vm.QueueA > 0)
             {

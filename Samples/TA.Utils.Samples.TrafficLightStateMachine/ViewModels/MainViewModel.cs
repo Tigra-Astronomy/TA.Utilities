@@ -12,12 +12,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
     // Backing fields
     private int queueA;
     private int queueB;
-    private bool aRedOn = true, aAmberOn, aGreenOn;
-    private bool bRedOn, bAmberOn, bGreenOn = true;
+    private bool aRedOn = true, aAmberOn = false, aGreenOn = false;
+    private bool bRedOn = true, bAmberOn = false, bGreenOn = false;
 
     private double arrivalRatePerMinute = 30.0; // vehicles per minute
     private double secondsPerVehicle   = 2.0;   // service interval during green
-    private double greenDurationSeconds = 10.0; // adjustable
+    private double greenDurationSeconds = 30.0; // adjustable (default 30s)
     private double redDurationSeconds   = 8.0;  // adjustable
 
     private readonly Services.TrafficController controller;
