@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TA.Utils.Samples.TrafficLightStateMachine.MainPage"
+             Title="Traffic Light FSM">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <!-- Lights row -->
+            <Grid ColumnDefinitions="Auto,16,Auto" RowDefinitions="Auto">
+                <!-- Light A -->
+                <VerticalStackLayout Grid.Column="0" Spacing="8" HorizontalOptions="Center">
+                    <Label Text="Light A" HorizontalOptions="Center"/>
+                    <Grid RowDefinitions="Auto,Auto,Auto" Padding="8" BackgroundColor="#111">
+                        <Ellipse WidthRequest="48" HeightRequest="48" Fill="{Binding ARedOn, Converter={StaticResource BoolToColor}, ConverterParameter=Red}" Margin="4"/>
+                        <Ellipse WidthRequest="48" HeightRequest="48" Fill="{Binding AAmberOn, Converter={StaticResource BoolToColor}, ConverterParameter=Amber}" Margin="4" Grid.Row="1"/>
+                        <Ellipse WidthRequest="48" HeightRequest="48" Fill="{Binding AGreenOn, Converter={StaticResource BoolToColor}, ConverterParameter=Green}" Margin="4" Grid.Row="2"/>
+                    </Grid>
+                    <Label Text="Queue: " />
+                    <Label Text="{Binding QueueA}" FontAttributes="Bold" FontSize="18"/>
+                </VerticalStackLayout>
+
+                <!-- Spacer -->
+                <BoxView Grid.Column="1" WidthRequest="16"/>
+
+                <!-- Light B -->
+                <VerticalStackLayout Grid.Column="2" Spacing="8" HorizontalOptions="Center">
+                    <Label Text="Light B" HorizontalOptions="Center"/>
+                    <Grid RowDefinitions="Auto,Auto,Auto" Padding="8" BackgroundColor="#111">
+                        <Ellipse WidthRequest="48" HeightRequest="48" Fill="{Binding BRedOn, Converter={StaticResource BoolToColor}, ConverterParameter=Red}" Margin="4"/>
+                        <Ellipse WidthRequest="48" HeightRequest="48" Fill="{Binding BAmberOn, Converter={StaticResource BoolToColor}, ConverterParameter=Amber}" Margin="4" Grid.Row="1"/>
+                        <Ellipse WidthRequest="48" HeightRequest="48" Fill="{Binding BGreenOn, Converter={StaticResource BoolToColor}, ConverterParameter=Green}" Margin="4" Grid.Row="2"/>
+                    </Grid>
+                    <Label Text="Queue: " />
+                    <Label Text="{Binding QueueB}" FontAttributes="Bold" FontSize="18"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <BoxView HeightRequest="1" BackgroundColor="#444"/>
+
+            <!-- Controls -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Phase Durations (seconds)" FontAttributes="Bold"/>
+                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                    <Label Text="Green:" Grid.Row="0" Grid.Column="0"/>
+                    <Slider Minimum="5" Maximum="60" Value="{Binding GreenDurationSeconds}" Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="{Binding GreenDurationSeconds, StringFormat='{}{0:F1}s'}" Grid.Row="0" Grid.Column="2"/>
+
+                    <Label Text="Red:" Grid.Row="1" Grid.Column="0"/>
+                    <Slider Minimum="2" Maximum="30" Value="{Binding RedDurationSeconds}" Grid.Row="1" Grid.Column="1"/>
+                    <Label Text="{Binding RedDurationSeconds, StringFormat='{}{0:F1}s'}" Grid.Row="1" Grid.Column="2"/>
+                </Grid>
+
+                <Label Text="Traffic Parameters" FontAttributes="Bold"/>
+                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                    <Label Text="Arrivals (veh/min):" Grid.Row="0" Grid.Column="0"/>
+                    <Slider Minimum="0" Maximum="120" Value="{Binding ArrivalRatePerMinute}" Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="{Binding ArrivalRatePerMinute, StringFormat='{}{0:F0} vpm'}" Grid.Row="0" Grid.Column="2"/>
+
+                    <Label Text="Seconds per vehicle:" Grid.Row="1" Grid.Column="0"/>
+                    <Slider Minimum="0.5" Maximum="10" Value="{Binding SecondsPerVehicle}" Grid.Row="1" Grid.Column="1"/>
+                    <Label Text="{Binding SecondsPerVehicle, StringFormat='{}{0:F1}s'}" Grid.Row="1" Grid.Column="2"/>
+                </Grid>
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                <Button Text="Start" Clicked="OnStartClicked"/>
+                <Button Text="Stop"  Clicked="OnStopClicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
