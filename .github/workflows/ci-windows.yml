@@ -1,0 +1,66 @@
+name: ci-windows
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - feature/*
+      - release/*
+      - hotfix/*
+    tags:
+      - "*.*.*"
+      - "*.*.*-*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-windows:
+    name: Build and test (Windows, .NET 8 + .NET Framework 4.8)
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      SOLUTION_FILTER: ci.windows.slnf
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        # setup-dotnet respects global.json automatically
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj','**/*.fsproj','**/packages.lock.json','global.json','Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore "$env:SOLUTION_FILTER"
+
+      - name: Build (Release)
+        run: dotnet build "$env:SOLUTION_FILTER" --configuration Release --no-restore
+
+      - name: Test (Release) - all frameworks in filter
+        # On Windows, multi-targeted test projects (e.g., net8.0 + net48) will run all TFMs by default
+        run: dotnet test "$env:SOLUTION_FILTER" --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-windows
+          path: |
+            ./TestResults/*.trx
+          if-no-files-found: warn
