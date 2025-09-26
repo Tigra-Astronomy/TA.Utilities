@@ -2,15 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:trig="clr-namespace:TA.Utils.Samples.TrafficLightStateMachine.Triggers"
              x:Class="TA.Utils.Samples.TrafficLightStateMachine.MainPage"
              Title="Traffic Light FSM">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
             <!-- Lights row with chart beside it -->
-            <Grid ColumnDefinitions="Auto,16,*" RowDefinitions="Auto">
+            <Grid ColumnDefinitions="Auto,16,*" RowDefinitions="Auto,Auto">
                 <!-- Existing lights grid on the left -->
-                <Grid Grid.Column="0" ColumnDefinitions="Auto,16,Auto" RowDefinitions="Auto">
+                <Grid x:Name="LightsGrid" Grid.Column="0" ColumnDefinitions="Auto,16,Auto" RowDefinitions="Auto">
                     <!-- Light A -->
                     <VerticalStackLayout Grid.Column="0" Spacing="8" HorizontalOptions="Center">
                         <Label Text="Light A" HorizontalOptions="Center"/>
@@ -40,38 +41,80 @@
                 </Grid>
 
                 <!-- Chart on the right -->
-                <lvc:CartesianChart Grid.Column="2"
+                <lvc:CartesianChart x:Name="Chart" Grid.Column="2"
                                     Series="{Binding Series}"
                                     XAxes="{Binding XAxes}"
                                     YAxes="{Binding YAxes}"
                                     HeightRequest="240"
                                     Margin="12,0,0,0"/>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="OrientationStates">
+                        <VisualState Name="Portrait">
+                            <VisualState.StateTriggers>
+                                <trig:OrientationStateTrigger Orientation="Portrait" />
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter TargetName="LightsGrid" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="LightsGrid" Property="Grid.Column" Value="0" />
+
+                                <Setter TargetName="Chart" Property="Grid.Row" Value="1" />
+                                <Setter TargetName="Chart" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="Chart" Property="Grid.ColumnSpan" Value="3" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState Name="Landscape">
+                            <VisualState.StateTriggers>
+                                <trig:OrientationStateTrigger Orientation="Landscape" />
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter TargetName="LightsGrid" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="LightsGrid" Property="Grid.Column" Value="0" />
+
+                                <Setter TargetName="Chart" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="Chart" Property="Grid.Column" Value="2" />
+                                <Setter TargetName="Chart" Property="Grid.ColumnSpan" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
             </Grid>
 
             <BoxView HeightRequest="1" BackgroundColor="#444"/>
 
             <!-- Controls -->
-            <VerticalStackLayout Spacing="8">
+            <VerticalStackLayout Spacing="{OnPlatform Android=16, Default=8}">
                 <Label Text="Phase Durations (seconds)" FontAttributes="Bold"/>
-                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                <!-- Columns: 0=Label, 1=Minus, 2=Slider, 3=Plus, 4=Value -->
+                <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto" RowDefinitions="Auto,Auto">
                     <Label Text="Green:" Grid.Row="0" Grid.Column="0"/>
-                    <Slider Minimum="5" Maximum="60" Value="{Binding GreenDurationSeconds}" Grid.Row="0" Grid.Column="1"/>
-                    <Label Text="{Binding GreenDurationSeconds, StringFormat='{}{0:F1}s'}" Grid.Row="0" Grid.Column="2"/>
+<Button Text="-" Grid.Row="0" Grid.Column="1" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnGreenMinusClicked"/>
+                    <Slider x:Name="GreenSlider" Minimum="5" Maximum="60" Value="{Binding GreenDurationSeconds}" Grid.Row="0" Grid.Column="2"/>
+<Button Text="+" Grid.Row="0" Grid.Column="3" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnGreenPlusClicked"/>
+                    <Label Text="{Binding GreenDurationSeconds, StringFormat='{}{0:F1}s'}" Grid.Row="0" Grid.Column="4"/>
 
                     <Label Text="Red:" Grid.Row="1" Grid.Column="0"/>
-                    <Slider Minimum="2" Maximum="30" Value="{Binding RedDurationSeconds}" Grid.Row="1" Grid.Column="1"/>
-                    <Label Text="{Binding RedDurationSeconds, StringFormat='{}{0:F1}s'}" Grid.Row="1" Grid.Column="2"/>
+<Button Text="-" Grid.Row="1" Grid.Column="1" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnRedMinusClicked"/>
+                    <Slider x:Name="RedSlider" Minimum="2" Maximum="30" Value="{Binding RedDurationSeconds}" Grid.Row="1" Grid.Column="2"/>
+<Button Text="+" Grid.Row="1" Grid.Column="3" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnRedPlusClicked"/>
+                    <Label Text="{Binding RedDurationSeconds, StringFormat='{}{0:F1}s'}" Grid.Row="1" Grid.Column="4"/>
                 </Grid>
 
                 <Label Text="Traffic Parameters" FontAttributes="Bold"/>
-                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                <!-- Columns: 0=Label, 1=Minus, 2=Slider, 3=Plus, 4=Value -->
+                <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto" RowDefinitions="Auto,Auto">
                     <Label Text="Arrivals (veh/min):" Grid.Row="0" Grid.Column="0"/>
-                    <Slider Minimum="0" Maximum="120" Value="{Binding ArrivalRatePerMinute}" Grid.Row="0" Grid.Column="1"/>
-                    <Label Text="{Binding ArrivalRatePerMinute, StringFormat='{}{0:F0} vpm'}" Grid.Row="0" Grid.Column="2"/>
+<Button Text="-" Grid.Row="0" Grid.Column="1" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnArrivalsMinusClicked"/>
+                    <Slider x:Name="ArrivalSlider" Minimum="0" Maximum="120" Value="{Binding ArrivalRatePerMinute}" Grid.Row="0" Grid.Column="2"/>
+<Button Text="+" Grid.Row="0" Grid.Column="3" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnArrivalsPlusClicked"/>
+                    <Label Text="{Binding ArrivalRatePerMinute, StringFormat='{}{0:F0} vpm'}" Grid.Row="0" Grid.Column="4"/>
 
                     <Label Text="Seconds per vehicle:" Grid.Row="1" Grid.Column="0"/>
-                    <Slider Minimum="0.5" Maximum="10" Value="{Binding SecondsPerVehicle}" Grid.Row="1" Grid.Column="1"/>
-                    <Label Text="{Binding SecondsPerVehicle, StringFormat='{}{0:F1}s'}" Grid.Row="1" Grid.Column="2"/>
+<Button Text="-" Grid.Row="1" Grid.Column="1" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnSecondsMinusClicked"/>
+                    <Slider x:Name="SecondsSlider" Minimum="0.5" Maximum="10" Value="{Binding SecondsPerVehicle}" Grid.Row="1" Grid.Column="2"/>
+<Button Text="+" Grid.Row="1" Grid.Column="3" MinimumWidthRequest="48" MinimumHeightRequest="{OnPlatform Android=24, Default=48}" HeightRequest="{OnPlatform Android=24}" FontSize="{OnPlatform Android=24}" VerticalOptions="Center" Padding="{OnPlatform Android='12,0'}" IsVisible="{OnPlatform Android=true, Default=false}" Clicked="OnSecondsPlusClicked"/>
+                    <Label Text="{Binding SecondsPerVehicle, StringFormat='{}{0:F1}s'}" Grid.Row="1" Grid.Column="4"/>
                 </Grid>
             </VerticalStackLayout>
 

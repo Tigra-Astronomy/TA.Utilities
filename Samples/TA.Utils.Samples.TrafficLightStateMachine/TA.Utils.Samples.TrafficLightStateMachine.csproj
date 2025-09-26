@@ -32,15 +32,30 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
-	<!-- Windows-specific build settings to avoid MSIX packaging and WinAppSDK self-contained packaging during Debug builds -->
-	<!--<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+	<!-- Windows-specific build settings to avoid MSIX packaging and WinAppSDK self-contained packaging during Debug runs in Visual Studio -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
 		<WindowsPackageType>None</WindowsPackageType>
-		<WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<GenerateAppxPackageOnBuild>false</GenerateAppxPackageOnBuild>
 		<GenerateAppInstallerFile>false</GenerateAppInstallerFile>
 		<EnablePreviewMsixTooling>false</EnablePreviewMsixTooling>
 		<SelfContained>false</SelfContained>
-	</PropertyGroup>-->
+	</PropertyGroup>
+
+	<!-- Make Windows Debug runs self-contained to avoid external runtime dependencies in VS -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<PublishTrimmed>false</PublishTrimmed>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<!-- Make Windows Release builds self-contained by default -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<PublishTrimmed>false</PublishTrimmed>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
@@ -67,6 +82,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" />
+		<PackageReference Include="CommunityToolkit.Maui" />
 	</ItemGroup>
 
 </Project>
