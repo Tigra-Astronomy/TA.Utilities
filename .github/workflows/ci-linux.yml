@@ -61,6 +61,16 @@ jobs:
       - name: Test (Release) - TA.Utils.Specifications (net8.0)
         run: dotnet test "TA.Utils.Specifications/TA.Utils.Specifications.csproj" --framework net8.0 --configuration Release --logger "trx;LogFileName=test-results-specs.trx" --results-directory ./TestResults
 
+      - name: Publish test report
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: |
+            ./TestResults/*.trx
+          check_name: Unit Test Results (Linux)
+          comment_mode: off
+          report_suite_logs: true
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,3 +79,9 @@ jobs:
           path: |
             ./TestResults/*.trx
           if-no-files-found: warn
+
+      - name: Attach test summary to job
+        if: always()
+        run: |
+          echo "## Test artefacts" >> $GITHUB_STEP_SUMMARY
+          echo "- See the 'Unit Test Results (Linux)' check for details" >> $GITHUB_STEP_SUMMARY

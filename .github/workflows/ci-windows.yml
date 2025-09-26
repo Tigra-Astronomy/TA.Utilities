@@ -56,6 +56,16 @@ jobs:
         # On Windows, multi-targeted test projects (e.g., net8.0 + net48) will run all TFMs by default
         run: dotnet test "$env:SOLUTION_FILTER" --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
 
+      - name: Publish test report
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: |
+            ./TestResults/*.trx
+          check_name: Unit Test Results (Windows)
+          comment_mode: off
+          report_suite_logs: true
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,3 +74,9 @@ jobs:
           path: |
             ./TestResults/*.trx
           if-no-files-found: warn
+
+      - name: Attach test summary to job
+        if: always()
+        run: |
+          echo "## Test artefacts" >> $GITHUB_STEP_SUMMARY
+          echo "- See the 'Unit Test Results (Windows)' check for details" >> $GITHUB_STEP_SUMMARY
