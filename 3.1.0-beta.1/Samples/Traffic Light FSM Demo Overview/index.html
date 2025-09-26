@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://tigra-astronomy.github.io/TA.Utilities/3.1.0-beta.1/Samples/Traffic%20Light%20Simulation/">
+        <link rel="canonical" href="https://tigra-astronomy.github.io/TA.Utilities/3.1.0-beta.1/Samples/Traffic%20Light%20FSM%20Demo%20Overview/">
       
       
       
@@ -18,7 +18,7 @@
     
     
       
-        <title>Traffic Light Simulation - Timtek Utilities</title>
+        <title>Traffic Light FSM Demo Overview - Timtek Utilities</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#definitions" class="md-skip">
+        <a href="#traffic-light-fsm-demo-overview" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Traffic Light Simulation
+              Traffic Light FSM Demo Overview
             
           </span>
         </div>
@@ -753,80 +753,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#definitions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Definitions
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Definitions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#state-machine-design" class="md-nav__link">
-    <span class="md-ellipsis">
-      State Machine Design
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="State Machine Design">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#traffic-light" class="md-nav__link">
-    <span class="md-ellipsis">
-      Traffic Light
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#approach-sequencer" class="md-nav__link">
-    <span class="md-ellipsis">
-      Approach Sequencer
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Configuration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phase-transitions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Phase Transitions
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -845,93 +773,43 @@
   
 
 
-  <h1>Traffic Light Simulation</h1>
-
-<p>This sample simulates an n-way traffic light controlled road segment or intersection. The user may select how many "approaches" to simulate and a traffic light will exist for each approach. Each light will be modelled as a finite state machine, there will be one instance of the state machine for each light.</p>
-<h2 id="definitions">Definitions<a class="headerlink" href="#definitions" title="Permanent link">&para;</a></h2>
-<p>Traffic
- : Something, typically a vehicle or person, that wishes to transit a <em>controlled area</em>.</p>
-<p>Controlled Area
- : The area controlled by a set of traffic lights, though which traffic may transit. Typically a section of road or a road interchange, but can also be other areas such as pedestrian walkways, one-way streets, tunnels, staircases or any area in which the flow of traffic must be controlled.</p>
-<p>Traffic Light
- : A visual indication to <em>traffic</em> that it may or may not enter a <em>controlled area</em>. A traffic light is an independent modular unit with a fixed phase sequence of colours. When triggered by the <em>approach sequencer</em>, the light becomes an <em>active approach</em> and begins transitioning through its phase sequence, which will be modelled as a finite state machine. Upon completion of the sequence, the light signals the <em>approach sequencer</em> that it has completed it's cycle and is back at the Red phase.</p>
-<p>Phase
- : A distinct state of a <em>traffic light</em> that can be mapped to a colour display. Each phase may map to one or more colours. The possible colour configurations are: Red, Red+Amber, Green, Amber. </p>
-<p>Approach
- : The location where traffic may enter the <em>controlled area</em> by passing a <em>traffic light</em>. There will be a <em>traffic light</em> at each approach.</p>
-<p>Active Approach
- : The approach that is currently allowing <em>traffic</em> to transit the <em>controlled area</em>. At any given moment, there may be zero or one active approaches.</p>
-<p>Approach Sequencer
- : A service that monitors the state of each approach and decides which approach(es) are to become active. The sequencer may use a number of strategies for sequencing the approaches. The simple case is a single active approach with a round-robin scheduler. More sophisticated sequencing strategies may make use of sensor inputs to detect waiting traffic, traffic moving within the controlled area and it may be able to support multiple active approaches. </p>
-<h3 id="state-machine-design">State Machine Design<a class="headerlink" href="#state-machine-design" title="Permanent link">&para;</a></h3>
-<h4 id="traffic-light">Traffic Light<a class="headerlink" href="#traffic-light" title="Permanent link">&para;</a></h4>
-<p>There shall exist a set of custom states, <code>ITrafficLightState</code> inherits <code>IState</code>, and an abstract class <code>TrafficLightStateBase</code> implements <code>ITrafficLightState</code>. The state machine instance for each light will be created as <code>FiniteStateMachine&lt;ITrafficLightState&gt;</code>.</p>
-<p><code>ITrafficLightState</code> shall define the following trigger methods: 
-- <code>SetActiveApproach</code> action in the <code>InactiveRed</code> state to trigger the phase sequence.
-- <code>FaultDetected</code>- causes immediate transition to a fault state which displays a flashing Amber light.
-- <code>StopTraffic</code> - triggers an orderly transition to the <code>Amber</code> state and ultimatelt the <code>InactiveRed</code> state, so that all traffic is stopped.</p>
-<h4 id="approach-sequencer">Approach Sequencer<a class="headerlink" href="#approach-sequencer" title="Permanent link">&para;</a></h4>
-<p>[ToDo]</p>
-<h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
-<p>[ToDo]</p>
-<h2 id="phase-transitions">Phase Transitions<a class="headerlink" href="#phase-transitions" title="Permanent link">&para;</a></h2>
-<p>The phases and their mapping to the colour display are:</p>
-<table>
-<thead>
-<tr>
-<th>Phase (state name)</th>
-<th>Colour Display</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>InactiveRed</td>
-<td>Red</td>
-</tr>
-<tr>
-<td>ActiveRed</td>
-<td>Red</td>
-</tr>
-<tr>
-<td>RedAmber</td>
-<td>Red and Amber</td>
-</tr>
-<tr>
-<td>Green</td>
-<td>Green</td>
-</tr>
-<tr>
-<td>Amber</td>
-<td>Amber</td>
-</tr>
-<tr>
-<td>Fault</td>
-<td>flashing Red with a period of 2 Hz.</td>
-</tr>
-<tr>
-<td>Caution</td>
-<td>flashing Amber with a period of 2 Hz.</td>
-</tr>
-</tbody>
-</table>
-<p>When <code>SetActiveApproach</code> is triggered in the <code>RedInactive</code> state, this starts the light clocking through it's phase sequence. It is ignored in all other phase states. The phase transitions are as defined in the following diagram:</p>
-<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>@startuml Traffic Light State Machine
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>state RedInactive
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>state RedActive
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>state RedAmber
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>state Green
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>state Amber
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>[*] -&gt; RedInactive
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>RedInactive -&gt; RedActive : SetActiveApproach
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>RedActive -&gt; RedAmber : PhaseTimerElpased
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>RedAmber -&gt; Green : PhaseTimerElpased
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>Green --&gt; Amber : PhaseTimerElpased
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>Amber -&gt; RedInactive : PhaseTimerElpased
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>@enduml
-</code></pre></div>
-<p>Each state's <code>OnEnter</code> method initializes a phase timer with an appropriate value for that state, which is taken from.</p>
-<p>Each traffic light uses a finite state machine to control it's transitions. All lights start Red and must remain red until they are triggered to become the <em>active approach</em>. An <code>ApproachSequencer</code> service will select one of the lights and send it the "SetActiveApproach" trigger. The light will then cycle through its state machine until it becomes Red again, and signals the <code>ApproachSequencer</code> that it has completed its cycle. The sequencer is then free to select another light to become the active approach. Initially, a round-robin sequencing strategy will be used but this must be extensible (possibly using the Strategy pattern) so that more advanced strategies can be added later (for example, a <code>FavourLongestQueueStrategy</code> could select the light with most traffic waiting at it).</p>
-<p>The sequencer should implement a timeout period, within which each approach must complete its sequence. If any light does not signal completion within the allowed time, an error condition is declared and all lights will be sent</p>
+<h1 id="traffic-light-fsm-demo-overview">Traffic Light FSM Demo Overview<a class="headerlink" href="#traffic-light-fsm-demo-overview" title="Permanent link">&para;</a></h1>
+<p>Purpose
+- Demonstrate the use of the TA.Utils.Core FiniteStateMachine<TState> with a realistic, visual example.
+- Showcase clean separation between state behaviour (IState), triggering actions (ITrafficLightActions), and orchestration (IApproachSequencer), following SOLID and MVVM.
+- Provide a deterministic, testable simulation using .NET 8 TimeProvider.</p>
+<p>What the demo simulates
+- An n‑way controlled area with one traffic light (approach) per entry.
+- Each traffic light runs an independent FSM modelling phases as states: InactiveRed → RedAmber → Green → Amber → ClearingRed → InactiveRed. Fault is modelled as a flashing Amber state with no runtime exit.
+- A sequencer that selects which approach is active using a round‑robin policy (single active approach in the initial implementation).
+- Traffic flow via arrivals and departures per approach with configurable rates.</p>
+<p>How it works (high level)
+- On Start, the app starts the arrival and departure simulations, starts the sequencer, then starts each approach’s FSM after a random startup delay (up to 10 s). The sequencer waits until all lights report InactiveRed before sequencing.
+- The sequencer activates one approach at a time by sending SetActiveApproach(config), which supplies per‑activation timings (ActiveTime, TransitionTime, ClearingTime). The light runs its FSM to completion and returns to InactiveRed, signalling the sequencer to select the next approach.
+- While an approach is in Green, the sequencer may resend SetActiveApproach(config) to reset and adjust the dwell time from the moment of receipt.
+- Stop sends StopTraffic to all approaches and waits for all to reach InactiveRed; simulations stop when the sequencer stops. Reset performs a full restart to recover from Fault.</p>
+<p>UI overview
+- Approach tiles show a visual traffic light, current state name, and time remaining.
+- A full‑width chart plots queue length over time, one coloured line per approach.
+- Controls:
+  - Start/Stop/Reset (IRelayCommand‑bound, auto‑disabled while executing)
+  - Number of approaches (editable only while stopped)
+  - Timing and simulation inputs: ActiveTime, TransitionTime, ClearingTime; arrival mean (1–300 s); departure interval (1.0–10.0 s)
+- Telemetry formatting uses fixed width with signed values per house style.</p>
+<p>Traffic model
+- Arrivals: stochastic process with configurable mean inter‑arrival time (recommended exponential distribution), one RNG stream per approach.
+- Departures (active approach): deterministic interval; departures are eligible during Green and the first half of Amber (TransitionTime/2) only.
+- Queue length updates on every arrival and departure; the chart updates in real time with efficient sampling.</p>
+<p>Design principles highlighted
+- Interface Segregation (ITrafficLightState vs ITrafficLightActions)
+- Dependency Injection (Ninject CompositionRoot)
+- Determinism and testability (TimeProvider‑driven timers; MSpec BDD tests)
+- Clear orchestration vs behaviour separation (Sequencer vs Light FSM)</p>
+<p>What to explore next
+- Alternative sequencing strategies (e.g., favour longest queue, sensor‑driven)
+- Multi‑active compatibility groups
+- Fault detection and reporting
+- Persistence of configurations and session replay</p>
 
 
 
