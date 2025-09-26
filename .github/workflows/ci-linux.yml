@@ -69,7 +69,7 @@ jobs:
             ./TestResults/*.trx
           check_name: Unit Test Results (Linux)
           comment_mode: off
-          report_suite_logs: true
+          report_suite_logs: any
 
       - name: Upload test results
         if: always()
