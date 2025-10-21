@@ -1,0 +1,12 @@
+<Project>
+  <!-- Ensure consistent defaults when built outside Visual Studio (e.g., NCrunch, CLI) -->
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' != 'true'">
+    <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+  </PropertyGroup>
+
+  <!-- For MAUI projects targeting Windows, ensure a default RID when missing -->
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' != 'true' and '$(UseMaui)' == 'true' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifier)' == ''">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+</Project>

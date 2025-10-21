@@ -11,14 +11,12 @@
             "id": "26f893446cafbf69",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "plantuml",
               "state": {
-                "file": "Home.md",
-                "mode": "source",
-                "source": false
+                "file": "Samples/TrafficLightStateMachine.puml"
               },
-              "icon": "lucide-file",
-              "title": "Home"
+              "icon": "document-plantuml",
+              "title": "TrafficLightStateMachine"
             }
           }
         ]
@@ -169,10 +167,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "26f893446cafbf69",
+  "active": "b6618774801f5531",
   "lastOpenFiles": [
-    "index.md",
+    "Samples/Traffic Light FSM Demo Overview.md",
+    "Samples/Traffic Light Simulation Design Specification.md",
+    "Samples/Traffic Light Simulation (Final).md",
+    "Samples/Traffic Light State Machine.md",
+    "Samples/TrafficLightStateMachine.puml",
+    "Samples/TrafficLightStateMachine.md",
+    "Samples/Traffic Light Simulation.md",
+    "Samples/Traffic Light Simulation (Redline).md",
+    "Areas for Improvement/FSM SOLID Analysis.md",
+    "Samples",
     "Home.md",
+    "index.md",
     "Overview.md",
     "Release Notes.md",
     "Logging/NLog Adapter.md",
@@ -189,11 +197,8 @@
     "Core/SemanticVersion.md",
     "Core/Property Binding.md",
     "Versioning.md",
-    "Areas for Improvement/FSM SOLID Analysis.md",
     "Core/Finite State Machine.md",
     "Areas for Improvement",
-    "Diagnostics and Logging.md",
-    "About GitVersion.md",
     "Core"
   ]
 }

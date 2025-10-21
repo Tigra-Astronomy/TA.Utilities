@@ -54,7 +54,7 @@ public interface IFiniteStateMachine<TState> where TState : class, IState
 Key runtime guarantees
 - Cancellation first: `TransitionTo(next)` cancels the current state’s token before waiting.
 - Orderly exit/enter: after the current state’s run task completes, `OnExit()` is called, then `OnEnter()` for the next state, then `RunAsync()` for the next state is started.
-- Transition completion signal: the FSM exposes a `StateChanged` event (ManualResetEvent) that is set once a transition fully completes, useful in tests or host loops.
+- Blocking wait helper: `WaitUntil(predicate, timeout)` enables hosts/tests to synchronously wait until a condition on `CurrentState` is true (e.g., a specific state is activated).
 - Observable transitions: each activation is pushed to `ObservableStates`.
 
 ## Minimal example
@@ -157,12 +157,28 @@ var subscription = fsm.ObservableStates.Subscribe(s =>
 });
 ```
 
-In tests or synchronous orchestration, you can wait for a transition to complete:
+In tests or synchronous orchestration, you can wait for a transition to complete using the blocking helper:
 
 ```csharp
 fsm.TransitionTo(new ConnectedState());
-fsm.StateChanged.WaitOne(); // transition completed (enter/run scheduled)
+fsm.WaitUntil(s => s != null && s.DisplayName == "Connected", TimeSpan.FromSeconds(2));
 ```
+
+## Synchronisation helpers
+
+- Concrete class: `FiniteStateMachine<TState>` exposes `WaitUntil(predicate, timeout)` and `WaitUntil(expected, timeout)` for blocking waits in tests or host code.
+- Interface extension: for general `IFiniteStateMachine<TState>` usage (e.g., when working against the abstraction), use the provided extension methods in `TA.Utils.Core.StateMachine.FiniteStateMachineExtensions`:
+
+```csharp
+IFiniteStateMachine<IState> fsm = new FiniteStateMachine<IState>(log);
+fsm.StartStateMachine(new IdleState(Go));
+// Extension method: blocks until Connected becomes current or the timeout elapses
+fsm.WaitUntil(s => s != null && s.DisplayName == "Connected", TimeSpan.FromSeconds(2));
+```
+
+Notes
+- These helpers block the calling thread and are not suitable for UI threads.
+- Prefer async/reactive orchestration in production code; use blocking waits primarily in tests or simple host loops.
 
 ## Error handling and logging
 
