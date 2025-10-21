@@ -93,7 +93,7 @@ public sealed class FiniteStateMachine<TState> : IFiniteStateMachine<TState> whe
 
         log.Info()
             .Message("State transition {stateType} => {targetState}", typeof(TState).Name, newState.DisplayName)
-            .Property(nameof(CurrentState), CurrentState)
+            .Property(nameof(CurrentState), CurrentState!) // null is OK in a log entry
             .Property(nameof(newState), newState)
             .Write();
 

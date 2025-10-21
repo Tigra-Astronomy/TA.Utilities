@@ -2,7 +2,11 @@ using System;
 using System.IO;
 using Machine.Specifications;
 using PublicApiGenerator;
-using TA.Utils.Core; // reference via a known type in the core assembly
+
+
+//
+// The purpose of this test is to evaluate whether the public surface API has changed, which may require a semantic version increment.
+//
 
 namespace TA.Utils.Core.PublicApi.Specs.Specs
 {
@@ -25,10 +29,9 @@ namespace TA.Utils.Core.PublicApi.Specs.Specs
         Because of = () =>
         {
             if (!File.Exists(approvedPath))
-            {
-                File.WriteAllText(receivedPath, publicApi);
-                throw new Exception("Public API approval file not found. A received file has been generated. Review and copy PublicApi.received.txt to PublicApi.approved.txt if acceptable.");
-            }
+                throw new Exception(
+                    "Public API approval file not found. A received file has been generated. Review and copy PublicApi.received.txt to PublicApi.approved.txt if acceptable.");
+            File.WriteAllText(receivedPath, publicApi);
         };
 
         It should_match_the_approved_public_api = () =>

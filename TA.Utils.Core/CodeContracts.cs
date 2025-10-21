@@ -65,6 +65,7 @@ public static class CodeContracts
     ///     Asserts that a reference type is not null.
     /// </summary>
     /// <param name="value">A reference.</param>
+    /// <param name="caller">The name of the calling member; optional, normally provided by the .net runtime.</param>
     /// <typeparam name="T">The type of the value.</typeparam>
     public static void ContractAssertNotNull<T>(this T value, [CallerMemberName] string? caller = null) where T : class =>
         value.ContractAssert(p => p != null, "Reference type must not be null.", caller);
@@ -72,8 +73,9 @@ public static class CodeContracts
     /// <summary>
     ///     Asserts that a nullable value type has a value.
     /// </summary>
-    /// <param name="value">A nullable struct.</param>
     /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="value">A nullable struct.</param>
+    /// <param name="caller">The name of the calling member; optional, normally provided by the .net runtime.</param>
     public static void ContractAssertNotNull<T>(this T? value, [CallerMemberName] string? caller = null) where T : struct =>
         value.ContractAssert(p => !p.HasValue, "nullable value type must have a value.", caller);
 
@@ -81,6 +83,7 @@ public static class CodeContracts
     ///     Asserts that a collection is not empty (A null reference is empty by definition).
     /// </summary>
     /// <param name="collection">The collection being tested.</param>
+    /// <param name="caller">The name of the calling member; optional, normally provided by the .net runtime.</param>
     public static void ContractAssertNotEmpty(this ICollection collection, [CallerMemberName] string? caller = null)
     {
         collection.ContractAssertNotNull(caller);
@@ -91,6 +94,7 @@ public static class CodeContracts
     ///     Asserts that a collection is not empty (A null reference is empty by definition).
     /// </summary>
     /// <param name="collection">The collection being tested.</param>
+    /// <param name="caller">The name of the calling member; optional, normally provided by the .net runtime.</param>
     public static void ContractAssertNotEmpty<T>(this IEnumerable<T> collection, [CallerMemberName] string? caller = null) =>
         collection.ContractAssert(p => p != null && p.Any(), "Enumerable must not be empty", caller);
 
@@ -98,9 +102,10 @@ public static class CodeContracts
     ///     Asserts that a source enumerable sequence contains the specified item at least once. Note: potentially expensive
     ///     operation O(n)
     /// </summary>
+    /// <typeparam name="TItem">The type of items in the collection.</typeparam>
     /// <param name="source">The source sequence.</param>
     /// <param name="item">The required item.</param>
-    /// <typeparam name="TItem">The type of items in the collection.</typeparam>
+    /// <param name="caller">The name of the calling member; optional, normally provided by the .net runtime.</param>
     public static void ContractAssertContains<TItem>(this IEnumerable<TItem> source, TItem item,
         [CallerMemberName]                                string?            caller = null) =>
         source.ContractAssert(p => p.Contains(item), "The source collection must contain the specified item", caller);
@@ -112,6 +117,7 @@ public static class CodeContracts
     /// <param name="source">The source sequence.</param>
     /// <param name="item">The disallowed item.</param>
     /// <typeparam name="TItem">The type of items in the collection.</typeparam>
+    /// <param name="caller">The name of the calling member; optional, normally provided by the .net runtime.</param>
     public static void ContractAssertDoesNotContain<TItem>(this IEnumerable<TItem> source, TItem item,
         [CallerMemberName]                                      string?            caller = null) =>
         source.ContractAssert(p => !p.Contains(item), "The source collection must not contain the specified item", caller);

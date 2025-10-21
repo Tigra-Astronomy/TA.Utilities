@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android34.0</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-
+    <TargetFrameworks>net8.0-android34.0;net8.0-windows10.0.19041.0</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>TA.Utils.Samples.TrafficLightStateMachine</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -84,5 +82,4 @@
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" />
 		<PackageReference Include="CommunityToolkit.Maui" />
 	</ItemGroup>
-
 </Project>

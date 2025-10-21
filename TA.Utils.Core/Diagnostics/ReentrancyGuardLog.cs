@@ -10,15 +10,17 @@
 // File: ReentrancyGuardLog.cs
 // Summary: ILog decorator that prevents re-entrant log writes on the current async-flow.
 //
+
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 
 namespace TA.Utils.Core.Diagnostics
 {
     /// <summary>
-    ///     An <see cref="ILog"/> decorator that prevents re-entrant log writes on the current async-flow.
+    ///     An <see cref="ILog" /> decorator that prevents re-entrant log writes on the current async-flow.
     ///     If a nested write is attempted while another write is in progress, the nested write is dropped.
-    ///
     ///     This helps avoid recursive logging cycles caused by logging during object-graph serialization
     ///     or from property getters/constructors executed while a log event is being rendered.
     /// </summary>
@@ -40,46 +42,51 @@ namespace TA.Utils.Core.Diagnostics
         /// </summary>
         public static bool IsActive => Depth.Value > 0;
 
+        /// <inheritdoc />
         public IFluentLogBuilder Trace(int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Trace(verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public IFluentLogBuilder Debug(int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Debug(verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public IFluentLogBuilder Info(int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Info(verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public IFluentLogBuilder Warn(int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Warn(verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public IFluentLogBuilder Error(int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Error(verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public IFluentLogBuilder Fatal(int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Fatal(verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public IFluentLogBuilder Level(string levelName, int verbosity = 0, string? sourceNameOverride = null)
             => new GuardedLogBuilder(inner.Level(levelName, verbosity, sourceNameOverride));
 
+        /// <inheritdoc />
         public void Shutdown() => inner.Shutdown();
 
+        /// <inheritdoc />
         public ILog WithAmbientProperty(string name, object value)
             => new ReentrancyGuardLog(inner.WithAmbientProperty(name, value));
 
+        /// <inheritdoc />
         public ILog WithName(string logSourceName)
             => new ReentrancyGuardLog(inner.WithName(logSourceName));
 
         /// <summary>
-        ///     Wrapper for <see cref="IFluentLogBuilder"/> that intercepts Write/WriteIf and applies the guard.
+        ///     Wrapper for <see cref="IFluentLogBuilder" /> that intercepts Write/WriteIf and applies the guard.
         /// </summary>
-        private sealed class GuardedLogBuilder : IFluentLogBuilder
+        private sealed class GuardedLogBuilder(IFluentLogBuilder innerBuilder) : IFluentLogBuilder
         {
-            private readonly IFluentLogBuilder innerBuilder;
-
-            public GuardedLogBuilder(IFluentLogBuilder innerBuilder)
-            {
-                this.innerBuilder = innerBuilder ?? throw new ArgumentNullException(nameof(innerBuilder));
-            }
+            private readonly IFluentLogBuilder innerBuilder = innerBuilder ?? throw new ArgumentNullException(nameof(innerBuilder));
 
             public IFluentLogBuilder Exception(Exception exception)
             {
@@ -117,7 +124,7 @@ namespace TA.Utils.Core.Diagnostics
                 return this;
             }
 
-            public IFluentLogBuilder Properties(System.Collections.Generic.IDictionary<string, object> properties)
+            public IFluentLogBuilder Properties(IDictionary<string, object> properties)
             {
                 innerBuilder.Properties(properties);
                 return this;
@@ -129,7 +136,7 @@ namespace TA.Utils.Core.Diagnostics
                 return this;
             }
 
-            public IFluentLogBuilder StackTrace(System.Diagnostics.StackTrace stackTrace, int userStackFrame)
+            public IFluentLogBuilder StackTrace(StackTrace stackTrace, int userStackFrame)
             {
                 innerBuilder.StackTrace(stackTrace, userStackFrame);
                 return this;
@@ -137,15 +144,11 @@ namespace TA.Utils.Core.Diagnostics
 
             public void Write(string? callerMemberName = null, string? callerFilePath = null, int callerLineNumber = 0)
             {
-                if (Depth.Value > 0)
-                {
-                    // Drop nested write to avoid re-entrancy.
-                    return;
-                }
+                if (Depth.Value > 0) return;
 
                 try
                 {
-                    Depth.Value = Depth.Value + 1;
+                    Depth.Value += 1;
                     innerBuilder.Write(callerMemberName, callerFilePath, callerLineNumber);
                 }
                 finally
@@ -156,12 +159,11 @@ namespace TA.Utils.Core.Diagnostics
 
             public void WriteIf(Func<bool> condition, string? callerMemberName = null, string? callerFilePath = null, int callerLineNumber = 0)
             {
-                if (condition is null) return;
                 if (Depth.Value > 0) return; // Drop nested write
 
                 try
                 {
-                    Depth.Value = Depth.Value + 1;
+                    Depth.Value += 1;
                     innerBuilder.WriteIf(condition, callerMemberName, callerFilePath, callerLineNumber);
                 }
                 finally
@@ -177,7 +179,7 @@ namespace TA.Utils.Core.Diagnostics
 
                 try
                 {
-                    Depth.Value = Depth.Value + 1;
+                    Depth.Value += 1;
                     innerBuilder.WriteIf(condition, callerMemberName, callerFilePath, callerLineNumber);
                 }
                 finally

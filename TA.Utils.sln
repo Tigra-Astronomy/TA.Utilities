@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34004.107
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11111.16 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Utils.Core", "TA.Utils.Core\TA.Utils.Core.csproj", "{4D49A7E7-DC29-4292-8D19-0B2F9D24BDE6}"
 EndProject
@@ -12,8 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{22935A98
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		.github\workflows\docs.yml = .github\workflows\docs.yml
+		global.json = global.json
 		mkdocs.yml = mkdocs.yml
 		Push-Packages.ps1 = Push-Packages.ps1
 		ReadMe.md = ReadMe.md
@@ -111,6 +113,7 @@ Global
 		{48B93DCE-0944-4A34-BF42-B7B5AF0DFAA0}.Release|x86.Build.0 = Release|Any CPU
 		{30432270-DF6F-48CA-BB7E-AE32699861E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{30432270-DF6F-48CA-BB7E-AE32699861E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30432270-DF6F-48CA-BB7E-AE32699861E6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{30432270-DF6F-48CA-BB7E-AE32699861E6}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{30432270-DF6F-48CA-BB7E-AE32699861E6}.Debug|x64.Build.0 = Debug|Any CPU
 		{30432270-DF6F-48CA-BB7E-AE32699861E6}.Debug|x86.ActiveCfg = Debug|Any CPU
