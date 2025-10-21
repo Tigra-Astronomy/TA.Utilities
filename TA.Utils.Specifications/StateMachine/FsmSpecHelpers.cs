@@ -10,19 +10,29 @@ namespace TA.Utils.Specifications.StateMachine
         public static void WaitForActivation<TState>(FiniteStateMachine<TState> fsm, TimeSpan timeout)
             where TState : class, IState
         {
-            // Use the Observable-based WaitUntil to avoid relying on any wait handles
+            // Prefer the FSM's event-based WaitUntil for deterministic behaviour across TFMs
             WaitUntil(fsm, s => s != null, timeout);
         }
 
         public static void WaitForState<TState>(FiniteStateMachine<TState> fsm, string expectedDisplayName, TimeSpan timeout)
             where TState : class, IState
         {
-            // Use the Observable-based WaitUntil to avoid relying on any wait handles
+            // Prefer the FSM's event-based WaitUntil for deterministic behaviour across TFMs
             WaitUntil(fsm, s => s != null && s.DisplayName == expectedDisplayName, timeout);
             fsm.CurrentState.ShouldNotBeNull();
             fsm.CurrentState!.DisplayName.ShouldEqual(expectedDisplayName);
         }
 
+        // Deterministic path: delegate to the FSM's own WaitUntil (uses a ManualResetEvent internally)
+        public static void WaitUntil<TState>(FiniteStateMachine<TState> fsm, Func<TState?, bool> predicate, TimeSpan timeout)
+            where TState : class, IState
+            => fsm.WaitUntil(predicate, timeout);
+
+        public static void WaitUntil<TState>(FiniteStateMachine<TState> fsm, string expectedDisplayName, TimeSpan timeout)
+            where TState : class, IState
+            => fsm.WaitUntil(s => s != null && s.DisplayName == expectedDisplayName, timeout);
+
+        // Legacy observable-based helper (kept for completeness and potential reuse elsewhere)
         public static void WaitUntil<TState>(IFiniteStateMachine<TState> fsm, Func<TState?, bool> predicate, TimeSpan timeout)
             where TState : class, IState
         {
