@@ -1,0 +1,86 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+      - 'release/**'
+    tags:
+      - '*.*.*'
+      - '*.*.*-*'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # allow pushing to gh-pages
+
+concurrency:
+  group: docs
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed by mike to manage gh-pages history
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs and plugins
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs mkdocs-material mike mkdocs-roamlinks-plugin pymdown-extensions
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine version via GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy documentation with mike
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          SEMVER: ${{ steps.gitversion.outputs.SemVer }}
+        run: |
+          set -e
+          echo "Ref: $GITHUB_REF"
+          echo "SemVer: $SEMVER"
+
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            # Release tag -> deploy as the tag and alias to 'latest'
+            VERSION="${GITHUB_REF#refs/tags/}"
+            mike set-default latest --push
+            mike deploy --push --update-aliases "$VERSION" latest
+
+          elif [[ "$GITHUB_REF" == refs/heads/develop ]]; then
+            # Develop -> rolling 'alpha' alias pointing to the GitVersion-computed SemVer
+            VERSION="$SEMVER"
+            mike deploy --push --update-aliases "$VERSION" alpha
+            # Set default to 'alpha' only if a 'latest' alias (from a tagged release) does not exist yet
+            if ! mike list | grep -q 'latest'; then
+              mike set-default alpha --push
+            fi
+
+          elif [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
+            # Any release/* -> rolling 'beta' alias pointing to the GitVersion-computed SemVer
+            VERSION="$SEMVER"
+            mike deploy --push --update-aliases "$VERSION" beta
+
+          else
+            echo "Branch not configured for docs deployment; skipping."
+          fi

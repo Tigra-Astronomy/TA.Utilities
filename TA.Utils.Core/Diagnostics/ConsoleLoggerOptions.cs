@@ -80,7 +80,7 @@ public class ConsoleLoggerOptions
 
     /// <summary>
     ///     Specifies which severity levels should be rendered to the console output.
-    ///     By default, all severity levels are rendered unless explicitly modified.
+    ///     By default, all severity levels are rendered unless at least one explicit allow rule has been created.
     /// </summary>
     /// <param name="levels">
     ///     An array of severity level names to render. If a level is not already included, it will be added.
@@ -99,6 +99,12 @@ public class ConsoleLoggerOptions
         return this;
     }
 
+    /// <summary>
+    ///     Specifies which severity levels to ignore (ignored levels are not written out to the console).
+    ///     If a specified level has previously been allowed, then that allowance is removed.
+    /// </summary>
+    /// <param name="levels"></param>
+    /// <returns></returns>
     public ConsoleLoggerOptions IgnoreSeverityLevels(params string[] levels)
     {
         foreach (var level in levels)

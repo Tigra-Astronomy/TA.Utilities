@@ -3,7 +3,6 @@
 // File: SuperstitiousNumberException.cs  Last modified: 2020-07-16@20:38 by Tim Long
 
 using System;
-using System.Runtime.Serialization;
 
 namespace TA.Utils.Logging.NLog.SampleConsoleApp
     {
@@ -22,9 +21,5 @@ namespace TA.Utils.Logging.NLog.SampleConsoleApp
         public SuperstitiousNumberException(string message) : base(message) { }
 
         public SuperstitiousNumberException(string message, Exception inner) : base(message, inner) { }
-
-        protected SuperstitiousNumberException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context) { }
         }
     }
