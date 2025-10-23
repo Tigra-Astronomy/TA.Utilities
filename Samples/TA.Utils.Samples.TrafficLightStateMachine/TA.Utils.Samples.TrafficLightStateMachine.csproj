@@ -75,7 +75,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\TA.Utils.Core\TA.Utils.Core.csproj" />
-		<PackageReference Include="GitVersion.MsBuild" PrivateAssets="All" />
+		<PackageReference Include="GitVersion.MsBuild">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.Maui.Controls" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
