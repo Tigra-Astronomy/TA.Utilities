@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{22935A98
 		Directory.Packages.props = Directory.Packages.props
 		.github\workflows\docs.yml = .github\workflows\docs.yml
 		.config\dotnet-tools.json = .config\dotnet-tools.json
+		GitVersion.yml = GitVersion.yml
 		global.json = global.json
 		mkdocs.yml = mkdocs.yml
 		Push-Packages.ps1 = Push-Packages.ps1
