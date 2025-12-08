@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "TA.Utils.sln",
+    "projects": [
+      "TA.Utils.Core\\TA.Utils.Core.csproj",
+      "TA.Utils.Logging.Nlog\\TA.Utils.Logging.Nlog.csproj",
+      "TA.Utils.Specifications\\TA.Utils.Specifications.csproj"
+    ]
+  }
+}
