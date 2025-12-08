@@ -1,7 +1,7 @@
 [assembly: System.CLSCompliantAttribute(true)]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Tigra-Astronomy/TA.Utilities")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("TA.Utils.Specifications")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.0", FrameworkDisplayName=".NET Standard 2.0")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.1", FrameworkDisplayName=".NET Standard 2.1")]
 namespace TA.Utils.Core
 {
     [System.Runtime.CompilerServices.NullableAttribute(0)]
