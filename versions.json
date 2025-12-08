@@ -1,5 +1,12 @@
 [
   {
+    "version": "3.3.0-alpha.1",
+    "title": "3.3.0-alpha.1",
+    "aliases": [
+      "alpha"
+    ]
+  },
+  {
     "version": "3.2.0-beta.1",
     "title": "3.2.0-beta.1",
     "aliases": [
@@ -14,9 +21,7 @@
   {
     "version": "3.1.0-alpha.11",
     "title": "3.1.0-alpha.11",
-    "aliases": [
-      "alpha"
-    ]
+    "aliases": []
   },
   {
     "version": "3.1.0-alpha.10",
