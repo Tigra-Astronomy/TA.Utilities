@@ -1,4 +1,4 @@
-# Timtek Utilities
+﻿# Timtek Utilities
 
 This library represents a collection of classes factored out of our production projects, that we found were being used over and over again.
 Rather than re-using the code at source level, it is now collected together in this package as a general purpose reusable library and made freely available for you to use at no cost and with no obligation. The only stipulation is that you can't sue the author or Timtek Systems Limited
@@ -197,6 +197,15 @@ Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on ea
         [DisplayEquivalent("Equivalent Text")] CaseWithEquivalentText,
         CaseWithoutEquivalentText
         }
+
+### Finite State Machine (FSM)
+
+The `TA.Utils.Core.StateMachines` namespace provides a lightweight generic finite state machine for orchestrating asynchronous workflows such as device controllers, protocol handlers and wizards.
+You model each mode of operation as an `IState` that implements `DisplayName`, `OnEnter()`, `RunAsync(CancellationToken)` and `OnExit()`, then host those states inside a `FiniteStateMachine<TState>` accessed via the `IFiniteStateMachine<TState>` abstraction.
+
+The state machine ensures deterministic transitions by cancelling the current state's run loop, waiting for it to complete, calling `OnExit()` and only then activating the next state's `OnEnter()` and `RunAsync()`.
+Every activation is published via an `IObservable<TState>` so other components or tests can react to state changes, and helper methods such as `WaitUntil(...)` make it easy to synchronise with particular states in tests or simple host code.
+
 ### Asynchrony and Threading
 
 #### ConfigureAwait
@@ -468,28 +477,63 @@ This uses the value of `CustomLevel` as the Seq level, unless it is empty or mis
 In targets other than Seq, this will just appear as yet another log event property.
 
 ## Release Notes
-2.10.0
- - Improved how code contracts handle recording the contract data in the `CodeContractViolationException`.  
- - Added the ability to configure logging levels in ConsoleLoggerOptions. The default is to log everything.
-   - Specific severity levels can be included using RenderSeverityLevels(). Once configured with any value, the default no longer applies so all levels to be logged must be included.
-   - Specific levels may also be ignored using IgnoreSeverityLevels(). The ignore list takes precedence over the include list.
 
-2.9.0
-- Added Code Contract assertions that can be used for enforcing code contracts at runtime.
-  Contract failures result in a `CodeContractViolationException` being thrown.
-  The exception records the value being tested, any predicate expression that was used in the test,
-  and the message that was passed to the assertion method. Any occurrence of a `CodeContractViolationException`
-  should be treated as an unambiguous bug in the code and not caught or handled, except to write it out to a log.
+### 3.2.0
 
-2.8.1
-- Fixed an issue that caused a custom severity property name option to be ignored. 
+- Added `netstandard2.1` as a target framework to improve compatibility with .NET 9.0 and later.
+- No API or behavioural changes.
 
-2.8.0
-- Fixed a formatting bug in `Octet.ToString()`
+### 3.1.0
 
-2.7.0
-- Added support for custom severity levels in the `ILog` abstraction and NLog implementation.
-- Used the "official" regular expression to validate semantic version strings. Note: some strings that were previously accepted, such as "01.02.03" will no longer be accepted as valid.
+- Fixed an issue in `ConsoleLoggerService` where include/ignore severity level lists were not being applied correctly.
+- Introduced `ReentrancyGuardLog`, a decorator for `ILog` that prevents re‑entrant logging calls from causing infinite recursion.
+- Introduced a generic finite state machine implementation in the `TA.Utils.Core.StateMachines` namespace:
+  - `FiniteStateMachine<TState, TTrigger>` – generic finite state machine implementation.
+  - `IStateMachine<TState, TTrigger>` – public API abstraction for the state machine.
+  - `StateTransition<TState, TTrigger>` – represents a state transition.
+  - `StateTransitionException` – represents an error during a state transition.
+  - Added a traffic light sample application to demonstrate usage.
+
+### 3.0.0
+
+- Added lightweight code contracts for checking contract conformance at runtime:
+  - `ContractAssert` extension method for checking arbitrary predicates.
+  - `ContractAssertNotNull` extension method for checking non‑null references.
+  - `CodeContractViolationException` for reporting contract violations.
+- Improved `ConsoleLoggerService` to support logging levels:
+  - Default behaviour is to log all levels.
+  - Specific levels can be included using `RenderSeverityLevels()`.
+  - Specific levels can be ignored using `IgnoreSeverityLevels()`; the ignore list takes precedence over the include list.
+
+### 2.10.0
+
+- Improved how code contracts record contract data in `CodeContractViolationException`.
+- Added the ability to configure logging levels in `ConsoleLoggerOptions`:
+  - Specific severity levels can be included using `RenderSeverityLevels()`. Once configured, all required levels must be explicitly included.
+  - Specific levels can be ignored using `IgnoreSeverityLevels()`; the ignore list takes precedence over the include list.
+
+### 2.9.0
+
+- Added code contract assertions for enforcing contracts at runtime:
+  - Contract failures throw `CodeContractViolationException`, which records:
+    - The value being tested.
+    - Any predicate expression used.
+    - The message passed to the assertion method.
+  - Any `CodeContractViolationException` should be treated as an unambiguous bug and not caught, except to log it.
+
+### 2.8.1
+
+- Fixed an issue that caused a custom severity property name option to be ignored.
+
+### 2.8.0
+
+- Fixed a formatting bug in `Octet.ToString()`.
+
+### 2.7.0
+
+- Added support for custom severity levels in the `ILog` abstraction and the NLog implementation.
+- Updated semantic version string validation to use the “official” SemVer regular expression:
+  - Some previously accepted strings (for example `01.02.03`) are now rejected as invalid.
 
 [seq]: https://datalust.co/seq "Seq semantic logging service"
 [mit]: https://tigra.mit-license.org "Tigra MIT License"
