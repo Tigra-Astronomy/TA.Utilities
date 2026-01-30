@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{22935A98
 		GitVersion.yml = GitVersion.yml
 		global.json = global.json
 		mkdocs.yml = mkdocs.yml
+		nuget.config = nuget.config
 		Push-Packages.ps1 = Push-Packages.ps1
 		ReadMe.md = ReadMe.md
 		TA.Utils.sln.DotSettings = TA.Utils.sln.DotSettings
