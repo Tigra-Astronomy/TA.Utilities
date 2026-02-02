@@ -47,5 +47,10 @@ nav:
     - Finite State Machine: Core/Finite State Machine.md
   - Logging:
     - NLog Adapter: Logging/NLog Adapter.md
+  - MVVM:
+    - ViewModelBase: MVVM/ViewModelBase.md
+    - RelayCommand: MVVM/RelayCommand.md
+    - AsyncRelayCommand: MVVM/AsyncRelayCommand.md
+    - UI Thread Dispatcher: MVVM/UI Thread Dispatcher.md
   - Areas for Improvement:
     - FSM SOLID Analysis: Areas for Improvement/FSM SOLID Analysis.md
