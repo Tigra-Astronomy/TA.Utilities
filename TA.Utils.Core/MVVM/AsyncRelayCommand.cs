@@ -83,6 +83,12 @@ public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
         }
     }
 
+    /// <summary>
+    ///     Determines whether the command can currently execute.
+    ///     Returns <c>false</c> while the command is executing to prevent overlapping executions.
+    /// </summary>
+    /// <param name="parameter">The command parameter of type <typeparamref name="TParam" />.</param>
+    /// <returns><c>true</c> if the command can execute; otherwise, <c>false</c>.</returns>
     public bool CanExecute(object? parameter)
     {
         if (Interlocked.Read(ref isExecuting) != 0)
