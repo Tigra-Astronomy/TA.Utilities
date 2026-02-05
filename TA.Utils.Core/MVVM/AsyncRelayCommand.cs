@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using TA.Utils.Core.Diagnostics;
@@ -6,12 +7,9 @@ using TA.Utils.Core.Diagnostics;
 namespace TA.Utils.Core.MVVM;
 
 /// <summary>
-///     A <see cref="RelayCommand" /> that executes asynchronously. While the command is executing,
-///     <see cref="CanExecute" /> is <c>false</c> so that command executions cannot overlap.
-///     The command parameter is of type <typeparamref name="TParam" /> and will be passed to the <c>execute</c> method and
-///     the <c>canExecuteQuery<c> predicate.</c>
+/// Gets a value indicating whether the async relay command is currently executing.
 /// </summary>
-public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
+public class AsyncRelayCommand<TParam> : IAsyncRelayCommand<TParam>
 {
     private readonly Func<TParam, Task> execute;
     private readonly Func<TParam, bool> canExecuteQuery;
@@ -34,17 +32,22 @@ public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
     ///     state changes, <see cref="CanExecuteChanged" /> events and command invocations.
     /// </param>
     public AsyncRelayCommand(
-        Func<TParam, Task>  execute,
+        Func<TParam, Task> execute,
         Func<TParam, bool>? canExecute = null,
-        string?             name       = null,
-        ILog?               log        = null)
+        string? name = null,
+        ILog? log = null)
     {
         dispatcher = UiThreadDispatcherContext.Current;
         Name = name ?? "unnamed";
         this.execute = execute;
         canExecuteQuery = canExecute ?? (param => true);
-        this.log = log               ?? new DegenerateLoggerService();
+        this.log = log ?? new DegenerateLoggerService();
     }
+
+    /// <summary>
+    ///    Gets a value indicating whether the command is currently executing.
+    /// </summary>
+    public bool IsRunning => Interlocked.Read(ref isExecuting) != 0;
 
     /// <summary>
     ///     The name of the command for diagnostic/display purposes.
@@ -83,6 +86,12 @@ public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
         }
     }
 
+    /// <summary>
+    ///     Determines whether the command can currently execute.
+    ///     Returns <c>false</c> while the command is executing to prevent overlapping executions.
+    /// </summary>
+    /// <param name="parameter">The command parameter of type <typeparamref name="TParam" />.</param>
+    /// <returns><c>true</c> if the command can execute; otherwise, <c>false</c>.</returns>
     public bool CanExecute(object? parameter)
     {
         if (Interlocked.Read(ref isExecuting) != 0)
@@ -94,7 +103,7 @@ public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
             log.Trace()
                 .Message("RelayCommand {name} CanExecute = {canExecute}", Name, canExecute)
                 .Property(nameof(parameter), parameter)
-                .Property("relayCommand",    this)
+                .Property("relayCommand", this)
                 .Write();
             return canExecute;
         }
@@ -120,10 +129,11 @@ public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
         {
             Interlocked.Exchange(ref isExecuting, 1);
             RaiseCanExecuteChanged();
+            OnPropertyChanged(nameof(IsRunning));
             log.Trace()
                 .Message("AsyncRelayCommand {name} Executing", Name)
                 .Property(nameof(parameter), parameter)
-                .Property("relayCommand",    this)
+                .Property("relayCommand", this)
                 .Write();
             await execute((TParam)parameter!).ContinueInCurrentContext();
         }
@@ -138,7 +148,29 @@ public class AsyncRelayCommand<TParam> : IRelayCommand<TParam>
         finally
         {
             Interlocked.Exchange(ref isExecuting, 0);
+            OnPropertyChanged(nameof(IsRunning));
             RaiseCanExecuteChanged();
+        }
+    }
+
+    /// <summary>
+    ///   Raised when a property value changes. Required for the IsRunning property, so that UI can bind to it and update accordingly.
+    /// </summary>
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        try
+        {
+            dispatcher.Post(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+        }
+        catch (Exception e)
+        {
+            log.Error()
+                .Exception(e)
+                .Message("AsyncRelayCommand {name} OnPropertyChanged {propertyName} exception: {message}",
+                    Name, propertyName, e.Message)
+                .Write();
         }
     }
 }
@@ -156,7 +188,8 @@ public class AsyncRelayCommand : AsyncRelayCommand<object>
     /// </param>
     /// <param name="name">Display name for diagnostics.</param>
     /// <param name="log">An optional logging service.</param>
-    public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null, string? name = null, ILog? log = null) :
+    public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null, string? name = null,
+        ILog? log = null) :
         base(
             async obj => await execute(),
             obj => canExecute?.Invoke() ?? true,

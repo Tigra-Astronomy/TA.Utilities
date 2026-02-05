@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using TA.Utils.Core.Diagnostics;
 
 namespace TA.Utils.Core.MVVM;
@@ -15,6 +16,9 @@ namespace TA.Utils.Core.MVVM;
 /// </remarks>
 public class RelayCommand : IRelayCommand
 {
+    /// <summary>
+    ///     The name of the command for diagnostic/display purposes.
+    /// </summary>
     public           string         Name { get; }
     private readonly Action         executeAction;
     private readonly Func<bool>     canExecuteQuery;
@@ -46,6 +50,11 @@ public class RelayCommand : IRelayCommand
         this.log = log ?? new DegenerateLoggerService();
     }
 
+    /// <summary>
+    ///     Determines whether the command can currently execute.
+    /// </summary>
+    /// <param name="parameter">Not used for parameterless commands.</param>
+    /// <returns><c>true</c> if the command can execute; otherwise, <c>false</c>.</returns>
     public bool CanExecute(object? parameter)
     {
         try
@@ -68,6 +77,10 @@ public class RelayCommand : IRelayCommand
         return false;
     }
 
+    /// <summary>
+    ///     Executes the command.
+    /// </summary>
+    /// <param name="parameter">Not used for parameterless commands.</param>
     public void Execute(object? parameter)
     {
         try
@@ -87,8 +100,14 @@ public class RelayCommand : IRelayCommand
         }
     }
 
+    /// <summary>
+    ///     Raised when the ability to execute the command might have changed.
+    /// </summary>
     public event EventHandler? CanExecuteChanged;
 
+    /// <summary>
+    ///     Raises the <see cref="CanExecuteChanged" /> event.
+    /// </summary>
     protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
     public void RaiseCanExecuteChanged()
@@ -109,11 +128,28 @@ public class RelayCommand : IRelayCommand
                 .Write();
         }
     }
+
+    /// <summary>
+    ///     Degenerate implementation to satisfy INotifyPropertyChanged requirement of IRelayCommand.
+    ///     This event will never fire and cannot be subscribed to, but it allows the command to be used in contexts where a
+    ///     property changed notification is expected without causing runtime errors.
+    /// </summary>
+    public event PropertyChangedEventHandler PropertyChanged
+    {
+        add { }
+        remove { }
+    }
 }
 
-/// <inheritdoc />
+/// <summary>
+///     A relay command that accepts a typed parameter.
+/// </summary>
+/// <typeparam name="TParam">The type of the command parameter.</typeparam>
 public class RelayCommand<TParam> : IRelayCommand<TParam>
 {
+    /// <summary>
+    ///     The name of the command for diagnostic/display purposes.
+    /// </summary>
     public string Name { get; }
     private readonly Action<TParam?> executeAction;
     private readonly Func<TParam?, bool> canExecuteQuery;
@@ -136,6 +172,11 @@ public class RelayCommand<TParam> : IRelayCommand<TParam>
         this.log = log ?? new DegenerateLoggerService();
     }
 
+    /// <summary>
+    ///     Determines whether the command can currently execute.
+    /// </summary>
+    /// <param name="parameter">The command parameter, which must be of type <typeparamref name="TParam" /> or null.</param>
+    /// <returns><c>true</c> if the command can execute; otherwise, <c>false</c>.</returns>
     public bool CanExecute(object? parameter)
     {
         if (parameter is not TParam typedParam)
@@ -200,8 +241,14 @@ public class RelayCommand<TParam> : IRelayCommand<TParam>
     }
 
 
+    /// <summary>
+    ///     Raised when the ability to execute the command might have changed.
+    /// </summary>
     public event EventHandler? CanExecuteChanged;
 
+    /// <summary>
+    ///     Notifies the UI that the <see cref="CanExecute" /> state may have changed and should be re-evaluated.
+    /// </summary>
     public void RaiseCanExecuteChanged()
     {
         try
@@ -220,5 +267,16 @@ public class RelayCommand<TParam> : IRelayCommand<TParam>
                 .Message("RelayCommand {name} RaiseCanExecuteChanged exception: {message}", Name, e.Message)
                 .Write();
         }
+    }
+
+    /// <summary>
+    ///     Degenerate implementation to satisfy INotifyPropertyChanged requirement of IRelayCommand.
+    ///     This event will never fire and cannot be subscribed to, but it allows the command to be used in contexts where a
+    ///     property changed notification is expected without causing runtime errors.
+    /// </summary>
+    public event PropertyChangedEventHandler PropertyChanged
+    {
+        add { }
+        remove { }
     }
 }
