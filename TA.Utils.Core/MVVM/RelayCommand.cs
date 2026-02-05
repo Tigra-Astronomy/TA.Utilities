@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using TA.Utils.Core.Diagnostics;
 
 namespace TA.Utils.Core.MVVM;
@@ -108,6 +109,17 @@ public class RelayCommand : IRelayCommand
                 .Message("RelayCommand {name} RaiseCanExecuteChanged exception: {message}", Name, e.Message)
                 .Write();
         }
+    }
+
+    /// <summary>
+    ///     Degenerate implementation to satisfy INotifyPropertyChanged requirement of IRelayCommand.
+    ///     This event will never fire and cannot be subscribed to, but it allows the command to be used in contexts where a
+    ///     property changed notification is expected without causing runtime errors.
+    /// </summary>
+    public event PropertyChangedEventHandler PropertyChanged
+    {
+        add { }
+        remove { }
     }
 }
 
@@ -220,5 +232,16 @@ public class RelayCommand<TParam> : IRelayCommand<TParam>
                 .Message("RelayCommand {name} RaiseCanExecuteChanged exception: {message}", Name, e.Message)
                 .Write();
         }
+    }
+
+    /// <summary>
+    ///     Degenerate implementation to satisfy INotifyPropertyChanged requirement of IRelayCommand.
+    ///     This event will never fire and cannot be subscribed to, but it allows the command to be used in contexts where a
+    ///     property changed notification is expected without causing runtime errors.
+    /// </summary>
+    public event PropertyChangedEventHandler PropertyChanged
+    {
+        add { }
+        remove { }
     }
 }

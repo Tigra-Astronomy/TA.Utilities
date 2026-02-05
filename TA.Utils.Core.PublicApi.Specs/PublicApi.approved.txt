@@ -1,10 +1,11 @@
 [assembly: System.CLSCompliantAttribute(true)]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Tigra-Astronomy/TA.Utilities")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("TA.Utils.Specifications")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.0", FrameworkDisplayName=".NET Standard 2.0")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETCoreApp,Version=v8.0", FrameworkDisplayName=".NET 8.0")]
 namespace TA.Utils.Core
 {
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static AsciiExtensions
     {
         public static string ExpandAscii([System.Runtime.CompilerServices.NullableAttribute(2)] this string text) { }
@@ -47,6 +48,7 @@ namespace TA.Utils.Core
         DEL = 127,
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static AsyncExtensions
     {
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable ContinueInCurrentContext(this System.Threading.Tasks.Task task) { }
@@ -66,6 +68,7 @@ namespace TA.Utils.Core
         public static System.Threading.Tasks.Task<T> WithCancellation<[System.Runtime.CompilerServices.NullableAttribute(2)]  T>(this System.Threading.Tasks.Task<T> task, System.Threading.CancellationToken cancellationToken) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class CodeContractViolationException : System.Exception
     {
         public CodeContractViolationException() { }
@@ -73,20 +76,24 @@ namespace TA.Utils.Core
         public CodeContractViolationException(string message, System.Exception inner) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static CodeContracts
     {
         public static void ContractAssert<[System.Runtime.CompilerServices.NullableAttribute(2)]  T>(this T value, System.Linq.Expressions.Expression<System.Func<T, bool>> condition, string message, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string caller = null) { }
         public static void ContractAssertContains<[System.Runtime.CompilerServices.NullableAttribute(2)]  TItem>(this System.Collections.Generic.IEnumerable<TItem> source, TItem item, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string caller = null) { }
         public static void ContractAssertDoesNotContain<[System.Runtime.CompilerServices.NullableAttribute(2)]  TItem>(this System.Collections.Generic.IEnumerable<TItem> source, TItem item, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string caller = null) { }
         public static void ContractAssertNotEmpty(this System.Collections.ICollection collection, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string caller = null) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public static void ContractAssertNotEmpty<T>([System.Runtime.CompilerServices.NullableAttribute(1)] this System.Collections.Generic.IEnumerable<T> collection, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] string caller = null) { }
         public static void ContractAssertNotNull<T>(this T value, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string caller = null)
             where T :  class { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(0)]
         public static void ContractAssertNotNull<T>(this System.Nullable<T> value, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string caller = null)
             where T :  struct { }
     }
     [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.All)]
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class DisplayEquivalentAttribute : System.Attribute
     {
         public DisplayEquivalentAttribute(string text) { }
@@ -94,9 +101,11 @@ namespace TA.Utils.Core
     }
     public class static EnumExtensions
     {
+        [System.Runtime.CompilerServices.NullableContextAttribute(1)]
         public static string DisplayEquivalent(this System.Enum en) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static GitVersion
     {
         public static string GitBranchName { get; }
@@ -113,10 +122,12 @@ namespace TA.Utils.Core
     }
     public class static MathExtensions
     {
+        [System.Runtime.CompilerServices.NullableContextAttribute(1)]
         public static T Clip<[System.Runtime.CompilerServices.NullableAttribute(0)]  T>(this T input, T minimum, T maximum)
             where T : System.IComparable { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static MaybeExtensions
     {
         public static TA.Utils.Core.Maybe<T> AsMaybe<T>(this T source)
@@ -125,6 +136,7 @@ namespace TA.Utils.Core
     }
     [System.ComponentModel.ImmutableObjectAttribute(true)]
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class Maybe<[System.Runtime.CompilerServices.NullableAttribute(2)]  T> : System.Collections.Generic.IEnumerable<T>, System.Collections.IEnumerable
     {
         public static TA.Utils.Core.Maybe<T> Empty { get; }
@@ -136,6 +148,7 @@ namespace TA.Utils.Core
         public override string ToString() { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class Octet : System.IEquatable<TA.Utils.Core.Octet>
     {
         public bool this[int bit] { get; }
@@ -165,6 +178,15 @@ namespace TA.Utils.Core
         public static bool !=(TA.Utils.Core.Octet left, TA.Utils.Core.Octet right) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+    public class static PathExtensions
+    {
+        public static string ExpandPath(string path) { }
+        public static string GetUserHomeDirectory() { }
+        public static bool IsPathRelativeToUserHome(string path) { }
+    }
+    [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class SemanticVersion : System.IComparable, System.IComparable<TA.Utils.Core.SemanticVersion>, System.IEquatable<TA.Utils.Core.SemanticVersion>
     {
         public const string SemanticVersionRegexPattern = "^(?<major>0|[1-9]\\d*)\\.(?<minor>0|[1-9]\\d*)\\.(?<patch>0|[1-9]\\d*)(?:-(?<prereleas" +
@@ -193,6 +215,7 @@ namespace TA.Utils.Core
         public static bool <=(TA.Utils.Core.SemanticVersion left, TA.Utils.Core.SemanticVersion right) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static StringExtensions
     {
         public static string Clean(this string source, string clean) { }
@@ -204,6 +227,7 @@ namespace TA.Utils.Core
         public static string ToHex(this string source) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static StringReadLinesExtension
     {
         public static System.Collections.Generic.IEnumerable<string> GetLines(this string text) { }
@@ -214,6 +238,7 @@ namespace TA.Utils.Core
 namespace TA.Utils.Core.Diagnostics
 {
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class ConsoleLogBuilder : TA.Utils.Core.Diagnostics.IFluentLogBuilder
     {
         public ConsoleLogBuilder(TA.Utils.Core.Diagnostics.ConsoleLoggerOptions options, TA.Utils.Core.Diagnostics.ConsoleLogSeverity severity) { }
@@ -227,8 +252,11 @@ namespace TA.Utils.Core.Diagnostics
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder Property(string name, object value) { }
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder StackTrace(System.Diagnostics.StackTrace stackTrace, int userStackFrame) { }
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder TimeStamp(System.DateTime timeStamp) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public void Write(string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public void WriteIf([System.Runtime.CompilerServices.NullableAttribute(1)] System.Func<bool> condition, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public void WriteIf(bool condition, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) { }
     }
     public enum ConsoleLogSeverity
@@ -241,6 +269,7 @@ namespace TA.Utils.Core.Diagnostics
         Fatal = 5,
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class ConsoleLoggerOptions
     {
         public static TA.Utils.Core.Diagnostics.ConsoleLoggerOptions DefaultOptions { get; }
@@ -251,8 +280,10 @@ namespace TA.Utils.Core.Diagnostics
         public TA.Utils.Core.Diagnostics.ConsoleLoggerOptions UseVerbosity(string verbosityPropertyName = "verbosity") { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class ConsoleLoggerService : TA.Utils.Core.Diagnostics.ILog
     {
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public ConsoleLoggerService(TA.Utils.Core.Diagnostics.ConsoleLoggerOptions options = null) { }
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder Debug(int verbosity = 0, [System.Runtime.CompilerServices.NullableAttribute(2)] string sourceNameOverride = null) { }
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder Error(int verbosity = 0, [System.Runtime.CompilerServices.NullableAttribute(2)] string sourceNameOverride = null) { }
@@ -266,6 +297,7 @@ namespace TA.Utils.Core.Diagnostics
         public TA.Utils.Core.Diagnostics.ILog WithName(string logSourceName) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class DegenerateLogBuilder : TA.Utils.Core.Diagnostics.IFluentLogBuilder
     {
         public DegenerateLogBuilder() { }
@@ -278,11 +310,15 @@ namespace TA.Utils.Core.Diagnostics
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder Property(string name, object value) { }
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder StackTrace(System.Diagnostics.StackTrace stackTrace, int userStackFrame) { }
         public TA.Utils.Core.Diagnostics.IFluentLogBuilder TimeStamp(System.DateTime timeStamp) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public void Write(string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public void WriteIf([System.Runtime.CompilerServices.NullableAttribute(1)] System.Func<bool> condition, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public void WriteIf(bool condition, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class DegenerateLoggerService : TA.Utils.Core.Diagnostics.ILog
     {
         public DegenerateLoggerService() { }
@@ -297,6 +333,7 @@ namespace TA.Utils.Core.Diagnostics
         public TA.Utils.Core.Diagnostics.ILog WithAmbientProperty(string name, object value) { }
         public TA.Utils.Core.Diagnostics.ILog WithName(string logSourceName) { }
     }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public interface IFluentLogBuilder
     {
         TA.Utils.Core.Diagnostics.IFluentLogBuilder Exception(System.Exception exception);
@@ -308,10 +345,14 @@ namespace TA.Utils.Core.Diagnostics
         TA.Utils.Core.Diagnostics.IFluentLogBuilder Property(string name, object value);
         TA.Utils.Core.Diagnostics.IFluentLogBuilder StackTrace(System.Diagnostics.StackTrace stackTrace, int userStackFrame);
         TA.Utils.Core.Diagnostics.IFluentLogBuilder TimeStamp(System.DateTime timeStamp);
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         void Write([System.Runtime.CompilerServices.CallerMemberNameAttribute()] string callerMemberName = null, [System.Runtime.CompilerServices.CallerFilePathAttribute()] string callerFilePath = null, [System.Runtime.CompilerServices.CallerLineNumberAttribute()] int callerLineNumber = 0);
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         void WriteIf([System.Runtime.CompilerServices.NullableAttribute(1)] System.Func<bool> condition, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] string callerMemberName = null, [System.Runtime.CompilerServices.CallerFilePathAttribute()] string callerFilePath = null, [System.Runtime.CompilerServices.CallerLineNumberAttribute()] int callerLineNumber = 0);
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         void WriteIf(bool condition, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] string callerMemberName = null, [System.Runtime.CompilerServices.CallerFilePathAttribute()] string callerFilePath = null, [System.Runtime.CompilerServices.CallerLineNumberAttribute()] int callerLineNumber = 0);
     }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public interface ILog
     {
         TA.Utils.Core.Diagnostics.IFluentLogBuilder Debug(int verbosity = 0, [System.Runtime.CompilerServices.NullableAttribute(2)] string sourceNameOverride = null);
@@ -326,6 +367,7 @@ namespace TA.Utils.Core.Diagnostics
         TA.Utils.Core.Diagnostics.ILog WithName(string logSourceName);
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class ReentrancyGuardLog : TA.Utils.Core.Diagnostics.ILog
     {
         public ReentrancyGuardLog(TA.Utils.Core.Diagnostics.ILog inner) { }
@@ -342,22 +384,136 @@ namespace TA.Utils.Core.Diagnostics
         public TA.Utils.Core.Diagnostics.ILog WithName(string logSourceName) { }
     }
 }
+namespace TA.Utils.Core.MVVM
+{
+    [System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+            0,
+            1})]
+    [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+    public class AsyncRelayCommand : TA.Utils.Core.MVVM.AsyncRelayCommand<object>
+    {
+        public AsyncRelayCommand([System.Runtime.CompilerServices.NullableAttribute(1)] System.Func<System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, string name = null, TA.Utils.Core.Diagnostics.ILog log = null) { }
+    }
+    [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+    public class AsyncRelayCommand<TParam> : System.ComponentModel.INotifyPropertyChanged, System.Windows.Input.ICommand, TA.Utils.Core.MVVM.IAsyncRelayCommand, TA.Utils.Core.MVVM.IAsyncRelayCommand<TParam>, TA.Utils.Core.MVVM.IRelayCommand, TA.Utils.Core.MVVM.IRelayCommand<TParam>
+    {
+        public AsyncRelayCommand([System.Runtime.CompilerServices.NullableAttribute(1)] System.Func<TParam, System.Threading.Tasks.Task> execute, [System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                2,
+                1})] System.Func<TParam, bool> canExecute = null, string name = null, TA.Utils.Core.Diagnostics.ILog log = null) { }
+        public bool IsRunning { get; }
+        [System.Runtime.CompilerServices.NullableAttribute(1)]
+        [get: System.Runtime.CompilerServices.NullableContextAttribute(1)]
+        public string Name { get; }
+        public event System.EventHandler CanExecuteChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public bool CanExecute(object parameter) { }
+        public void Execute(object parameter) { }
+        protected virtual void OnCanExecuteChanged() { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+        protected virtual void OnPropertyChanged(string propertyName) { }
+        public void RaiseCanExecuteChanged() { }
+    }
+    public class CurrentThreadDispatcher : TA.Utils.Core.MVVM.IUiThreadDispatcher
+    {
+        public CurrentThreadDispatcher() { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+        public void Post(System.Action action) { }
+    }
+    public interface IAsyncRelayCommand : System.ComponentModel.INotifyPropertyChanged, System.Windows.Input.ICommand, TA.Utils.Core.MVVM.IRelayCommand
+    {
+        bool IsRunning { get; }
+    }
+    public interface IAsyncRelayCommand<[System.Runtime.CompilerServices.NullableAttribute(2)]  TParam> : System.ComponentModel.INotifyPropertyChanged, System.Windows.Input.ICommand, TA.Utils.Core.MVVM.IAsyncRelayCommand, TA.Utils.Core.MVVM.IRelayCommand, TA.Utils.Core.MVVM.IRelayCommand<TParam> { }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+    public interface IRelayCommand : System.Windows.Input.ICommand
+    {
+        string Name { get; }
+        void RaiseCanExecuteChanged();
+    }
+    public interface IRelayCommand<[System.Runtime.CompilerServices.NullableAttribute(2)]  TParam> : System.Windows.Input.ICommand, TA.Utils.Core.MVVM.IRelayCommand { }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+    public interface IUiThreadDispatcher
+    {
+        void Post(System.Action action);
+    }
+    [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+    public class RelayCommand : System.Windows.Input.ICommand, TA.Utils.Core.MVVM.IRelayCommand
+    {
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public RelayCommand([System.Runtime.CompilerServices.NullableAttribute(1)] System.Action execute, System.Func<bool> canExecute, string name = null, TA.Utils.Core.Diagnostics.ILog log = null) { }
+        public string Name { get; }
+        [System.Runtime.CompilerServices.NullableAttribute(2)]
+        public event System.EventHandler CanExecuteChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public bool CanExecute(object parameter) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public void Execute(object parameter) { }
+        protected virtual void OnCanExecuteChanged() { }
+        public void RaiseCanExecuteChanged() { }
+    }
+    [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+    public class RelayCommand<[System.Runtime.CompilerServices.NullableAttribute(2)]  TParam> : System.Windows.Input.ICommand, TA.Utils.Core.MVVM.IRelayCommand, TA.Utils.Core.MVVM.IRelayCommand<TParam>
+    {
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public RelayCommand([System.Runtime.CompilerServices.NullableAttribute(1)] System.Action<TParam> execute, [System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                2,
+                1})] System.Func<TParam, bool> canExecute, string name = null, TA.Utils.Core.Diagnostics.ILog log = null) { }
+        public string Name { get; }
+        [System.Runtime.CompilerServices.NullableAttribute(2)]
+        public event System.EventHandler CanExecuteChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public bool CanExecute(object parameter) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public void Execute(object parameter) { }
+        public void RaiseCanExecuteChanged() { }
+    }
+    [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+    public class static UiThreadDispatcherContext
+    {
+        public static TA.Utils.Core.MVVM.IUiThreadDispatcher Current { get; }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        public static void SetDispatcher(TA.Utils.Core.MVVM.IUiThreadDispatcher value) { }
+    }
+    [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+    public class ViewModelBase : System.ComponentModel.INotifyPropertyChanged, System.IDisposable
+    {
+        [System.Runtime.CompilerServices.NullableAttribute(1)]
+        protected TA.Utils.Core.Diagnostics.ILog log;
+        public ViewModelBase(TA.Utils.Core.Diagnostics.ILog log = null) { }
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        protected virtual void Dispose(bool disposing) { }
+        public void Dispose() { }
+        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberNameAttribute()] string propertyName = null) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(1)]
+        protected bool SetField<[System.Runtime.CompilerServices.NullableAttribute(2)]  T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberNameAttribute()] [System.Runtime.CompilerServices.NullableAttribute(2)] string propertyName = null) { }
+    }
+}
 namespace TA.Utils.Core.PropertyBinding
 {
     [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=true)]
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class DataKeyAttribute : System.Attribute
     {
         public DataKeyAttribute(string keyword) { }
         public string Keyword { get; }
         public int Sequence { get; set; }
     }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public interface IPropertyBinder
     {
         TOut BindProperties<[System.Runtime.CompilerServices.NullableAttribute(2)]  TOut>(System.Collections.Generic.IEnumerable<TA.Utils.Core.PropertyBinding.KeyValueDataRecord> dataRecords)
             where TOut : new();
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class KeyValueDataRecord : System.IEquatable<TA.Utils.Core.PropertyBinding.KeyValueDataRecord>
     {
         public KeyValueDataRecord(string Key, string Value) { }
@@ -365,15 +521,19 @@ namespace TA.Utils.Core.PropertyBinding
         public string Value { get; }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class KeyValueReader : System.IDisposable
     {
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public KeyValueReader([System.Runtime.CompilerServices.NullableAttribute(1)] System.IO.Stream input, char[] delimiters = null, char[] commentChars = null) { }
         public void Dispose() { }
         public System.Collections.Generic.IEnumerable<TA.Utils.Core.PropertyBinding.KeyValueDataRecord> KeyValueDataRecords() { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class PropertyBinder : TA.Utils.Core.PropertyBinding.IPropertyBinder
     {
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public PropertyBinder(TA.Utils.Core.Diagnostics.ILog log = null) { }
         public TOut BindProperties<[System.Runtime.CompilerServices.NullableAttribute(2)]  TOut>(System.Collections.Generic.IEnumerable<TA.Utils.Core.PropertyBinding.KeyValueDataRecord> dataRecords)
             where TOut : new() { }
@@ -382,6 +542,7 @@ namespace TA.Utils.Core.PropertyBinding
 namespace TA.Utils.Core.StateMachine
 {
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public class static FiniteStateMachineExtensions
     {
         public static void WaitUntil<TState>(this TA.Utils.Core.StateMachine.IFiniteStateMachine<TState> fsm, [System.Runtime.CompilerServices.NullableAttribute(new byte[] {
@@ -392,11 +553,15 @@ namespace TA.Utils.Core.StateMachine
             where TState :  class, TA.Utils.Core.StateMachine.IState { }
     }
     [System.Runtime.CompilerServices.NullableAttribute(0)]
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public sealed class FiniteStateMachine<TState> : TA.Utils.Core.StateMachine.IFiniteStateMachine<TState>
         where TState :  class, TA.Utils.Core.StateMachine.IState
     {
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public FiniteStateMachine(TA.Utils.Core.Diagnostics.ILog log = null) { }
         [System.Runtime.CompilerServices.NullableAttribute(2)]
+        [get: System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        [set: System.Runtime.CompilerServices.NullableContextAttribute(2)]
         public TState CurrentState { get; }
         public string CurrentStateName { get; }
         public System.IObservable<TState> ObservableStates { get; }
@@ -408,16 +573,19 @@ namespace TA.Utils.Core.StateMachine
                 2})] System.Func<TState, bool> predicate, System.TimeSpan timeout) { }
         public void WaitUntil(TState expected, System.TimeSpan timeout) { }
     }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public interface IFiniteStateMachine<TState>
         where TState :  class, TA.Utils.Core.StateMachine.IState
     {
         [System.Runtime.CompilerServices.NullableAttribute(2)]
+        [get: System.Runtime.CompilerServices.NullableContextAttribute(2)]
         TState CurrentState { get; }
         System.IObservable<TState> ObservableStates { get; }
         void StartStateMachine(TState initialState);
         void StopStateMachine();
         void TransitionTo(TState newState);
     }
+    [System.Runtime.CompilerServices.NullableContextAttribute(1)]
     public interface IState
     {
         string DisplayName { get; }
