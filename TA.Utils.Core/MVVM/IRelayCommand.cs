@@ -15,6 +15,11 @@ public interface IRelayCommand : ICommand
     ///     Raise the <see cref="ICommand.CanExecuteChanged" /> event on the bound control.
     /// </summary>
     void RaiseCanExecuteChanged();
+
+    /// <summary>
+    ///     Gets the name of the relay command for diagnostic/display purposes.
+    /// </summary>
+    string Name { get; }
 }
 
 /// <summary>
@@ -23,5 +28,4 @@ public interface IRelayCommand : ICommand
 /// </summary>
 /// <typeparam name="TParam"></typeparam>
 public interface IRelayCommand<TParam> : IRelayCommand
-{
-}
+{ }

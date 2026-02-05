@@ -11,6 +11,7 @@
       <Value>TA.Utils.Specifications\TA.Utils.Specifications.csproj</Value>
     </MetricsExclusionList>
     <RdiConfigured>True</RdiConfigured>
+    <RestrictToString>False</RestrictToString>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
