@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://tigra-astronomy.github.io/TA.Utilities/3.5.0-beta.1/Logging/NLog%20Adapter/">
+        <link rel="canonical" href="https://tigra-astronomy.github.io/TA.Utilities/3.5.0-beta.1/Logging/OpenTelemetry%20Adapter/">
       
       
-        <link rel="prev" href="../../Core/Finite%20State%20Machine/">
+        <link rel="prev" href="../NLog%20Adapter/">
       
       
-        <link rel="next" href="../OpenTelemetry%20Adapter/">
+        <link rel="next" href="../../MVVM/ViewModelBase/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>NLog Adapter - Timtek Utilities</title>
+        <title>OpenTelemetry Adapter - Timtek Utilities</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#nlog-adapter" class="md-skip">
+        <a href="#opentelemetry-adapter" class="md-skip">
           Skip to content
         </a>
       
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              NLog Adapter
+              OpenTelemetry Adapter
             
           </span>
         </div>
@@ -743,6 +743,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../NLog%20Adapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NLog Adapter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -762,7 +790,7 @@
   <span class="md-ellipsis">
     
   
-    NLog Adapter
+    OpenTelemetry Adapter
   
 
     
@@ -780,7 +808,7 @@
   <span class="md-ellipsis">
     
   
-    NLog Adapter
+    OpenTelemetry Adapter
   
 
     
@@ -817,30 +845,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verbosity-and-custom-levels" class="md-nav__link">
+  <a href="#configuration-options" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verbosity and custom levels
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Verbosity and custom levels">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#seq-target-mapping-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Seq target mapping example
+        Configuration options
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#trace-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trace correlation
+      
+    </span>
+  </a>
   
 </li>
       
@@ -878,10 +900,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#migrating-from-the-nlog-adapter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshooting
+        Migrating from the NLog adapter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sample-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample application
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
       
     </span>
   </a>
@@ -892,34 +936,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../OpenTelemetry%20Adapter/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    OpenTelemetry Adapter
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1218,30 +1234,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verbosity-and-custom-levels" class="md-nav__link">
+  <a href="#configuration-options" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verbosity and custom levels
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Verbosity and custom levels">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#seq-target-mapping-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Seq target mapping example
+        Configuration options
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#trace-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trace correlation
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1279,10 +1289,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#migrating-from-the-nlog-adapter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshooting
+        Migrating from the NLog adapter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sample-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample application
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
       
     </span>
   </a>
@@ -1309,43 +1341,97 @@
   
 
 
-<h1 id="nlog-adapter">NLog adapter<a class="headerlink" href="#nlog-adapter" title="Permanent link">&para;</a></h1>
-<p>An implementation of the logging abstraction (<code>ILog</code>/<code>IFluentLogBuilder</code>) that targets NLog as the back‑end. It maps fluent builder calls to NLog’s <code>LogEventInfo</code>, supports semantic properties, and integrates cleanly with NLog targets including Seq.</p>
+<h1 id="opentelemetry-adapter">OpenTelemetry Adapter<a class="headerlink" href="#opentelemetry-adapter" title="Permanent link">&para;</a></h1>
+<p>An implementation of the logging abstraction (<code>ILog</code>/<code>IFluentLogBuilder</code>) that exports structured log records via the OpenTelemetry Protocol (OTLP). It maps fluent builder calls to <code>Microsoft.Extensions.Logging.ILogger</code> configured with the OpenTelemetry provider and the OTLP exporter. Log records are automatically correlated with active <code>System.Diagnostics.Activity</code> spans.</p>
 <ul>
-<li>Package: TA.Utils.Logging.Nlog</li>
-<li>Classes: <code>LoggingService</code>, <code>LogBuilder</code>, <code>LogServiceOptions</code></li>
+<li>Package: <code>TA.Utils.Logging.OpenTelemetry</code></li>
+<li>Classes: <code>OpenTelemetryLoggingService</code>, <code>OpenTelemetryLogBuilder</code>, <code>OpenTelemetryLoggingServiceOptions</code></li>
 </ul>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="language-csharp highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">TA.Utils.Logging.NLog</span><span class="p">;</span>
+<div class="language-csharp highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">TA.Utils.Logging.OpenTelemetry</span><span class="p">;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">var</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LogServiceOptions</span><span class="p">.</span><span class="n">DefaultOptions</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">.</span><span class="n">UseVerbosity</span><span class="p">()</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">.</span><span class="n">CustomSeverityPropertyName</span><span class="p">(</span><span class="s">&quot;CustomLevel&quot;</span><span class="p">);</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">ILog</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LoggingService</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">.</span><span class="n">WithAmbientProperty</span><span class="p">(</span><span class="s">&quot;CorrelationId&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">());</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">var</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OpenTelemetryLoggingServiceOptions</span><span class="p">.</span><span class="n">Default</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">.</span><span class="n">WithOtlpEndpoint</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:5341/ingest/otlp/v1/logs&quot;</span><span class="p">))</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">.</span><span class="n">WithServiceName</span><span class="p">(</span><span class="s">&quot;MyApplication&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="p">.</span><span class="n">WithSeqApiKey</span><span class="p">(</span><span class="s">&quot;your-api-key&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">.</span><span class="n">UseVerbosity</span><span class="p">()</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">.</span><span class="n">WithConsoleLogging</span><span class="p">();</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">log</span><span class="p">.</span><span class="n">Info</span><span class="p">().</span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;Hello {who}&quot;</span><span class="p">).</span><span class="n">Property</span><span class="p">(</span><span class="s">&quot;who&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">).</span><span class="n">Write</span><span class="p">();</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">log</span><span class="p">.</span><span class="n">Level</span><span class="p">(</span><span class="s">&quot;Important&quot;</span><span class="p">).</span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;This is important&quot;</span><span class="p">).</span><span class="n">Write</span><span class="p">();</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">OpenTelemetryLoggingService</span><span class="p">(</span><span class="n">options</span><span class="p">);</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">log</span><span class="p">.</span><span class="n">WithAmbientProperty</span><span class="p">(</span><span class="s">&quot;CorrelationId&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">());</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">log</span><span class="p">.</span><span class="n">Info</span><span class="p">().</span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;Hello {who}&quot;</span><span class="p">).</span><span class="n">Property</span><span class="p">(</span><span class="s">&quot;who&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">).</span><span class="n">Write</span><span class="p">();</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">log</span><span class="p">.</span><span class="n">Level</span><span class="p">(</span><span class="s">&quot;Important&quot;</span><span class="p">).</span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;This is important&quot;</span><span class="p">).</span><span class="n">Write</span><span class="p">();</span>
 </code></pre></div>
-<h2 id="verbosity-and-custom-levels">Verbosity and custom levels<a class="headerlink" href="#verbosity-and-custom-levels" title="Permanent link">&para;</a></h2>
-<ul>
-<li>UseVerbosity(propertyName = "verbosity")</li>
-<li>Adds a numeric verbosity property to each entry when you pass the number to the severity method (e.g., <code>Info(2)</code>).</li>
-<li>CustomSeverityPropertyName(name = "CustomLevel")</li>
-<li>The custom severity property used when you call <code>log.Level("Name")</code>.</li>
-</ul>
-<h3 id="seq-target-mapping-example">Seq target mapping example<a class="headerlink" href="#seq-target-mapping-example" title="Permanent link">&para;</a></h3>
-<p>To use custom levels with Seq, configure the Seq target to take its level from the custom property when present:</p>
-<div class="language-xml highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">&lt;target</span><span class="w"> </span><span class="na">xsi:type=</span><span class="s">&quot;Seq&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;seq&quot;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">        </span><span class="na">serverUrl=</span><span class="s">&quot;http://your-server-url:5341&quot;</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="na">apiKey=</span><span class="s">&quot;your-seq-api-key&quot;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="na">seqLevel=</span><span class="s">&quot;${event-properties:CustomLevel:whenEmpty=${level}}&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<h2 id="configuration-options">Configuration options<a class="headerlink" href="#configuration-options" title="Permanent link">&para;</a></h2>
+<p>All options are set via the fluent API on <code>OpenTelemetryLoggingServiceOptions</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WithOtlpEndpoint(uri)</code></td>
+<td>OTLP endpoint URI. Falls back to the <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> environment variable, then <code>http://localhost:4317</code>.</td>
+</tr>
+<tr>
+<td><code>WithOtlpProtocol(protocol)</code></td>
+<td>Export protocol. Defaults to <code>HttpProtobuf</code> (what Seq expects).</td>
+</tr>
+<tr>
+<td><code>WithServiceName(name)</code></td>
+<td>OpenTelemetry service name shown in the collector. Falls back to <code>OTEL_SERVICE_NAME</code>.</td>
+</tr>
+<tr>
+<td><code>WithSeqApiKey(key)</code></td>
+<td>Sent as the <code>X-Seq-ApiKey</code> header.</td>
+</tr>
+<tr>
+<td><code>UseVerbosity(propertyName)</code></td>
+<td>Adds a numeric verbosity property (default <code>"verbosity"</code>) to every entry.</td>
+</tr>
+<tr>
+<td><code>WithCustomLevelPropertyName(name)</code></td>
+<td>Property name used by <code>ILog.Level()</code> for custom severity (default <code>"CustomLevel"</code>).</td>
+</tr>
+<tr>
+<td><code>WithConsoleLogging()</code></td>
+<td>Also writes log entries to the console via <code>Microsoft.Extensions.Logging.Console</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="trace-correlation">Trace correlation<a class="headerlink" href="#trace-correlation" title="Permanent link">&para;</a></h2>
+<p>Log entries written while a <code>System.Diagnostics.Activity</code> is active automatically carry the trace and span IDs. To export those traces, set up a <code>TracerProvider</code> alongside the logging service:</p>
+<div class="language-csharp highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">System.Diagnostics</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">OpenTelemetry</span><span class="p">;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">OpenTelemetry.Exporter</span><span class="p">;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">using</span><span class="w"> </span><span class="nn">OpenTelemetry.Resources</span><span class="p">;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">using</span><span class="w"> </span><span class="nn">OpenTelemetry.Trace</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kt">var</span><span class="w"> </span><span class="n">tracer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ActivitySource</span><span class="p">(</span><span class="s">&quot;MyApplication.Tracer&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">tracerProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sdk</span><span class="p">.</span><span class="n">CreateTracerProviderBuilder</span><span class="p">()</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">.</span><span class="n">SetResourceBuilder</span><span class="p">(</span><span class="n">ResourceBuilder</span><span class="p">.</span><span class="n">CreateDefault</span><span class="p">().</span><span class="n">AddService</span><span class="p">(</span><span class="s">&quot;MyApplication&quot;</span><span class="p">))</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="n">tracer</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">.</span><span class="n">AddOtlpExporter</span><span class="p">(</span><span class="n">otlp</span><span class="w"> </span><span class="o">=&gt;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="n">otlp</span><span class="p">.</span><span class="n">Endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:5341/ingest/otlp/v1/traces&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">otlp</span><span class="p">.</span><span class="n">Protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OtlpExportProtocol</span><span class="p">.</span><span class="n">HttpProtobuf</span><span class="p">;</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="p">})</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1">// Logs emitted inside this span are automatically correlated</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">span</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tracer</span><span class="p">.</span><span class="n">StartActivity</span><span class="p">(</span><span class="s">&quot;ImportantOperation&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="n">log</span><span class="p">.</span><span class="n">Info</span><span class="p">().</span><span class="n">Message</span><span class="p">(</span><span class="s">&quot;Starting important operation&quot;</span><span class="p">).</span><span class="n">Write</span><span class="p">();</span>
 </code></pre></div>
+<p>In Seq (or any OTLP-aware UI) you can then view the trace waterfall and see log events grouped under their parent spans.</p>
 <h2 id="logger-names-and-ambient-properties">Logger names and ambient properties<a class="headerlink" href="#logger-names-and-ambient-properties" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>WithName("Source")</code> sets the logger name, which NLog can use for routing and filtering (e.g., <code>${logger}</code> in layouts).</li>
-<li><code>WithAmbientProperty("name", value)</code> adds a property to all subsequent entries; useful for correlation IDs, component, tenant, etc.</li>
+<li><code>WithName("Source")</code> sets the logger category name used by <code>ILoggerFactory.CreateLogger()</code>.</li>
+<li><code>WithAmbientProperty("name", value)</code> adds a property to all subsequent log entries; useful for correlation IDs, component identifiers, tenant, etc.</li>
 </ul>
 <h2 id="message-templates-and-properties">Message templates and properties<a class="headerlink" href="#message-templates-and-properties" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1353,18 +1439,24 @@
 <li>Attach additional properties explicitly via <code>.Property("name", value)</code> or <code>.Properties(dict)</code>.</li>
 </ul>
 <h2 id="shutdown">Shutdown<a class="headerlink" href="#shutdown" title="Permanent link">&para;</a></h2>
+<p>Call <code>log.Shutdown()</code> (or <code>Dispose()</code>) to flush buffered log records and release the underlying <code>ILoggerFactory</code>. The service implements <code>IDisposable</code>, so <code>using var log = ...</code> handles this automatically.</p>
+<h2 id="migrating-from-the-nlog-adapter">Migrating from the NLog adapter<a class="headerlink" href="#migrating-from-the-nlog-adapter" title="Permanent link">&para;</a></h2>
+<p>Because both adapters implement <code>ILog</code>, migrating is straightforward:</p>
+<ol>
+<li>Replace <code>LoggingService</code> with <code>OpenTelemetryLoggingService</code>.</li>
+<li>Replace <code>LogServiceOptions</code> with <code>OpenTelemetryLoggingServiceOptions</code>.</li>
+<li>Remove <code>NLog.config</code> — configuration is now in code via the fluent options API.</li>
+<li>All existing <code>log.Info().Message(...).Write()</code> calls remain unchanged.</li>
+</ol>
+<p>The <code>NLog.config</code> file and the <code>NLog.Targets.Seq</code> package are no longer needed; the OTLP exporter sends data directly to the collector.</p>
+<h2 id="sample-application">Sample application<a class="headerlink" href="#sample-application" title="Permanent link">&para;</a></h2>
+<p>A complete working example is provided in <code>Samples/TA.Utils.Samples.OpenTelemetryConsoleApp</code>. The sample demonstrates structured logging at all severity levels, ambient properties, exception logging, custom severity levels, and trace/span correlation with <code>ActivitySource</code>.</p>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Call <code>log.Shutdown()</code> or rely on NLog’s <code>AutoShutdown = true</code> set by the adapter type initialiser.</li>
+<li><a href="../../Diagnostics%20and%20Logging/">Diagnostics and Logging</a></li>
+<li><a href="../NLog%20Adapter/">NLog Adapter</a></li>
+<li><a href="../../Core/Console%20Logger%20%28Diagnostics%29/">Console logger (Diagnostics)</a></li>
 </ul>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<ul>
-<li>If a property name collides, the adapter auto‑deconflicts by suffixing a number (e.g., <code>property</code>, <code>property2</code>).</li>
-<li>Ensure <code>IsEnabled(Level)</code> is true for the chosen level; otherwise <code>.Write()</code> is a no‑op.</li>
-</ul>
-<p>See also
-- <a href="../../Diagnostics%20and%20Logging/">Diagnostics and Logging</a>
-- <a href="../../Core/Console%20Logger%20%28Diagnostics%29/">Console logger (Diagnostics)</a>
-- <a href="../../Core/ASCII%20Mnemonic%20Expansion/">ASCII Mnemonic Expansion</a></p>
 
 
 
