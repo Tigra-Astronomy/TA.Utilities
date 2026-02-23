@@ -47,13 +47,17 @@ If you are a company and need some work done, then consider hiring me as a freel
 ### Code Contract Assertions
 
 A set of extension methods for making runtime assertions that can help to catch code contract violations.
+
+```csharp
 void AddUserToDatabase(User user)
 {
     // Check that the user is not null and that the age is greater than 18.
     user.ContractAssertNotNull();
     user.Age.ContractAssert(p => p > 18, "Age must be greater than 18");
 }
-Any assertion failure will result in a `ContractViolationException` being thrown. It is recommended not to catch these exceptions, but to let them bubble up to the application root where they can be logged and the application terminated cleanly. A `ContractViolationException` is an unequivocal indication of a bug in the code, so it should never be caught and handled. It is a failure of the code contract, not a runtime error that can be recovered from.
+```
+
+Any assertion failure will result in a `ContractViolationException` being thrown.
 
 ### Versioning
 
@@ -65,6 +69,8 @@ We never manually set the version number, it happens as part of the build proces
 So we can never forget to "bump the version" and we can never forget to set it.
 Total automation.
 If you examine one of our log files, you may well find something like this:
+
+```text
 21:16:59.2909|INFO |Server          |Git Commit ID: "229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
 21:16:59.3069|INFO |Server          |Git Short ID: "229c1ac"
 21:16:59.3069|INFO |Server          |Commit Date: "2020-07-11"
@@ -72,6 +78,8 @@ If you examine one of our log files, you may well find something like this:
 21:16:59.3069|INFO |Server          |Full Semantic version: "0.1.0-alpha.1"
 21:16:59.3069|INFO |Server          |Build metadata: "Branch.develop.Sha.229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
 21:16:59.3069|INFO |Server          |Informational Version: "0.1.0-alpha.1+Branch.develop.Sha.229c1acc4a7bda494f78a8c7cc811c2a4d8e9132"
+```
+
 There's no mistaking where that build came from.
 
 #### `SemanticVersion` class
@@ -182,21 +190,24 @@ This can be useful for building drop-down lists and Combo box contents for enume
 You can always get the equivalent human-readable display text for an enumerated value using `value.DisplayEquivalent()`.
 This will return the display text if it has been set, or the name of the enum value otherwise.
 Set the display text by dropping a `[DisplayEquivalent("text")]` attribute on each field of the enum.
-    [Subject(typeof(DisplayEquivalentAttribute))]
-    internal class when_displaying_an_enum_with_equivalent_text
-        {
-        It should_have_equivalent_text_when_the_attribute_is_present = () =>
-            TestCases.CaseWithEquivalentText.DisplayEquivalent().ShouldEqual("Equivalent Text");
-        It should_use_the_field_name_when_no_attribute_is_present = () =>
-            TestCases.CaseWithoutEquivalentText.DisplayEquivalent()
-                .ShouldEqual(nameof(TestCases.CaseWithoutEquivalentText));
-        }
 
-    internal enum TestCases
-        {
-        [DisplayEquivalent("Equivalent Text")] CaseWithEquivalentText,
-        CaseWithoutEquivalentText
-        }
+```csharp
+[Subject(typeof(DisplayEquivalentAttribute))]
+internal class when_displaying_an_enum_with_equivalent_text
+{
+    It should_have_equivalent_text_when_the_attribute_is_present = () =>
+        TestCases.CaseWithEquivalentText.DisplayEquivalent().ShouldEqual("Equivalent Text");
+    It should_use_the_field_name_when_no_attribute_is_present = () =>
+        TestCases.CaseWithoutEquivalentText.DisplayEquivalent()
+            .ShouldEqual(nameof(TestCases.CaseWithoutEquivalentText));
+}
+
+internal enum TestCases
+{
+    [DisplayEquivalent("Equivalent Text")] CaseWithEquivalentText,
+    CaseWithoutEquivalentText
+}
+```
 
 ### Finite State Machine (FSM)
 
@@ -218,12 +229,16 @@ Conversely, `ConfigureAwait(false)` means that continuation can happen on any th
 and typically that will be a thread pool worker thread.
 The implications are quite profound, especially for apartment-threaded GUI applications such as WinForms or WPF. 
 Consider the following method:
+
+```csharp
 public async Task SomeMethod()
-    {
+{
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
 	await Task.Delay(1000).ConfigureAwait(false);
 	Console.WriteLine("Continuing on thread {0}", Thread.CurrentThread.ManagedThreadId);
-    }
+}
+```
+
 When you run this, you may get something like
 
 > Starting on thread 14  
@@ -237,25 +252,33 @@ It's just horrible.
 You can't read the code and instantly understand what it does, and that violates the _Principle of Least Astonishment_.
 
 So we made some extension methods that essentially do the same thing, but make more sense. Our aync method now becomes:
+
+```csharp
 public async Task SomeMethod()
-    {
+{
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
 	await Task.Delay(1000).ContinueOnAnyThread();
 	Console.WriteLine("Continuing on thread {0}", Thread.CurrentThread.ManagedThreadId);
-    }
+}
+```
+
 and we get
 
 > Starting on thread 15  
 > Continuing on thread 13
 
 Alternatively:
+
+```csharp
 public async Task SomeMethod()
-    {
+{
 	Console.WriteLine("Starting on thread {0}", Thread.CurrentThread.ManagedThreadId);
 	await Task.Delay(1000).ContinueInCurrentContext();
 	Console.WriteLine("Continuing on thread {0}", Thread.CurrentThread.ManagedThreadId);
-    }
-The await captures the current `SynchronizationContext` and uses it to schedule the continuation.
+}
+```
+
+The await captures the current `SynchronizationContext`
 What happens next depends on the application model and how it implements `SynchronizationContext`.
 For a user interface application, the UI generally runs in a Single Threaded Apartment (STA thread).
 In this model, asynchronous operations are posted to the message queue of the STA thread.
@@ -312,6 +335,8 @@ A null implementation is provided in `DegenerateLoggerService` and `DegenerateLo
 The two classes do essentially nothing and produce no output; they are a data sink.
 Libraries can choose to use this as their default logging implementation, which is easier than checking
 whether the logger is null every time it is used.
+
+```csharp
 public class MyClassThatUsesLogging
 {
     private ILog Log;
@@ -330,10 +355,18 @@ public class MyClassThatUsesLogging
             .Write();
     }
 }
-The interface supports semantic logging. You can use a simple format string like so:
+```
+
+The interface supports semantic logging.
+
+```csharp
 log.Info().Message("Sending data {0}", data).Write();
 log.Error().Message("Exception {0} occurred with error code {1}", ex.Message, errorCode).Write();
+```
+
 But this leaves useful information on the table. Extra rich information can be included like so:
+
+```csharp
 log.Info().Message("Sending data {data}", data).Write();
 log.Error()
     .Message("Exception {exception} occurred with error code {error}")
@@ -341,6 +374,8 @@ log.Error()
     .Property("error", errorCode)
     .Exception(ex)
     .Write();
+```
+
 In both statements, we are adding property-value pairs to the log.
 In the first `Log.Info()` statement this is implicit, whereas in the `Log.Error()` statement it is made explicit.
 This extra information may or may not be used by the log renderer, but if its not there then it can't be used!
@@ -417,35 +452,39 @@ We highly recommend Seq. It's free for a single user and can be set up in a few 
 - When reporting a `CorrelationId` to the user, you can use just the last few digits (we use 6) of the `CorrelationId`, this is usually enough to uniquely identify a log session.
 - Use _dependency injection_ and have your IOC container create loggers for injection into class constructors.
 
- This method may be useful. It was written for use with Ninject, but you can distill out the approach  of looking at the stack frame to work out the calling type and set the logger name from that.
-/// <summary>
-///     Get an instance of a service from the dependency injection kernel.
-///     Special handling for logging services.
-/// </summary>
-/// <typeparam name="TService">The type of service requested.</typeparam>
-/// <returns>An instance of the requested service.</returns>
-public static TService Get<TService>()
-{
-   if (typeof(ILog).IsAssignableFrom(typeof(TService)))
-   {
-       // Special handling for request for ILog.
-       // Try to determine the calling type by examining the stack, and pass it to the kernel as a binding parameter.
-       var callerStackFrame = new StackFrame(1);
-       var callingMethod = callerStackFrame.GetMethod();
-       // MethodBase.ReflectedType is more reliable than the direct Type property and less likely to return an "un-utterable name".
-       var callerType = callingMethod.ReflectedType;
-       var callerTypeName = callerType?.Name ?? string.Empty;
-       if (!string.IsNullOrEmpty(callerTypeName))
-       {
-           var logServiceNameParameter = new Parameter(LogSourceParameterName, callerTypeName, false);
-           return Kernel.Get<TService>(logServiceNameParameter);
-       }
-   }
+ This method may be useful. It was written for use with Ninject, but you can distill out the approach of looking at the stack frame to work out the calling type and set the logger name from that.
 
-   // For all other requests, simply request the type from the DI kernel.
-    return Kernel.Get<TService>();
-}
-#### Log Correlation
+ ```csharp
+ /// <summary>
+ ///     Get an instance of a service from the dependency injection kernel.
+ ///     Special handling for logging services.
+ /// </summary>
+ /// <typeparam name="TService">The type of service requested.</typeparam>
+ /// <returns>An instance of the requested service.</returns>
+ public static TService Get<TService>()
+ {
+     if (typeof(ILog).IsAssignableFrom(typeof(TService)))
+     {
+         // Special handling for request for ILog.
+         // Try to determine the calling type by examining the stack, and pass it to the kernel as a binding parameter.
+         var callerStackFrame = new StackFrame(1);
+         var callingMethod = callerStackFrame.GetMethod();
+         // MethodBase.ReflectedType is more reliable than the direct Type property and less likely to return an "un-utterable name".
+         var callerType = callingMethod.ReflectedType;
+         var callerTypeName = callerType?.Name ?? string.Empty;
+         if (!string.IsNullOrEmpty(callerTypeName))
+         {
+             var logServiceNameParameter = new Parameter(LogSourceParameterName, callerTypeName, false);
+             return Kernel.Get<TService>(logServiceNameParameter);
+         }
+     }
+
+     // For all other requests, simply request the type from the DI kernel.
+     return Kernel.Get<TService>();
+ }
+ ```
+
+ #### Log Correlation
 
 We use a global static readonly GUID called something like `CorrelationId`.
 We initialize this with a new `Guid` as early as possible in the program execution, usually in a static initializer, so that it has a new value for each run of the program. We then add this to every instance of `ILog` as an Ambient Property.
@@ -462,21 +501,123 @@ We find this a bit limiting and would like to be able to create our own levels, 
 
 The `NLog.Targets.Seq` logging target has support for this, and we also support it in our `ILog` interface via the `ILog.Level(string levelName)` method.
 
-The way this works is to create an additional log event property, by default named "CustomLevel", containing the level name. The Seq target then uses this property as the level when it posts the data to the Seq server. If the default property name is no good for some reason, it can be changed using a `LogServiceOptions` instance and setting `LogServiceOptions.CustomSeverityPropertyName` property to the preferred name, like so:
+it can be changed using a `LogServiceOptions` instance and setting `LogServiceOptions.CustomSeverityPropertyName` property to the preferred name, like so:
+
+```csharp
 var options = LogServiceOptions.DefaultOptions.CustomSeverityPropertyName("SeqLevel");
 var log = new LoggingService(options);
-A small bit of configuration is needed to wire this up, in the Seq target in the `NLog.config` file, like so:
-      <target xsi:type="Seq" name="seq" 
-      serverUrl="http://your-server-url:5341"
-      apiKey="your-seq-api-key"
-      seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}">
-The magic is in `seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}`
+```
+
+A small bit of configuration is needed
+
+```xml
+<target xsi:type="Seq" name="seq" 
+    serverUrl="http://your-server-url:5341"
+    apiKey="your-seq-api-key"
+    seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}">
+```
+
+The magic is in `seqLevel="${event-properties:CustomLevel:whenEmpty=${level}}"`
 
 This uses the value of `CustomLevel` as the Seq level, unless it is empty or missing, in which case it defaults to the NLog level.
 
 In targets other than Seq, this will just appear as yet another log event property.
 
+### OpenTelemetry Logging Back-end
+
+The `TA.Utils.Logging.OpenTelemetry` package provides an `ILog` implementation that exports structured log records via the [OpenTelemetry][otel] Protocol (OTLP).
+This means your existing code that logs through `ILog` can send data to any OTLP-compatible collector — [Seq][seq], Jaeger, Grafana, the .NET Aspire Dashboard, and many others — with zero changes to your log statements.
+
+Because the implementation is built on `Microsoft.Extensions.Logging` and the OpenTelemetry .NET SDK, log records are automatically correlated with any active `System.Diagnostics.Activity` spans.
+If you set up a `TracerProvider` alongside the logging service, Seq (or your collector of choice) can display logs grouped under their parent trace, giving you end-to-end observability.
+
+#### Getting Started
+
+Install the NuGet package:
+
+    dotnet add package TA.Utils.Logging.OpenTelemetry
+
+Configure the service with the fluent options API and use it exactly like any other `ILog` implementation:
+
+```csharp
+var options = OpenTelemetryLoggingServiceOptions.Default
+    .WithOtlpEndpoint(new Uri("http://localhost:5341/ingest/otlp/v1/logs"))
+    .WithServiceName("MyApplication")
+    .WithSeqApiKey("your-api-key")
+    .UseVerbosity()
+    .WithConsoleLogging();   // also write to the console
+
+using var log = new OpenTelemetryLoggingService(options);
+log.WithAmbientProperty("CorrelationId", Guid.NewGuid());
+
+log.Info()
+    .Message("Application starting on {Machine}", Environment.MachineName)
+    .Write();
+```
+
+The fluent options mirror the patterns established by the NLog adapter:
+
+| Method | Purpose |
+|---|---|
+| `WithOtlpEndpoint(uri)` | OTLP endpoint URI (defaults to `OTEL_EXPORTER_OTLP_ENDPOINT` env var) |
+| `WithOtlpProtocol(protocol)` | Export protocol; defaults to `HttpProtobuf` (what Seq expects) |
+| `WithServiceName(name)` | OpenTelemetry service name shown in the collector |
+| `WithSeqApiKey(key)` | Sent as the `X-Seq-ApiKey` header |
+| `UseVerbosity(propertyName)` | Adds a verbosity property to every log entry |
+| `WithCustomLevelPropertyName(name)` | Property name used by `ILog.Level()` for custom severity |
+| `WithConsoleLogging()` | Also writes log entries to the console |
+
+#### Trace Correlation
+
+To correlate logs with distributed traces, create a `TracerProvider` that listens to your `ActivitySource` and exports via OTLP.
+Any log entries written while an `Activity` is active will automatically carry the trace and span IDs:
+
+```csharp
+using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("MyApplication"))
+    .AddSource("MyApplication.Tracer")
+    .AddOtlpExporter(otlp =>
+    {
+        otlp.Endpoint = new Uri("http://localhost:5341/ingest/otlp/v1/traces");
+        otlp.Protocol = OtlpExportProtocol.HttpProtobuf;
+    })
+    .Build();
+
+var tracer = new ActivitySource("MyApplication.Tracer");
+using var span = tracer.StartActivity("ImportantOperation");
+
+// This log entry is automatically associated with the span above
+log.Info().Message("Starting important operation").Write();
+```
+
+In Seq (or any OTLP-aware UI) you can then view the trace waterfall and see log events grouped under their parent spans.
+
+#### Migrating from the NLog Back-end
+
+Because both adapters implement `ILog`, migrating is straightforward:
+
+1. Replace the NLog `LoggingService` with `OpenTelemetryLoggingService`.
+2. Replace `LogServiceOptions` with `OpenTelemetryLoggingServiceOptions`.
+3. Remove the `NLog.config` file — configuration is now in code via the fluent options API.
+4. All existing `log.Info().Message(...).Write()` calls remain unchanged.
+
+The `NLog.config` file and the `NLog.Targets.Seq` NuGet package are no longer needed; the OpenTelemetry exporter sends data directly via OTLP.
+
+#### Sample Application
+
+A complete working example is provided in `Samples/TA.Utils.Samples.OpenTelemetryConsoleApp`.
+The sample demonstrates structured logging at all severity levels, ambient properties, exception logging, custom severity levels, and trace/span correlation with `ActivitySource`.
+
 ## Release Notes
+
+### 3.5.0
+
+- Added `TA.Utils.Logging.OpenTelemetry`, a new `ILog` implementation that exports structured log records via the OpenTelemetry Protocol (OTLP).
+  - Fully implements `ILog` and `IFluentLogBuilder`; drop-in replacement for the NLog adapter.
+  - Fluent `OpenTelemetryLoggingServiceOptions` API for configuring the OTLP endpoint, protocol, service name, Seq API key, verbosity, custom severity levels, and console logging.
+  - Automatic correlation of log entries with active `System.Diagnostics.Activity` spans.
+  - Optional console logging via `WithConsoleLogging()`.
+- Added `Samples/TA.Utils.Samples.OpenTelemetryConsoleApp`, a console application demonstrating the OpenTelemetry logging back-end with trace/span correlation.
 
 ### 3.2.0
 
@@ -545,3 +686,4 @@ In targets other than Seq, this will just appear as yet another log event proper
 [yt-gitversion-arduino]: https://www.youtube.com/watch?v=P4B6PTP6aAk "Automatic version in Arduino code with GitVersion"
 [yt-oss]: https://www.youtube.com/watch?v=kloweL2fw7Q "Set your software free"
 [coffee]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ARU8ANQKU2SN2&source=url "Support our open source projects with a donation"
+[otel]: https://opentelemetry.io/ "OpenTelemetry observability framework"

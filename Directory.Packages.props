@@ -20,6 +20,10 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageVersion Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc6.1" />
     <PackageVersion Include="CommunityToolkit.Maui" Version="9.0.0" />
+    <!-- OpenTelemetry logging dependencies -->
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.3" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
     <!-- Transitive Packages -->
     <PackageVersion Include="Mono.Cecil" Version="0.10.0" />
   </ItemGroup>

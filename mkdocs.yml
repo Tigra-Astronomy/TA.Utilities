@@ -47,6 +47,7 @@ nav:
     - Finite State Machine: Core/Finite State Machine.md
   - Logging:
     - NLog Adapter: Logging/NLog Adapter.md
+    - OpenTelemetry Adapter: Logging/OpenTelemetry Adapter.md
   - MVVM:
     - ViewModelBase: MVVM/ViewModelBase.md
     - RelayCommand: MVVM/RelayCommand.md
