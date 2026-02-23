@@ -1,0 +1,1484 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tigra-astronomy.github.io/TA.Utilities/3.5.0-beta.1/Samples/Traffic%20Light%20Simulation%20Design%20Specification/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>Traffic Light Simulation — Final Specification - Timtek Utilities</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#traffic-light-simulation-final-specification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Timtek Utilities" class="md-header__button md-logo" aria-label="Timtek Utilities" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Timtek Utilities
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Traffic Light Simulation — Final Specification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Tigra-Astronomy/TA.Utilities" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Timtek Utilities" class="md-nav__button md-logo" aria-label="Timtek Utilities" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Timtek Utilities
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Tigra-Astronomy/TA.Utilities" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Diagnostics%20and%20Logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics and Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/SemanticVersion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SemanticVersion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Maybe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maybe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Octet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Octet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Code%20Contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Display%20Equivalent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Display Equivalent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/ASCII%20Mnemonic%20Expansion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ASCII Mnemonic Expansion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Async%20Helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Async Helpers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Property%20Binding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Property Binding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/String%20Extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Math%20Extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Console%20Logger%20%28Diagnostics%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Console Logger (Diagnostics)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Core/Finite%20State%20Machine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite State Machine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Logging
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Logging/NLog%20Adapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NLog Adapter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MVVM
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MVVM
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MVVM/ViewModelBase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModelBase
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MVVM/RelayCommand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RelayCommand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MVVM/AsyncRelayCommand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AsyncRelayCommand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MVVM/UI%20Thread%20Dispatcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI Thread Dispatcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Areas for Improvement
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Areas for Improvement
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Areas%20for%20Improvement/FSM%20SOLID%20Analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FSM SOLID Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definitions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-machine-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State Machine Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="State Machine Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#traffic-light" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traffic Light
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approach-sequencer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approach Sequencer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activation-configuration-dto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activation Configuration DTO
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-transitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase Transitions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Application Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-design-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI Design Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composition-root-and-dependency-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composition Root and Dependency Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uiux-for-the-sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI/UX for the sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="traffic-light-simulation-final-specification">Traffic Light Simulation — Final Specification<a class="headerlink" href="#traffic-light-simulation-final-specification" title="Permanent link">&para;</a></h1>
+<ol>
+<li>This sample simulates an n‑way traffic light controlled area. The user may select how many approaches to simulate and a traffic light will exist for each approach. Each light is modelled as a finite state machine, with one instance per light.</li>
+</ol>
+<h2 id="definitions">Definitions<a class="headerlink" href="#definitions" title="Permanent link">&para;</a></h2>
+<p>Traffic
+: Something, typically a vehicle or person, that wishes to transit a controlled area.</p>
+<p>Controlled Area
+: The area controlled by a set of traffic lights, though which traffic may transit. Typically a section of road or a road interchange, but can also be other areas such as pedestrian walkways, one‑way streets, tunnels, staircases or any area in which the flow of traffic must be controlled.</p>
+<p>Traffic Light
+: A visual indication to traffic that it may or may not enter a controlled area. A traffic light is an independent modular unit with a fixed phase sequence of colours. When triggered by the approach sequencer, the light becomes an active approach and begins transitioning through its phase sequence, which is modelled as a finite state machine. Upon completion of the sequence, the light signals the approach sequencer that it has completed its cycle and is back at the InactiveRed phase.</p>
+<p>Phase
+: A distinct state of a traffic light that can be mapped to a colour display. The possible colour configurations are: Red, Red+Amber, Green, Amber.</p>
+<p>Approach
+: The location where traffic may enter the controlled area by passing a traffic light. There will be a traffic light at each approach.</p>
+<p>Active Approach
+: Any approach that is currently allowing traffic to transit the controlled area.</p>
+<p>Inactive Approach
+: An approach that is not allowing traffic to transit the controlled area. An inactive approach shall display a red light.</p>
+<p>Approach Sequencer
+: A service that monitors the state of each approach and decides which approach(es) are to become active. The application shall be architected to support multiple active approaches; however, the initial sequencer implementation shall allow exactly one active approach at a time using a round‑robin strategy. More sophisticated strategies (e.g., favouring the longest queue or sensor‑driven activation) may be introduced later.</p>
+<h2 id="state-machine-design">State Machine Design<a class="headerlink" href="#state-machine-design" title="Permanent link">&para;</a></h2>
+<h3 id="traffic-light">Traffic Light<a class="headerlink" href="#traffic-light" title="Permanent link">&para;</a></h3>
+<p>There shall exist a set of custom states; ITrafficLightState inherits IState, and an abstract class TrafficLightStateBase implements ITrafficLightState. The state machine instance for each light will be created as <code>FiniteStateMachine&lt;ITrafficLightState&gt;</code>. Triggering actions are separated into a dedicated interface ITrafficLightActions to follow the Interface Segregation Principle (ISP).</p>
+<p>The light exposes the following triggering actions via ITrafficLightActions (states do not implement these):
+- SetActiveApproach(ApproachActivationConfig config) in the InactiveRed state starts the phase sequence using config for all phase timings of the activation. When received in the Green state, it replaces the current activation configuration with config and resets the Green phase timer (ActiveTime) from the moment of receipt, allowing the sequencer to extend or reduce the green dwell by issuing additional SetActiveApproach triggers while in Green. It is ignored in all other states.
+- FaultDetected — causes immediate transition to a per‑light Fault state (flashing Amber) to indicate a hardware or critical error affecting that approach.
+- StopTraffic — triggers an orderly transition from the current phase towards InactiveRed.</p>
+<p>StopTraffic behaviour:
+- From any state except InactiveRed and ClearingRed, transition immediately to Amber, which will then transition to ClearingRed and then InactiveRed by normal timing.
+- In InactiveRed and ClearingRed, StopTraffic has no effect (ignored).
+- From Fault, there is no transition; recovery requires a complete system restart.</p>
+<h3 id="approach-sequencer">Approach Sequencer<a class="headerlink" href="#approach-sequencer" title="Permanent link">&para;</a></h3>
+<p>The Approach Sequencer must be pluggable. Different sequencing strategies shall be possible simply by substituting a different sequencer implementation. There will be an IApproachSequencer interface and an initial basic implementation SimpleRoundRobinApproachSequencer that allows one active approach and round‑robin scheduling.</p>
+<p>Upon start‑up, the sequencer shall await a signal from each approach that it is in the InactiveRed ready state and must receive the signal from every approach before any approach can become active.</p>
+<p>Sequencer–light contract:
+- The sequencer subscribes to each light’s ObservableStates to detect InactiveRed (completion) and Green (for potential dwell adjustments).
+- Initial strategy: strict round‑robin across configured approaches; start from index 0 on system start.
+- The sequencer may resend SetActiveApproach(config) while a light is in Green to extend or reduce dwell. It should not send SetActiveApproach in other phases.
+- The sequencer shall not select a light in Fault.
+- Recovery: Restart stops all FSMs, disposes subscriptions, reconstructs lights and sequencer, and starts from InactiveRed.</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="activation-configuration-dto">Activation Configuration DTO<a class="headerlink" href="#activation-configuration-dto" title="Permanent link">&para;</a></h3>
+<p>The sequencer shall supply an immutable activation snapshot on each activation and any Green re‑arm:</p>
+<div class="language-csharp highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">ApproachActivationConfig</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">ActivationId</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">DateTimeOffset</span><span class="w"> </span><span class="n">TimestampUtc</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">TimeSpan</span><span class="w"> </span><span class="n">ActiveTime</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">TimeSpan</span><span class="w"> </span><span class="n">TransitionTime</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">TimeSpan</span><span class="w"> </span><span class="n">ClearingTime</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">);</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">ITrafficLightActions</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">{</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">SetActiveApproach</span><span class="p">(</span><span class="n">ApproachActivationConfig</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">StopTraffic</span><span class="p">();</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">FaultDetected</span><span class="p">();</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">ITrafficLightState</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IState</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The light implements ITrafficLightState (for FSM participation) and ITrafficLightActions (for triggers) via its controller/aggregate, keeping state types focused on state behaviour.</li>
+</ul>
+<p>Configuration items and purpose:</p>
+<table>
+<thead>
+<tr>
+<th>Configuration Item</th>
+<th>Purpose</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ClearingTime</td>
+<td>The dwell time after a traffic light returns to red before the next approach can become active.</td>
+<td>seconds</td>
+</tr>
+<tr>
+<td>TransitionTime</td>
+<td>Time to remain at Amber or RedAmber.</td>
+<td>seconds</td>
+</tr>
+<tr>
+<td>ActiveTime</td>
+<td>The time for the approach to maintain a green light.</td>
+<td>seconds</td>
+</tr>
+</tbody>
+</table>
+<p>Application points:
+- TransitionTime applies to RedAmber and Amber.
+- ActiveTime applies to Green.
+- ClearingTime applies to ClearingRed and is included in ApproachActivationConfig.</p>
+<p>Configuration for an approach is supplied as an immutable activation snapshot via SetActiveApproach(ApproachActivationConfig config). The light does not persist configuration; the effective timings for a cycle are those in the most recently received config for the current activation. When in Green, receipt of a new SetActiveApproach(config) replaces the current activation configuration and resets the Green timer from the moment of receipt; otherwise, new configuration takes effect on the next activation from InactiveRed. Validation of configuration values is performed by the sequencer.</p>
+<p>Validation and defaults:
+- ActiveTime default 15.0 s; allowed range 0.5–120.0 s.
+- TransitionTime default 2.0 s; allowed range 0.5–10.0 s.
+- ClearingTime default 2.0 s; allowed range 0.5–10.0 s.
+- The sequencer shall reject configurations outside these ranges.</p>
+<h2 id="phase-transitions">Phase Transitions<a class="headerlink" href="#phase-transitions" title="Permanent link">&para;</a></h2>
+<p>The phases and their mapping to the colour display are:</p>
+<table>
+<thead>
+<tr>
+<th>Phase (state name)</th>
+<th>Colour Display</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>InactiveRed</td>
+<td>Red</td>
+</tr>
+<tr>
+<td>RedAmber</td>
+<td>Red and Amber</td>
+</tr>
+<tr>
+<td>Green</td>
+<td>Green</td>
+</tr>
+<tr>
+<td>Amber</td>
+<td>Amber</td>
+</tr>
+<tr>
+<td>ClearingRed</td>
+<td>Red</td>
+</tr>
+<tr>
+<td>Fault</td>
+<td>flashing Amber at 2 Hz (50% duty)</td>
+</tr>
+</tbody>
+</table>
+<p>When SetActiveApproach(config) is triggered in the InactiveRed state, this starts the light clocking through its phase sequence and sets the current activation configuration to config; when triggered in the Green state it replaces the current activation configuration with config and resets the Green phase timer (ActiveTime) from the moment of receipt. It is ignored in all other phase states. The phase transitions are as defined in the following diagram:</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>@startuml Traffic Light State Machine
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>skinparam state {
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  BackgroundColor&lt;&lt;Active&gt;&gt; LightGreen
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>}
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>state InactiveRed
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>state RedAmber
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>state Green &lt;&lt;Active&gt;&gt;
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>state Amber
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>state ClearingRed
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>state Fault
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>&#39; Fault displays flashing Amber at 2 Hz (50% duty)
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>[*] --&gt; InactiveRed
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>&#39; Normal sequencing
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>InactiveRed --&gt; RedAmber : SetActiveApproach
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>RedAmber --&gt; Green : TransitionTime elapsed
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>Green --&gt; Amber : ActiveTime elapsed
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>Amber --&gt; ClearingRed : TransitionTime elapsed
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>ClearingRed --&gt; InactiveRed : ClearingTime elapsed
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>&#39; StopTraffic handling (orderly stop)
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>Green --&gt; Amber : StopTraffic
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>RedAmber --&gt; Amber : StopTraffic
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>&#39; SetActiveApproach while in Green resets the dwell timer
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>Green --&gt; Green : SetActiveApproach (reset ActiveTime)
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>&#39; Faults (per-light)
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>InactiveRed --&gt; Fault : FaultDetected
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>RedAmber --&gt; Fault : FaultDetected
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>Green --&gt; Fault : FaultDetected
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>Amber --&gt; Fault : FaultDetected
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>&#39; No runtime exit from Fault (requires system restart)
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>@enduml
+</code></pre></div>
+<p>Each state's OnEnter method initialises a phase timer with an appropriate value for that state, taken from the activation configuration. When the phase timer expires, it triggers transition to the next state. The exception to this is the InactiveRed state, which has no timeout and transitions only when triggered by the sequencer. Timers are implemented within each state's RunAsync(CancellationToken) using async delays.</p>
+<p>Each traffic light uses a finite state machine to control its transitions based on <code>TA.Utils.StateMachine.FiniteStateMachine&lt;ITrafficLightState&gt;</code>. All lights start InactiveRed and must remain so until they are triggered to become the active approach. An ApproachSequencer service will select one of the lights and send it the SetActiveApproach trigger. The light will then cycle through its state machine until it becomes InactiveRed again (after the ClearingRed dwell), after which the sequencer may select another light to become the active approach. Initially, a round‑robin sequencing strategy will be used but this must be extensible so that more advanced strategies can be added later.</p>
+<p>The sequencer should implement a timeout period, within which each approach must complete its sequence. If any light does not signal completion within the allowed time, an error condition is declared. Sequencing halts and operator intervention is required; behaviour on timeout does not trigger any automatic state changes in this version.</p>
+<p>Faults
+- Per‑light faults: FaultDetected transitions that light to Fault (flashing Amber). The sequencer shall not select a light in Fault as an active approach.
+- There is no runtime exit from Fault; recovery requires a complete system restart.</p>
+<h2 id="application-architecture">Application Architecture<a class="headerlink" href="#application-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h3>
+<p>The application shall be a Windows MAUI cross‑platform app and shall work on Windows as the reference implementation, plus Android, at minimum.</p>
+<p>The app shall be developed test‑first using the MSpec BDD specification framework. Where possible, the Establish, Because and It members of each test shall be a single statement. The use of builders (especially in the Establish statement) and context classes should be used where this makes tests smaller and more readable. Time should be abstracted using .NET 8 TimeProvider so unit tests can run without real delays (use a controllable TimeProvider in tests).</p>
+<p>The app shall adhere to the SOLID Principles of object oriented design and there shall be a strong preference for clean, readable code over compactness or performance. Robert C. Martin's clean code principles shall be followed where practicable.</p>
+<h3 id="ui-design-pattern">UI Design Pattern<a class="headerlink" href="#ui-design-pattern" title="Permanent link">&para;</a></h3>
+<p>The UI shall use the MVVM pattern and minimise the use of code‑behind in views.</p>
+<p>The application shall prefer to use the PropertyChanged.SourceGenerator NuGet package to source‑generate all observable public properties in ViewModels, and optionally other model classes.</p>
+<h3 id="composition-root-and-dependency-injection">Composition Root and Dependency Injection<a class="headerlink" href="#composition-root-and-dependency-injection" title="Permanent link">&para;</a></h3>
+<p>The app shall use Dependency Injection via the Ninject library and shall have a static CompositionRoot class that owns and configures the DI kernel and provides a method <code>TService Get&lt;TService&gt;()</code> that encapsulates the DI framework. Where possible, all object creation and lifetime management shall be delegated to the Dependency Injection framework. Where possible, objects should receive their dependencies via constructor injection.</p>
+<h3 id="uiux-for-the-sample">UI/UX for the sample<a class="headerlink" href="#uiux-for-the-sample" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Controls: Start, Stop, Reset; number of approaches selector (editable only while sequencing is stopped); editable ActiveTime, TransitionTime, ClearingTime per approach.</li>
+<li>Visuals: For each approach, render a traffic light with Red, Red+Amber, Green, Amber states and a flashing Amber for Fault.</li>
+<li>Telemetry/logging: Show current state name and time remaining in the current state for each approach; show recent transitions. Telemetry values shall use a fixed field width and always include a signed value as per house style.</li>
+</ul>
+<p>Simulation model and telemetry
+- Queue length per approach: Maintain and display a live queue length for each approach; update on each simulated arrival and departure event.
+- Traffic arrivals (per approach): Simulate arrivals using a stochastic process parameterised by the configured mean inter‑arrival time (seconds). UI range 1–300 s, resolution 1 s. Recommended distribution: exponential with mean equal to the configured value. Changes in the UI take effect immediately.
+- Traffic departures (active approach only): Simulate departures at a configurable interval (seconds between departures). UI range 1.0–10.0 s, resolution 0.1 s. Departures are eligible while the approach is in Green and during the first half of the Amber phase (i.e., for TransitionTime/2 after entering Amber). No departures occur during RedAmber, ClearingRed, or InactiveRed. Changes in the UI take effect immediately.
+- Immediate effect of UI controls: All changes to simulation controls (arrival mean, departure interval, number of approaches, timings) shall immediately affect simulation behaviour; use .NET 8 TimeProvider to ensure deterministic, testable timing.
+- Queue length graph: Display a chart of queue length over time across all approaches. The chart shall be full window width and appear at the top of the window. Represent each approach as a distinct coloured line; update in real time with efficient sampling to avoid UI jank.
+- Time remaining display: For the current state, compute time remaining based on the state’s scheduled expiry using TimeProvider and the active ApproachActivationConfig. Ensure the display updates at least 10 Hz for smoothness without excessive CPU usage.
+- Fault state rendering: In Fault, display a flashing Amber lamp at 2 Hz (50% duty); queue length updates continue to be displayed; arrivals should continue to be simulated, but departures do not occur while not active.
+- Accessibility: The state name is displayed and is unambiguous; no separate colour labels are required. Ensure sufficient contrast for the chart and lamp visuals.</p>
+<p>Control semantics
+- Start (IRelayCommand): Starts the arrival and departure simulations, starts the sequencer, then starts each approach’s state machine after a random start‑up delay of up to 10 seconds per approach (using TimeProvider). The Start button binds to an IRelayCommand and is disabled while its action executes. The sequencer shall not begin selecting an active approach until it has observed every approach enter InactiveRed (i.e., it has seen each FSM start and reach ready state).
+- Stop (IRelayCommand): Causes the sequencer to send StopTraffic to all approaches, then wait until every approach has entered InactiveRed. Once the sequencer has fully stopped, the arrival and departure simulations shall also stop. The Stop button binds to an IRelayCommand and is disabled while its action executes.
+- Reset (IRelayCommand): Restarts the sequencer and all approaches to recover from a fault state (equivalent to stop, re‑initialise, and start as above). The Reset button binds to an IRelayCommand and is disabled while its action executes. Fault detection is not yet modelled and will be introduced in a future iteration.
+- Number of approaches: This value may be changed only while the sequencer is stopped. The UI shall disable or reject changes to this control while the system is operational. After a change, on the next Start, approaches are (re)created and the round‑robin sequencer restarts from index 0.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
