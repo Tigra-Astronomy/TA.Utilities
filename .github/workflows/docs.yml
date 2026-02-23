@@ -62,19 +62,26 @@ jobs:
           echo "SemVer: $SEMVER"
 
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            # Release tag -> deploy as the tag and alias to 'latest'
+            # Tag push -> deploy as the tag name
             VERSION="${GITHUB_REF#refs/tags/}"
-            mike set-default latest --push
+            if [[ "$VERSION" == *-* ]]; then
+              # Pre-release tag (e.g. 3.5.0-beta.1) -> deploy without aliasing to 'latest'
+              mike deploy --push "$VERSION"
+            else
+              # Stable release tag (e.g. 3.5.0) -> deploy and alias to 'latest'
+              mike deploy --push --update-aliases "$VERSION" latest
+            fi
+
+          elif [[ "$GITHUB_REF" == refs/heads/master ]] || [[ "$GITHUB_REF" == refs/heads/main ]]; then
+            # Main/master -> deploy as the GitVersion SemVer and alias to 'latest'
+            VERSION="$SEMVER"
             mike deploy --push --update-aliases "$VERSION" latest
+            mike set-default latest --push
 
           elif [[ "$GITHUB_REF" == refs/heads/develop ]]; then
             # Develop -> rolling 'alpha' alias pointing to the GitVersion-computed SemVer
             VERSION="$SEMVER"
             mike deploy --push --update-aliases "$VERSION" alpha
-            # Set default to 'alpha' only if a 'latest' alias (from a tagged release) does not exist yet
-            if ! mike list | grep -q 'latest'; then
-              mike set-default alpha --push
-            fi
 
           elif [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
             # Any release/* -> rolling 'beta' alias pointing to the GitVersion-computed SemVer
