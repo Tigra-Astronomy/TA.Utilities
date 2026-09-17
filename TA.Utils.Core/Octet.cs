@@ -1,5 +1,5 @@
 // This file is part of the TA.Utils project
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// Copyright ï¿½ 2016-2020 Tigra Astronomy, all rights reserved.
 // File: Octet.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using System;
@@ -73,7 +73,7 @@ namespace TA.Utils.Core
         ///     false.
         /// </returns>
         /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Octet other)
+        public bool Equals(Octet? other)
             {
             if (other is null) return false; // equality to a null object is false by definition
             for (var i = 0; i < bits.Length; i++)
@@ -242,7 +242,7 @@ namespace TA.Utils.Core
         ///     <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance;
         ///     otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
             {
             if (ReferenceEquals(null, other)) return false;
             return other is Octet && Equals((Octet)other);

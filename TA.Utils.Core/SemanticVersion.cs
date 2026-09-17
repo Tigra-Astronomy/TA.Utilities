@@ -221,7 +221,7 @@ public sealed class SemanticVersion : IEquatable<SemanticVersion>, IComparable, 
     ///     For guidance on the meaning and rules of semantic versioning, please see
     ///     https://semver.org/
     /// </remarks>
-    public bool Equals(SemanticVersion other)
+    public bool Equals(SemanticVersion? other)
     {
         if (ReferenceEquals(null, other))
             return false;
@@ -247,7 +247,7 @@ public sealed class SemanticVersion : IEquatable<SemanticVersion>, IComparable, 
     ///     For guidance on the meaning and rules of semantic versioning, please see
     ///     https://semver.org/
     /// </remarks>
-    public override bool Equals(object other)
+    public override bool Equals(object? other)
     {
         if (ReferenceEquals(null, other))
             return false;
@@ -349,7 +349,7 @@ public sealed class SemanticVersion : IEquatable<SemanticVersion>, IComparable, 
     ///     this instance.
     /// </exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="comparison" /> is <c>null</c>.</exception>
-    public int CompareTo(object comparison)
+    public int CompareTo(object? comparison)
     {
         if (ReferenceEquals(comparison, null))
             throw new ArgumentNullException(nameof(comparison));
@@ -393,7 +393,7 @@ public sealed class SemanticVersion : IEquatable<SemanticVersion>, IComparable, 
     /// </remarks>
     /// <param name="comparison">An object to compare with this instance.</param>
     /// <returns>A value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(SemanticVersion comparison)
+    public int CompareTo(SemanticVersion? comparison)
     {
         if (comparison is null)
             throw new ArgumentNullException(nameof(comparison));

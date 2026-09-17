@@ -143,6 +143,7 @@ _TeamCity*
 _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
+*_NCrunchResults/
 
 # MightyMoose
 *.mm.*
@@ -340,3 +341,4 @@ ASALocalRun/
 healthchecksdb
 /TA.Utils.Logging.Nlog/TA.Utils.Logging.Nlog.xml
 TA.Utils.Core/TA.Utils.Core.xml
+/NCrunchResults

@@ -11,10 +11,12 @@ namespace TA.Utils.Core.MVVM;
 /// </summary>
 public class ViewModelBase(ILog? log = null) : INotifyPropertyChanged, IDisposable
 {
+    /// <summary>The logger instance used by this view model and its derived classes.</summary>
     protected ILog log = log ?? new DegenerateLoggerService();
 
     #region INotifyPropertyChanged
 
+    /// <inheritdoc/>
     public virtual event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -42,6 +44,7 @@ public class ViewModelBase(ILog? log = null) : INotifyPropertyChanged, IDisposab
         }
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose(true);

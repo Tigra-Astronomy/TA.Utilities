@@ -3,28 +3,30 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="GitVersion.MsBuild" Version="5.12.0" />
-    <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
-    <PackageVersion Include="Machine.Specifications.Runner.VisualStudio" Version="2.10.2" />
+    <PackageVersion Include="Timtek.GitFlowVersion" Version="3.2.1" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2026.2.0" />
+    <PackageVersion Include="Machine.Specifications.Runner.VisualStudio" Version="2.10.3" />
     <PackageVersion Include="Machine.Specifications.Should" Version="1.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageVersion Include="NLog" Version="6.0.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageVersion Include="NLog" Version="6.2.1" />
     <PackageVersion Include="NLog.Targets.Seq" Version="4.0.2" />
-    <PackageVersion Include="PublicApiGenerator" Version="9.3.0" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
-    <PackageVersion Include="System.Reactive" Version="6.1.0" />
+    <PackageVersion Include="System.Reactive" Version="7.0.0" />
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.4" />
     <!-- MAUI sample app dependencies -->
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="8.0.100" />
-    <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageVersion Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc6.1" />
-    <PackageVersion Include="CommunityToolkit.Maui" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.101" />
+    <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.101" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.12" />
+    <PackageVersion Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.5" />
+    <PackageVersion Include="CommunityToolkit.Maui" Version="15.0.1" />
     <!-- OpenTelemetry logging dependencies -->
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.3" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.12" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.18.0" />
     <!-- Transitive Packages -->
-    <PackageVersion Include="Mono.Cecil" Version="0.10.0" />
+    <!-- Pinned above Machine.Specifications.Runner.VisualStudio's preferred <0.11.0 range because
+         PublicApiGenerator requires >=0.11.6. NuGet reports this as NU1608 (non-fatal). -->
+    <PackageVersion Include="Mono.Cecil" Version="0.11.6" />
   </ItemGroup>
 </Project>

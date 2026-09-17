@@ -182,7 +182,7 @@ public class AsyncRelayCommand : AsyncRelayCommand<object>
     /// </summary>
     /// <param name="execute">An async method with no parameters.</param>
     /// <param name="canExecute">
-    ///     A <see cref="Func{bool}" /> with no parameters.
+    ///     A <see cref="Func{Boolean}" /> with no parameters.
     ///     Note: unlike some implementations of RelayCommand, the CanExecute method must be supplied.
     ///     If there is no suitable method, use <c>()=>true</c>.
     /// </param>

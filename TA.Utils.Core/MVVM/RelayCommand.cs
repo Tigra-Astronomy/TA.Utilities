@@ -110,6 +110,7 @@ public class RelayCommand : IRelayCommand
     /// </summary>
     protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
+    /// <inheritdoc/>
     public void RaiseCanExecuteChanged()
     {
         try

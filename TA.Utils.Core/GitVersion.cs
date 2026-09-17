@@ -1,5 +1,5 @@
 // This file is part of the TA.Utils project
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// Copyright ï¿½ 2016-2020 Tigra Astronomy, all rights reserved.
 // File: GitVersion.cs  Last modified: 2020-07-13@02:11 by Tim Long
 
 using System;
@@ -86,7 +86,7 @@ namespace TA.Utils.Core
         private static string GitVersionField(this Type gitVersionInformationType, string fieldName)
         {
             var versionField = gitVersionInformationType?.GetField(fieldName);
-            return versionField?.GetValue(null).ToString() ?? "undefined";
+            return versionField?.GetValue(null)?.ToString() ?? "undefined";
         }
 
         /// <summary>Reflects the type of the injected git version information.</summary>

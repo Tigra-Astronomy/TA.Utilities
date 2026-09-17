@@ -37,11 +37,12 @@ namespace TA.Utils.Core.PublicApi.Specs.Specs
         It should_match_the_approved_public_api = () =>
         {
             var approved = File.ReadAllText(approvedPath);
-            if (!string.Equals(approved, publicApi, StringComparison.Ordinal))
-            {
-                File.WriteAllText(receivedPath, publicApi);
-                throw new Exception("Public API mismatch. Review diff between PublicApi.approved.txt and PublicApi.received.txt, then update approved if intentional.");
-            }
+            //if (!string.Equals(approved, publicApi, StringComparison.Ordinal))
+            //{
+            //    File.WriteAllText(receivedPath, publicApi);
+            //    throw new Exception("Public API mismatch. Review diff between PublicApi.approved.txt and PublicApi.received.txt, then update approved if intentional.");
+            //}
+            approved.ShouldEqual(publicApi);
         };
     }
 }
