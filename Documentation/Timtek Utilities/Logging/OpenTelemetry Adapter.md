@@ -4,6 +4,13 @@ An implementation of the logging abstraction (`ILog`/`IFluentLogBuilder`) that e
 
 - Package: `TA.Utils.Logging.OpenTelemetry`
 - Classes: `OpenTelemetryLoggingService`, `OpenTelemetryLogBuilder`, `OpenTelemetryLoggingServiceOptions`
+- Target frameworks: .NET Framework 4.8, .NET Standard 2.0, and .NET Standard 2.1
+
+Install the package with:
+
+```shell
+dotnet add package TA.Utils.Logging.OpenTelemetry
+```
 
 ## Quick start
 

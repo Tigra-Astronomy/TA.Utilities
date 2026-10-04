@@ -40,6 +40,8 @@ Libraries can perform logging through these interfaces without ever taking a dep
 The actual implementation can be injected at runtime, typically in a constructor parameter.
 The policy decision about which logging engine to use can be taken in the top level composition root of the application.
 
+Available adapters include [[Logging/NLog Adapter|NLog]] and [[Logging/OpenTelemetry Adapter|OpenTelemetry]].
+
 The fluent interface defined in `IFluentLogBuilder` was modeled on the NLog fluent interface, so it is a very natural fit.
 However, the interface has enough flexibility to adapt to other logging backends without too much trouble.]
 

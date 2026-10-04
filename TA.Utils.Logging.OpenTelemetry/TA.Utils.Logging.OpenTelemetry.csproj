@@ -1,20 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <TargetFrameworks>net4.8;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <LangVersion>13.0</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.0</Version>
+    <Authors>Tim Long</Authors>
+    <Company>Tigra Astronomy</Company>
+    <Product>TA.Utilities</Product>
     <Title>Open Telemetry logging back-end for ILog.</Title>
     <Description>Provides an OpenTelemetry implementation of an ILog logging service.</Description>
     <Copyright>Copyright © 2026 Timothy P. Long t/a Timtek Systems</Copyright>
-    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.Utilities/wiki</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.Utilities</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>TA-Utilities-256x256.png</PackageIcon>
+    <PackageIconUrl>https://github.com/Tigra-Astronomy/TA.Utilities/wiki/assets/TA-Utilities-256x256.png</PackageIconUrl>
     <PackageTags>ILog;OpenTelemtry</PackageTags>
-    <IncludeSymbols>True</IncludeSymbols>
-    <EnableNETAnalyzers>False</EnableNETAnalyzers>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\Assets\TA-Utilities-256x256.png" Link="TA-Utilities-256x256.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Assets\TA-Utilities-256x256.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\ReadMe.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -25,6 +42,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+    <PackageReference Include="Timtek.GitFlowVersion">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

@@ -23,6 +23,7 @@ This page provides a table of contents for easy navigation while editing in Obsi
   - [[Core/Finite State Machine|Finite State Machine]]
 - Logging
   - [[Logging/NLog Adapter|NLog adapter]]
+  - [[Logging/OpenTelemetry Adapter|OpenTelemetry adapter]]
 - Release Notes
   - [[Release Notes]]
 - Areas for Improvement
