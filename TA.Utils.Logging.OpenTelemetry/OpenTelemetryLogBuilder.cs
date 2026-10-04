@@ -179,6 +179,8 @@ internal sealed partial class OpenTelemetryLogBuilder : IFluentLogBuilder
         return names;
     }
 
-    [GeneratedRegex(@"\{[@$]?(?<propertyName>\w+)\}", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture)]
-    private static partial Regex PropertyNamePattern();
+    private static Regex PropertyNamePattern()
+    {
+        return new Regex(@"\{[@$]?(?<propertyName>\w+)\}", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+    }
 }

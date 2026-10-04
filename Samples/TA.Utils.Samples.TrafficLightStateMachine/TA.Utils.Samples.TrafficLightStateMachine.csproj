@@ -55,6 +55,11 @@
 		<PublishTrimmed>false</PublishTrimmed>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(NCrunch)' == '1' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+		<WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+		<SelfContained>false</SelfContained>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -75,14 +80,14 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\TA.Utils.Core\TA.Utils.Core.csproj" />
-		<PackageReference Include="GitVersion.MsBuild">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.Maui.Controls" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" />
 		<PackageReference Include="CommunityToolkit.Maui" />
+		<PackageReference Include="Timtek.GitFlowVersion">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 </Project>
