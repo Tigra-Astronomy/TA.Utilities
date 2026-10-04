@@ -1,10 +1,15 @@
 [
   {
-    "version": "3.6.0-alpha.4",
-    "title": "3.6.0-alpha.4",
+    "version": "3.6.0-alpha.5",
+    "title": "3.6.0-alpha.5",
     "aliases": [
       "alpha"
     ]
+  },
+  {
+    "version": "3.6.0-alpha.4",
+    "title": "3.6.0-alpha.4",
+    "aliases": []
   },
   {
     "version": "3.5.1",
