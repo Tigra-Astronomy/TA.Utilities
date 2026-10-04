@@ -610,6 +610,12 @@ The sample demonstrates structured logging at all severity levels, ambient prope
 
 ## Release Notes
 
+### 3.5.3
+
+- Fixed the OpenTelemetry logger and NuGet packaging for `TA.Utils.Logging.OpenTelemetry`.
+- Expanded the OpenTelemetry package to target .NET Framework 4.8 and .NET Standard 2.0 and 2.1.
+- Updated package dependencies, including the OpenTelemetry OTLP exporter.
+
 ### 3.5.0
 
 - Added `TA.Utils.Logging.OpenTelemetry`, a new `ILog` implementation that exports structured log records via the OpenTelemetry Protocol (OTLP).

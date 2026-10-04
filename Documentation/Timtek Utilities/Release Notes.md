@@ -1,5 +1,10 @@
 # Release Notes
 
+3.5.3
+- Fixed the OpenTelemetry logger and NuGet packaging for `TA.Utils.Logging.OpenTelemetry`.
+- Expanded the OpenTelemetry package to target .NET Framework 4.8 and .NET Standard 2.0 and 2.1.
+- Updated package dependencies, including the OpenTelemetry OTLP exporter.
+
 3.1.0
 - Documentation and site
   - Migrated monolithic README into a structured Obsidian vault; added topic pages for Core utilities (e.g., String Extensions, Math, Property Binding, FSM) and logging (Console, NLog adapter).
