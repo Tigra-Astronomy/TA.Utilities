@@ -12,6 +12,13 @@
     "aliases": []
   },
   {
+    "version": "3.5.2-beta.1",
+    "title": "3.5.2-beta.1",
+    "aliases": [
+      "beta"
+    ]
+  },
+  {
     "version": "3.5.1",
     "title": "3.5.1",
     "aliases": [
@@ -26,9 +33,7 @@
   {
     "version": "3.5.0-beta.1",
     "title": "3.5.0-beta.1",
-    "aliases": [
-      "beta"
-    ]
+    "aliases": []
   },
   {
     "version": "3.4.0-beta.1",
