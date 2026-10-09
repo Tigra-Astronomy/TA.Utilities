@@ -56,11 +56,37 @@ namespace TA.Utils.Core
                 0,
                 1})]
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable<TResult> ContinueInCurrentContext<[System.Runtime.CompilerServices.NullableAttribute(2)]  TResult>(this System.Threading.Tasks.Task<TResult> task) { }
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable ContinueInCurrentContext(this System.Threading.Tasks.ValueTask task) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                0,
+                1})]
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<TResult> ContinueInCurrentContext<TResult>([System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                0,
+                1})] this System.Threading.Tasks.ValueTask<TResult> task) { }
+        public static System.Runtime.CompilerServices.ConfiguredAsyncDisposable ContinueInCurrentContext(this System.IAsyncDisposable source) { }
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                0,
+                1})]
+        public static System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable<T> ContinueInCurrentContext<[System.Runtime.CompilerServices.NullableAttribute(2)]  T>(this System.Collections.Generic.IAsyncEnumerable<T> source) { }
         [return: System.Runtime.CompilerServices.NullableAttribute(new byte[] {
                 0,
                 1})]
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable<TResult> ContinueOnAnyThread<[System.Runtime.CompilerServices.NullableAttribute(2)]  TResult>(this System.Threading.Tasks.Task<TResult> task) { }
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable ContinueOnAnyThread(this System.Threading.Tasks.Task task) { }
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable ContinueOnAnyThread(this System.Threading.Tasks.ValueTask task) { }
+        [System.Runtime.CompilerServices.NullableContextAttribute(2)]
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                0,
+                1})]
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<TResult> ContinueOnAnyThread<TResult>([System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                0,
+                1})] this System.Threading.Tasks.ValueTask<TResult> task) { }
+        public static System.Runtime.CompilerServices.ConfiguredAsyncDisposable ContinueOnAnyThread(this System.IAsyncDisposable source) { }
+        [return: System.Runtime.CompilerServices.NullableAttribute(new byte[] {
+                0,
+                1})]
+        public static System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable<T> ContinueOnAnyThread<[System.Runtime.CompilerServices.NullableAttribute(2)]  T>(this System.Collections.Generic.IAsyncEnumerable<T> source) { }
         [System.ObsoleteAttribute("Use ContinueInCurrentContext() instead", true)]
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable ContinueOnCurrentThread(this System.Threading.Tasks.Task task) { }
         public static void WaitForCompletion(this System.Threading.Tasks.Task task) { }
