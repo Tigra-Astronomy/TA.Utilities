@@ -53,6 +53,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TA.Utils.Logging.Analyzers\TA.Utils.Logging.Analyzers.csproj"
+                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <None Include="..\TA.Utils.Logging.Analyzers\bin\$(Configuration)\netstandard2.0\TA.Utils.Logging.Analyzers.dll"
+          Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!--<None Include="..\Assets\TA-Utilities-256x256.png" Link="Assets\TA-Utilities-256x256.png">
       <Pack>True</Pack>
       <PackagePath>/</PackagePath>
