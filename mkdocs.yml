@@ -53,5 +53,6 @@ nav:
     - RelayCommand: MVVM/RelayCommand.md
     - AsyncRelayCommand: MVVM/AsyncRelayCommand.md
     - UI Thread Dispatcher: MVVM/UI Thread Dispatcher.md
+  - Release Notes: Release Notes.md
   - Areas for Improvement:
     - FSM SOLID Analysis: Areas for Improvement/FSM SOLID Analysis.md

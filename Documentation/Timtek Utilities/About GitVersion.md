@@ -21,7 +21,7 @@ Key benefits
   - Version rules live in configuration rather than tribal knowledge; easy to review and change as a team policy.
 
 How it helps in this repository
-- We already reference GitVersion.MsBuild in the packable libraries, so assemblies and NuGet packages receive the computed version automatically at build time.
+- We reference the `Timtek.GitFlowVersion` package in the packable libraries, so assemblies and NuGet packages receive the computed version automatically at build time.
 - The docs site deployments also use the GitVersion SemVer as the mike version for develop and release/* builds, so your published documentation versions align with your code versions.
 - Release tagging uses the raw semantic tag (no leading “v”), which becomes the published stable version and moves the latest alias in documentation.
 

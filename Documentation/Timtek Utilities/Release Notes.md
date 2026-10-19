@@ -1,5 +1,19 @@
 # Release Notes
 
+3.6.0
+- Logging analyzers
+  - `TA.Utils.Core` now ships a bundled Roslyn analyzer. **TAULOG001** warns when the template passed to `IFluentLogBuilder.Message(...)` is an interpolated string, `string.Format(...)` or a non-constant concatenation, which defeats structured logging.
+  - **TAULOG002** warns when the number of placeholders in a constant message template differs from the number of arguments (placeholders filled by a same-named `.Property(...)` are accepted).
+  - See [[Diagnostics and Logging]].
+- NLog adapter
+  - Named message-template holes are now bound from matching properties when `Write()` or `WriteIf()` is called, regardless of whether `.Property()` came before or after `Message()`. Unmatched holes are back-filled with their own name so NLog still renders the message. NLog culture and exception handling are preserved.
+  - See [[Logging/NLog Adapter]].
+- Async helpers
+  - `ContinueOnAnyThread()` and `ContinueInCurrentContext()` now support `ValueTask`, `ValueTask<T>`, `IAsyncDisposable` and `IAsyncEnumerable<T>` (not available in the `netstandard2.0` build). See [[Core/Async Helpers]].
+- Versioning and packaging
+  - Migrated from `GitVersion.MsBuild` to `Timtek.GitFlowVersion`; `TA.Utils.Logging.OpenTelemetry` now receives proper version information.
+  - Fixed a null-check bug in `GitVersion`.
+  - Nullability of `SemanticVersion` and `Octet` `Equals`/`CompareTo` parameters now matches `IEquatable<T>`/`IComparable<T>`/`object` contracts (public API baseline updated).
 3.5.3
 - Fixed the OpenTelemetry logger and NuGet packaging for `TA.Utils.Logging.OpenTelemetry`.
 - Expanded the OpenTelemetry package to target .NET Framework 4.8 and .NET Standard 2.0 and 2.1.
@@ -38,3 +52,4 @@
 2.7.0
 - Added support for custom severity levels in the `ILog` abstraction and NLog implementation.
 - Used the “official” regular expression to validate semantic version strings. Note: some strings that were previously accepted, such as “01.02.03”, will no longer be accepted as valid.
+

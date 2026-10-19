@@ -41,7 +41,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -171,8 +173,12 @@
   },
   "active": "26f893446cafbf69",
   "lastOpenFiles": [
-    "index.md",
+    "Diagnostics and Logging.md",
+    "Areas for Improvement/FSM SOLID Analysis.md",
+    "Versioning.md",
+    "Release Notes.md",
     "Logging/OpenTelemetry Adapter.md",
+    "index.md",
     "Samples/Traffic Light FSM Demo Overview.md",
     "Samples/Traffic Light Simulation Design Specification.md",
     "Samples/Traffic Light Simulation (Final).md",
@@ -181,11 +187,9 @@
     "Samples/TrafficLightStateMachine.md",
     "Samples/Traffic Light Simulation.md",
     "Samples/Traffic Light Simulation (Redline).md",
-    "Areas for Improvement/FSM SOLID Analysis.md",
     "Samples",
     "Home.md",
     "Overview.md",
-    "Release Notes.md",
     "Logging/NLog Adapter.md",
     "Logging",
     "Core/Console Logger (Diagnostics).md",
@@ -198,8 +202,6 @@
     "Core/ASCII Mnemonic Expansion.md",
     "Core/Async Helpers.md",
     "Core/SemanticVersion.md",
-    "Core/Property Binding.md",
-    "Versioning.md",
     "Areas for Improvement",
     "Core"
   ]

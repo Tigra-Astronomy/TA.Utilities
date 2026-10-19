@@ -48,6 +48,9 @@ To use custom levels with Seq, configure the Seq target to take its level from t
 
 - Use either indexed placeholders (`{0}`) or named placeholders (`{name}`); named placeholders are recommended for semantic logging.
 - Attach additional properties explicitly via `.Property("name", value)` or `.Properties(dict)`.
+- Named holes are filled from positional arguments first, in template order. Remaining named holes are filled from matching properties when `Write()`/`WriteIf()` writes the event; properties may be supplied before or after `Message()`.
+- Holes with no matching property are back-filled with their own name (e.g. `{Reason}`) so NLog renders the rest of the message. NLog still applies format specifiers, alignment and `@`/`$` capture operators. Back-filling only happens when at least one property is present.
+- The `TAULOG001`/`TAULOG002` analyzers in `TA.Utils.Core` help keep templates constant and placeholders matched; see [[Diagnostics and Logging]].
 
 ## Shutdown
 
