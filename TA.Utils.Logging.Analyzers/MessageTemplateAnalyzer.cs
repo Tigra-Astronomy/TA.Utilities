@@ -32,7 +32,7 @@ public sealed class MessageTemplateAnalyzer : DiagnosticAnalyzer
             if (builderType == null)
                 return;
 
-            var messageMethods = builderType.GetMembers("Message").OfType<IMethodSymbol>().ToImmutableArray();
+            var messageMethods = MessageCall.GetMessageMethods(builderType);
             startContext.RegisterOperationAction(
                 operationContext => AnalyzeInvocation(operationContext, messageMethods),
                 OperationKind.Invocation);
@@ -42,40 +42,12 @@ public sealed class MessageTemplateAnalyzer : DiagnosticAnalyzer
     static void AnalyzeInvocation(OperationAnalysisContext context, ImmutableArray<IMethodSymbol> messageMethods)
     {
         var invocation = (IInvocationOperation)context.Operation;
-        var target = invocation.TargetMethod;
-        if (target.Name != "Message")
+        var call = MessageCall.Match(invocation, messageMethods);
+        if (call == null || !IsDynamicTemplate(call.Template))
             return;
 
-        foreach (var messageMethod in messageMethods)
-        {
-            var implementation = target.ContainingType.FindImplementationForInterfaceMember(messageMethod);
-            if (!SymbolEqualityComparer.Default.Equals(target.OriginalDefinition, messageMethod) &&
-                !SymbolEqualityComparer.Default.Equals(target.OriginalDefinition, implementation?.OriginalDefinition))
-                continue;
-
-            var templateParameter = messageMethod.Parameters.First(parameter => parameter.Type.SpecialType == SpecialType.System_String);
-            var argument = invocation.Arguments.FirstOrDefault(value => value.Parameter?.Ordinal == templateParameter.Ordinal);
-            if (argument == null)
-                return;
-
-            var value = argument.Value;
-            while (true)
-            {
-                if (value is IConversionOperation conversion)
-                    value = conversion.Operand;
-                else if (value is IParenthesizedOperation parenthesized)
-                    value = parenthesized.Operand;
-                else
-                    break;
-            }
-
-            if (IsDynamicTemplate(value))
-            {
-                var diagnostic = Diagnostic.Create(Rule, value.Syntax.GetLocation());
-                context.ReportDiagnostic(diagnostic);
-            }
-            return;
-        }
+        var diagnostic = Diagnostic.Create(Rule, call.Template.Syntax.GetLocation());
+        context.ReportDiagnostic(diagnostic);
     }
 
     static bool IsDynamicTemplate(IOperation value)

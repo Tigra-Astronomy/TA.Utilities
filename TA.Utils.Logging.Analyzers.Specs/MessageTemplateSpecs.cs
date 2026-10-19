@@ -35,7 +35,8 @@ class with_message_template_analysis
         diagnostics.ShouldBeEmpty();
     }
 
-    protected static ImmutableArray<Diagnostic> Analyze(string statement, bool referenceLoggingApi = true, string path = "Test.cs")
+    protected static ImmutableArray<Diagnostic> Analyze(string statement, bool referenceLoggingApi = true, string path = "Test.cs",
+        DiagnosticAnalyzer analyzer = null)
     {
         var source = $$"""
             using System;
@@ -67,7 +68,7 @@ class with_message_template_analysis
         var errorMessages = string.Join(Environment.NewLine, errors);
         errorMessages.ShouldEqual("");
 
-        var analyzers = ImmutableArray.Create<DiagnosticAnalyzer>(new MessageTemplateAnalyzer());
+        var analyzers = ImmutableArray.Create(analyzer ?? new MessageTemplateAnalyzer());
         var analysis = compilation.WithAnalyzers(analyzers);
         return analysis.GetAnalyzerDiagnosticsAsync().GetAwaiter().GetResult();
     }

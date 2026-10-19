@@ -117,6 +117,27 @@ trace strings through local variables or helper methods, so keep those templates
 For an intentional exception, suppress `TAULOG001` locally with `#pragma warning disable TAULOG001`,
 or configure its severity with `dotnet_diagnostic.TAULOG001.severity` in `.editorconfig`.
 
+## Match placeholders to values
+
+Warning **TAULOG002** flags a constant message template whose number of placeholders differs from the
+number of arguments passed to `IFluentLogBuilder.Message(...)`. Surplus arguments are silently dropped,
+and placeholders without a value are not rendered.
+
+```csharp
+// Warns: two placeholders, one argument.
+log.Debug().Message("Tx: {command} {result}", command).Write();
+
+// Fine: the missing named placeholder is filled by a property with the same name.
+log.Debug().Message("Tx: {command} {result}", command).Property("result", result).Write();
+```
+
+Placeholders without an argument are accepted only when every one of them has a `.Property(...)` with a
+matching literal name in the same fluent chain. Positional placeholders such as `{0}` can only be filled by
+arguments. The check is skipped when it cannot be decided from the call site: a non-constant or interpolated
+template (see TAULOG001), arguments passed as an existing `object[]`, `.Properties(...)`, or a property name
+that is not a literal. Suppress it locally with `#pragma warning disable TAULOG002` or configure
+`dotnet_diagnostic.TAULOG002.severity`.
+
 ## Two-stage Approach to Logging
 
 Think of logging as occurring in two distinct stages.
