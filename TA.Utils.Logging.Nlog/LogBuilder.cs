@@ -5,10 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using NLog;
 using TA.Utils.Core.Diagnostics;
@@ -21,8 +19,6 @@ namespace TA.Utils.Logging.NLog
     /// </summary>
     internal sealed class LogBuilder : IFluentLogBuilder
     {
-        private static readonly Regex TemplateTokens = new Regex(
-            @"\{\{|\}\}|\{(?<hole>[^{}:,]+(?:,[^{}:]+)?(?::(?:[^{}]|\{\{|\}\})*)?)\}");
         private readonly ILogger logger;
 
         /// <summary>
@@ -217,65 +213,16 @@ namespace TA.Utils.Logging.NLog
             if (holes.IsPositional || holes.Count <= arguments.Length)
                 return;
 
-            var values = new List<object>();
-            var missingHoles = new bool[holes.Count];
-            var boundProperty = false;
-            var missingProperty = false;
-            for (var index = 0; index < holes.Count; ++index)
+            var values = new List<object>(arguments);
+            for (var index = arguments.Length; index < holes.Count; ++index)
             {
-                if (index < arguments.Length)
-                {
-                    values.Add(arguments[index]);
-                }
-                else if (PeekLogEvent.Properties.TryGetValue(holes[index].Name, out var value))
-                {
-                    values.Add(value);
-                    boundProperty = true;
-                }
-                else
-                {
-                    missingHoles[index] = true;
-                    missingProperty = true;
-                }
+                if (!PeekLogEvent.Properties.TryGetValue(holes[index].Name, out var value))
+                    break;
+                values.Add(value);
             }
 
-            if (!boundProperty && arguments.Length == 0)
-                return;
-
-            if (!missingProperty)
-            {
+            if (values.Count > arguments.Length)
                 PeekLogEvent.Parameters = values.ToArray();
-                return;
-            }
-
-            // Escape missing holes only for rendering, keeping the structured message template intact.
-            var holeIndex = 0;
-            var renderTemplate = TemplateTokens.Replace(message, token =>
-            {
-                if (!token.Groups["hole"].Success || holeIndex >= holes.Count)
-                    return token.Value;
-                return missingHoles[holeIndex++]
-                    ? token.Value.Replace("{", "{{").Replace("}", "}}")
-                    : token.Value;
-            });
-            if (holeIndex != holes.Count)
-                return;
-
-            var renderEvent = new LogEventInfo
-            {
-                Message = renderTemplate,
-                Parameters = values.ToArray()
-            };
-            var formatter = PeekLogEvent.MessageFormatter;
-            PeekLogEvent.MessageFormatter = logEvent =>
-            {
-                renderEvent.FormatProvider = logEvent.FormatProvider ?? CultureInfo.CurrentCulture;
-                var renderedMessage = formatter(renderEvent);
-                foreach (var property in renderEvent.Properties)
-                    if (!logEvent.Properties.ContainsKey(property.Key))
-                        logEvent.Properties.Add(property);
-                return renderedMessage;
-            };
         }
 
         private void SetCallerInfo(string callerMethodName, string callerFilePath, int callerLineNumber)
