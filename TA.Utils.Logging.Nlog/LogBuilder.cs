@@ -170,6 +170,7 @@ namespace TA.Utils.Logging.NLog
             [CallerLineNumber] int callerLineNumber = default)
         {
             if (!logger.IsEnabled(PeekLogEvent.Level)) return;
+            BindMessageProperties();
             SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
             logger.Log(PeekLogEvent);
         }
@@ -182,6 +183,7 @@ namespace TA.Utils.Logging.NLog
         {
             if (condition == null || !condition() || !logger.IsEnabled(PeekLogEvent.Level))
                 return;
+            BindMessageProperties();
             SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
             logger.Log(PeekLogEvent);
         }
@@ -194,8 +196,32 @@ namespace TA.Utils.Logging.NLog
         {
             if (condition == false || !logger.IsEnabled(PeekLogEvent.Level))
                 return;
+            BindMessageProperties();
             SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
             logger.Log(PeekLogEvent);
+        }
+
+        private void BindMessageProperties()
+        {
+            var message = PeekLogEvent.Message;
+            var arguments = PeekLogEvent.Parameters ?? Array.Empty<object>();
+            if (string.IsNullOrEmpty(message) || !PeekLogEvent.HasProperties)
+                return;
+
+            var probe = new LogEventInfo { Message = message, Parameters = new object[1] };
+            var holes = probe.MessageTemplateParameters;
+            if (holes.IsPositional || holes.Count <= arguments.Length)
+                return;
+
+            // NLog renders nothing unless every hole has a value, so unmatched holes get their own name.
+            var values = new List<object>(arguments);
+            for (var index = arguments.Length; index < holes.Count; ++index)
+            {
+                var name = holes[index].Name;
+                values.Add(PeekLogEvent.Properties.TryGetValue(name, out var value) ? value : "{" + name + "}");
+            }
+
+            PeekLogEvent.Parameters = values.ToArray();
         }
 
         private void SetCallerInfo(string callerMethodName, string callerFilePath, int callerLineNumber)
