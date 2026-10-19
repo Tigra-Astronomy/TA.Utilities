@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using NLog;
 using TA.Utils.Core.Diagnostics;
@@ -19,6 +20,8 @@ namespace TA.Utils.Logging.NLog
     /// </summary>
     internal sealed class LogBuilder : IFluentLogBuilder
     {
+        private static readonly Regex TemplateTokens = new Regex(
+            @"\{\{|\}\}|\{(?<hole>[^{}:,]+(?:,[^{}:]+)?(?::(?:[^{}]|\{\{|\}\})*)?)\}");
         private readonly ILogger logger;
 
         /// <summary>
@@ -170,6 +173,7 @@ namespace TA.Utils.Logging.NLog
             [CallerLineNumber] int callerLineNumber = default)
         {
             if (!logger.IsEnabled(PeekLogEvent.Level)) return;
+            BindMessageProperties();
             SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
             logger.Log(PeekLogEvent);
         }
@@ -182,6 +186,7 @@ namespace TA.Utils.Logging.NLog
         {
             if (condition == null || !condition() || !logger.IsEnabled(PeekLogEvent.Level))
                 return;
+            BindMessageProperties();
             SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
             logger.Log(PeekLogEvent);
         }
@@ -194,8 +199,72 @@ namespace TA.Utils.Logging.NLog
         {
             if (condition == false || !logger.IsEnabled(PeekLogEvent.Level))
                 return;
+            BindMessageProperties();
             SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
             logger.Log(PeekLogEvent);
+        }
+
+        private void BindMessageProperties()
+        {
+            var message = PeekLogEvent.Message;
+            if (string.IsNullOrEmpty(message) || !PeekLogEvent.HasProperties)
+                return;
+
+            var arguments = PeekLogEvent.Parameters ?? Array.Empty<object>();
+            var probe = new LogEventInfo { Message = message, Parameters = new object[1] };
+            var holes = probe.MessageTemplateParameters;
+            if (holes.IsPositional || holes.Count <= arguments.Length)
+                return;
+
+            var values = new List<object>();
+            var holeIndex = 0;
+            var boundProperty = false;
+            var missingProperty = false;
+            var renderTemplate = TemplateTokens.Replace(message, token =>
+            {
+                if (!token.Groups["hole"].Success || holeIndex >= holes.Count)
+                    return token.Value;
+
+                var hole = holes[holeIndex];
+                var index = holeIndex++;
+                if (index < arguments.Length)
+                {
+                    values.Add(arguments[index]);
+                    return token.Value;
+                }
+
+                if (PeekLogEvent.Properties.TryGetValue(hole.Name, out var value))
+                {
+                    values.Add(value);
+                    boundProperty = true;
+                    return token.Value;
+                }
+
+                missingProperty = true;
+                return token.Value.Replace("{", "{{").Replace("}", "}}");
+            });
+
+            if (!boundProperty || holeIndex != holes.Count)
+                return;
+
+            if (!missingProperty)
+            {
+                PeekLogEvent.Parameters = values.ToArray();
+                return;
+            }
+
+            // Escape missing holes only for rendering, keeping the structured message template intact.
+            var renderEvent = new LogEventInfo
+            {
+                Message = renderTemplate,
+                Parameters = values.ToArray(),
+                FormatProvider = PeekLogEvent.FormatProvider
+            };
+            var renderedMessage = PeekLogEvent.MessageFormatter(renderEvent);
+            foreach (var property in renderEvent.Properties)
+                if (!PeekLogEvent.Properties.ContainsKey(property.Key))
+                    PeekLogEvent.Properties.Add(property);
+            PeekLogEvent.MessageFormatter = _ => renderedMessage;
         }
 
         private void SetCallerInfo(string callerMethodName, string callerFilePath, int callerLineNumber)
