@@ -4,6 +4,8 @@
     "projects":
     [
       "TA.Utils.Core\\TA.Utils.Core.csproj",
+      "TA.Utils.Logging.Analyzers\\TA.Utils.Logging.Analyzers.csproj",
+      "TA.Utils.Logging.Analyzers.Specs\\TA.Utils.Logging.Analyzers.Specs.csproj",
       "TA.Utils.Logging.Nlog\\TA.Utils.Logging.Nlog.csproj",
       "TA.Utils.Logging.OpenTelemetry\\TA.Utils.Logging.OpenTelemetry.csproj",
       "TA.Utils.Logging.NLog.SampleConsoleApp\\TA.Utils.Logging.NLog.SampleConsoleApp.csproj",

@@ -93,6 +93,51 @@ So if in doubt, include extra information where it is appropriate.
 Again, this feature set is native to NLog so makes for a very lightweight adaptor.
 When developing adaptors for other logging frameworks, every attempt shouldbe made to preserve as much of the information as possible.
 
+## Keep message templates constant
+
+The `TA.Utils.Core` NuGet package, which contains the logging API, includes a C# Roslyn analyzer.
+Warning **TAULOG001** flags interpolated strings, `string.Format(...)`, and non-constant string
+concatenations passed as the template to `IFluentLogBuilder.Message(...)` (including its overloads
+and implementations). Constant string concatenations are allowed.
+
+Embedding variable data in a template causes structured sinks such as Seq to create a separate
+event type for each distinct value, breaking grouping, signals, and `@MessageTemplate` queries.
+Use a constant template with named placeholders instead:
+
+```csharp
+// Avoid: log.Debug().Message($"Tx: {message}").Write();
+log.Debug().Message("Tx: {command}", message).Write();
+
+// Alternatively, supply properties explicitly.
+log.Debug().Message("Tx: {command}").Property("command", message).Write();
+```
+
+The warning applies to the template, not to property values or other arguments. It does not
+trace strings through local variables or helper methods, so keep those templates constant too.
+For an intentional exception, suppress `TAULOG001` locally with `#pragma warning disable TAULOG001`,
+or configure its severity with `dotnet_diagnostic.TAULOG001.severity` in `.editorconfig`.
+
+## Match placeholders to values
+
+Warning **TAULOG002** flags a constant message template whose number of placeholders differs from the
+number of arguments passed to `IFluentLogBuilder.Message(...)`. Surplus arguments are silently dropped,
+and placeholders without a value are not rendered.
+
+```csharp
+// Warns: two placeholders, one argument.
+log.Debug().Message("Tx: {command} {result}", command).Write();
+
+// Fine: the missing named placeholder is filled by a property with the same name.
+log.Debug().Message("Tx: {command} {result}", command).Property("result", result).Write();
+```
+
+Placeholders without an argument are accepted only when every one of them has a `.Property(...)` with a
+matching literal name in the same fluent chain. Positional placeholders such as `{0}` can only be filled by
+arguments. The check is skipped when it cannot be decided from the call site: a non-constant or interpolated
+template (see TAULOG001), arguments passed as an existing `object[]`, `.Properties(...)`, or a property name
+that is not a literal. Suppress it locally with `#pragma warning disable TAULOG002` or configure
+`dotnet_diagnostic.TAULOG002.severity`.
+
 ## Two-stage Approach to Logging
 
 Think of logging as occurring in two distinct stages.
