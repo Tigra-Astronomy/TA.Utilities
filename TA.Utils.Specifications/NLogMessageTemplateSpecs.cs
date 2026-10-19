@@ -63,9 +63,9 @@ class when_nlog_writes_partially_matched_property_holes : with_nlog_message_temp
 {
     Because of = () => builder.Message("{Missing:N2} / {Reason} / {@Absent} / {Reason} / {$Unknown,10}")
         .Property("Reason", "UserClosed").Write();
-    It should_render_only_matched_holes = () =>
-        target.Logs[0].ShouldEqual("{Missing:N2} / UserClosed / {@Absent} / UserClosed / {$Unknown,10}");
-    It should_not_capture_missing_properties = () => builder.PeekLogEvent.Properties.ContainsKey("Missing").ShouldBeFalse();
+    It should_back_fill_missing_holes_with_their_names = () =>
+        target.Logs[0].ShouldEqual("{Missing} / UserClosed / \"{Absent}\" / UserClosed / \"{Unknown}\"");
+    It should_capture_the_back_filled_name = () => builder.PeekLogEvent.Properties["Missing"].ShouldEqual("{Missing}");
     It should_keep_the_original_template = () => builder.PeekLogEvent.Message.ShouldEqual(
         "{Missing:N2} / {Reason} / {@Absent} / {Reason} / {$Unknown,10}");
 }
@@ -88,14 +88,14 @@ class when_nlog_mixes_arguments_properties_and_missing_holes : with_nlog_message
     Because of = () => builder.Message("{First} / {Missing} / {Last}", "argument").Property("Last", "property").Write();
     It should_not_shift_values_into_missing_holes = () => target.Logs[0].ShouldEqual("argument / {Missing} / property");
     It should_capture_the_argument = () => builder.PeekLogEvent.Properties["First"].ShouldEqual("argument");
-    It should_not_capture_the_missing_hole = () => builder.PeekLogEvent.Properties.ContainsKey("Missing").ShouldBeFalse();
+    It should_capture_the_back_filled_name = () => builder.PeekLogEvent.Properties["Missing"].ShouldEqual("{Missing}");
 }
 
-class when_nlog_has_arguments_and_unmatched_holes : with_nlog_message_template
+class when_nlog_has_arguments_and_unmatched_holes_but_no_properties : with_nlog_message_template
 {
     Because of = () => builder.Message("{First} / {Missing}", "argument").Write();
-    It should_render_the_supplied_argument = () => target.Logs[0].ShouldEqual("argument / {Missing}");
-    It should_capture_the_argument = () => builder.PeekLogEvent.Properties["First"].ShouldEqual("argument");
+    It should_leave_the_event_to_nlog_unchanged = () => target.Logs[0].ShouldEqual("{First} / {Missing}");
+    It should_not_extend_the_arguments = () => builder.PeekLogEvent.Parameters.Length.ShouldEqual(1);
 }
 
 class when_nlog_formats_property_values : with_nlog_message_template
@@ -110,16 +110,16 @@ class when_nlog_formats_properties_beside_missing_holes : with_nlog_message_temp
     Because of = () => builder.Message(CultureInfo.InvariantCulture,
         "{Missing,10:N2} / {Amount,12:N2} / {Amount,-12:N2} / {@Value} / {$Text}")
         .Property("Amount", 1234.5m).Property("Value", new[] { 1, 2 }).Property("Text", "hello").Write();
-    It should_preserve_missing_holes_and_apply_nlog_formatting = () =>
-        target.Logs[0].ShouldEqual("{Missing,10:N2} /     1,234.50 / 1,234.50     / [1,2] / \"hello\"");
+    It should_back_fill_missing_holes_and_let_nlog_apply_formatting = () =>
+        target.Logs[0].ShouldEqual(" {Missing} /     1,234.50 / 1,234.50     / [1,2] / \"hello\"");
 }
 
 class when_nlog_formats_escaped_braces_in_format_specifiers : with_nlog_message_template
 {
     Because of = () => builder.Message(CultureInfo.InvariantCulture, "{Missing:{{0}}} / {Value:{{0}}}")
         .Property("Value", 12).Write();
-    It should_preserve_the_missing_format_and_render_the_matched_format = () =>
-        target.Logs[0].ShouldEqual("{Missing:{{0}}} / {12}");
+    It should_back_fill_the_missing_name_and_render_the_matched_format = () =>
+        target.Logs[0].ShouldEqual("{Missing} / {12}");
 }
 
 class when_nlog_partially_renders_using_the_logger_culture : with_nlog_message_template
@@ -137,20 +137,17 @@ class when_nlog_partial_rendering_has_an_explicit_culture : with_nlog_message_te
     It should_prefer_the_explicit_culture = () => target.Logs[0].ShouldEqual("{Missing} / 1,234.50");
 }
 
-class when_nlog_partial_rendering_has_no_factory_culture : with_nlog_message_template
+class when_nlog_back_fill_has_no_factory_culture : with_nlog_message_template
 {
     Establish context = () =>
     {
         globalCulture = LogManager.LogFactory.DefaultCultureInfo;
         LogManager.LogFactory.DefaultCultureInfo = CultureInfo.GetCultureInfo("de-DE");
-        var amount = 1234.5m.ToString("N2", CultureInfo.CurrentCulture);
-        expected = "{Missing} / " + amount;
     };
     Because of = () => builder.Message("{Missing} / {Amount:N2}").Property("Amount", 1234.5m).Write();
-    It should_use_current_culture_not_global_factory_culture = () => target.Logs[0].ShouldEqual(expected);
+    It should_use_the_nlog_global_default_culture = () => target.Logs[0].ShouldEqual("{Missing} / 1.234,50");
     Cleanup after = () => LogManager.LogFactory.DefaultCultureInfo = globalCulture;
     static CultureInfo globalCulture;
-    static string expected;
 }
 
 class when_nlog_partial_rendering_has_an_invalid_format : with_nlog_message_template

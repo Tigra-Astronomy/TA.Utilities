@@ -28,7 +28,9 @@ log.Error()
 Named message-template holes are filled from positional arguments first, in template order.
 Remaining named holes are filled from matching properties when `Write()` or `WriteIf()` writes the event.
 Properties may be supplied before or after `Message()`, and remain available to structured targets.
-Unmatched holes are left unchanged. NLog applies format specifiers, alignment and the `@`/`$` capture operators.
+Holes with no matching property are back-filled with their own name, for example `{Reason}`, so that NLog renders the rest of the message.
+The library never renders the template itself: NLog applies format specifiers, alignment and the `@`/`$` capture operators to the back-filled values.
+Back-filling only happens when at least one property is present; events with only positional arguments are passed to NLog unchanged.
 
 When using NLog, you never need to be concerned about output formatting or where the log messages will go.
 This is all handled by NLog and the `NLog.config` file in the application directory.

@@ -205,7 +205,7 @@ namespace TA.Utils.Logging.NLog
         {
             var message = PeekLogEvent.Message;
             var arguments = PeekLogEvent.Parameters ?? Array.Empty<object>();
-            if (string.IsNullOrEmpty(message) || (arguments.Length == 0 && !PeekLogEvent.HasProperties))
+            if (string.IsNullOrEmpty(message) || !PeekLogEvent.HasProperties)
                 return;
 
             var probe = new LogEventInfo { Message = message, Parameters = new object[1] };
@@ -213,16 +213,15 @@ namespace TA.Utils.Logging.NLog
             if (holes.IsPositional || holes.Count <= arguments.Length)
                 return;
 
+            // NLog renders nothing unless every hole has a value, so unmatched holes get their own name.
             var values = new List<object>(arguments);
             for (var index = arguments.Length; index < holes.Count; ++index)
             {
-                if (!PeekLogEvent.Properties.TryGetValue(holes[index].Name, out var value))
-                    break;
-                values.Add(value);
+                var name = holes[index].Name;
+                values.Add(PeekLogEvent.Properties.TryGetValue(name, out var value) ? value : "{" + name + "}");
             }
 
-            if (values.Count > arguments.Length)
-                PeekLogEvent.Parameters = values.ToArray();
+            PeekLogEvent.Parameters = values.ToArray();
         }
 
         private void SetCallerInfo(string callerMethodName, string callerFilePath, int callerLineNumber)
