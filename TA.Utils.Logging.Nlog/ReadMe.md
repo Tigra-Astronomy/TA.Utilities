@@ -25,6 +25,11 @@ log.Error()
     .Write();
 ```
 
+Named message-template holes are filled from positional arguments first, in template order.
+Remaining named holes are filled from matching properties when `Write()` or `WriteIf()` writes the event.
+Properties may be supplied before or after `Message()`, and remain available to structured targets.
+Unmatched holes are left unchanged. NLog applies format specifiers, alignment and the `@`/`$` capture operators.
+
 When using NLog, you never need to be concerned about output formatting or where the log messages will go.
 This is all handled by NLog and the `NLog.config` file in the application directory.
 There is a lot of flexibility in this approach.

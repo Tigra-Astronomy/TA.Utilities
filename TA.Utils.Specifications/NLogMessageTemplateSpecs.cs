@@ -83,11 +83,36 @@ class when_nlog_mixes_properties_before_the_message_and_arguments : with_nlog_me
     It should_preserve_argument_positions = () => target.Logs[0].ShouldEqual("argument / property");
 }
 
+class when_nlog_mixes_arguments_properties_and_missing_holes : with_nlog_message_template
+{
+    Because of = () => builder.Message("{First} / {Missing} / {Last}", "argument").Property("Last", "property").Write();
+    It should_not_shift_values_into_missing_holes = () => target.Logs[0].ShouldEqual("argument / {Missing} / property");
+    It should_capture_the_argument = () => builder.PeekLogEvent.Properties["First"].ShouldEqual("argument");
+    It should_not_capture_the_missing_hole = () => builder.PeekLogEvent.Properties.ContainsKey("Missing").ShouldBeFalse();
+}
+
 class when_nlog_formats_property_values : with_nlog_message_template
 {
     Because of = () => builder.Message(CultureInfo.InvariantCulture, "{Amount,12:N2} / {Amount,-12:N2}")
         .Property("Amount", 1234.5m).Write();
     It should_apply_format_and_alignment = () => target.Logs[0].ShouldEqual("    1,234.50 / 1,234.50    ");
+}
+
+class when_nlog_formats_properties_beside_missing_holes : with_nlog_message_template
+{
+    Because of = () => builder.Message(CultureInfo.InvariantCulture,
+        "{Missing,10:N2} / {Amount,12:N2} / {Amount,-12:N2} / {@Value} / {$Text}")
+        .Property("Amount", 1234.5m).Property("Value", new[] { 1, 2 }).Property("Text", "hello").Write();
+    It should_preserve_missing_holes_and_apply_nlog_formatting = () =>
+        target.Logs[0].ShouldEqual("{Missing,10:N2} /     1,234.50 / 1,234.50     / [1,2] / \"hello\"");
+}
+
+class when_nlog_formats_escaped_braces_in_format_specifiers : with_nlog_message_template
+{
+    Because of = () => builder.Message(CultureInfo.InvariantCulture, "{Missing:{{0}}} / {Value:{{0}}}")
+        .Property("Value", 12).Write();
+    It should_preserve_the_missing_format_and_render_the_matched_format = () =>
+        target.Logs[0].ShouldEqual("{Missing:{{0}}} / {12}");
 }
 
 class when_nlog_uses_capture_operators_with_properties : with_nlog_message_template
@@ -156,6 +181,14 @@ class when_nlog_skips_a_conditional_message : with_nlog_message_template
         builder.WriteIf(() => false);
         builder.WriteIf((Func<bool>)null);
     };
+    It should_not_write = () => target.Logs.Count.ShouldEqual(0);
+    It should_not_bind_parameters = () => builder.PeekLogEvent.Parameters.ShouldBeNull();
+}
+
+class when_nlog_skips_a_disabled_level : with_nlog_message_template
+{
+    Establish context = () => factory.Configuration = new LoggingConfiguration();
+    Because of = () => builder.Message("Ended: {Reason}").Property("Reason", "UserClosed").Write();
     It should_not_write = () => target.Logs.Count.ShouldEqual(0);
     It should_not_bind_parameters = () => builder.PeekLogEvent.Parameters.ShouldBeNull();
 }

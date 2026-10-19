@@ -217,34 +217,28 @@ namespace TA.Utils.Logging.NLog
                 return;
 
             var values = new List<object>();
-            var holeIndex = 0;
+            var missingHoles = new bool[holes.Count];
             var boundProperty = false;
             var missingProperty = false;
-            var renderTemplate = TemplateTokens.Replace(message, token =>
+            for (var index = 0; index < holes.Count; ++index)
             {
-                if (!token.Groups["hole"].Success || holeIndex >= holes.Count)
-                    return token.Value;
-
-                var hole = holes[holeIndex];
-                var index = holeIndex++;
                 if (index < arguments.Length)
                 {
                     values.Add(arguments[index]);
-                    return token.Value;
                 }
-
-                if (PeekLogEvent.Properties.TryGetValue(hole.Name, out var value))
+                else if (PeekLogEvent.Properties.TryGetValue(holes[index].Name, out var value))
                 {
                     values.Add(value);
                     boundProperty = true;
-                    return token.Value;
                 }
+                else
+                {
+                    missingHoles[index] = true;
+                    missingProperty = true;
+                }
+            }
 
-                missingProperty = true;
-                return token.Value.Replace("{", "{{").Replace("}", "}}");
-            });
-
-            if (!boundProperty || holeIndex != holes.Count)
+            if (!boundProperty)
                 return;
 
             if (!missingProperty)
@@ -254,6 +248,18 @@ namespace TA.Utils.Logging.NLog
             }
 
             // Escape missing holes only for rendering, keeping the structured message template intact.
+            var holeIndex = 0;
+            var renderTemplate = TemplateTokens.Replace(message, token =>
+            {
+                if (!token.Groups["hole"].Success || holeIndex >= holes.Count)
+                    return token.Value;
+                return missingHoles[holeIndex++]
+                    ? token.Value.Replace("{", "{{").Replace("}", "}}")
+                    : token.Value;
+            });
+            if (holeIndex != holes.Count)
+                return;
+
             var renderEvent = new LogEventInfo
             {
                 Message = renderTemplate,
