@@ -9,7 +9,9 @@
 // 
 // File: LogEntryState.cs  Last modified: 2026-02-23 by tim.long
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace TA.Utils.Logging.OpenTelemetry;

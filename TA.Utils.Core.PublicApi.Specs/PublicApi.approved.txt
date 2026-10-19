@@ -47,10 +47,18 @@ namespace TA.Utils.Core
     }
     public static class AsyncExtensions
     {
+        public static System.Runtime.CompilerServices.ConfiguredAsyncDisposable ContinueInCurrentContext(this System.IAsyncDisposable source) { }
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable ContinueInCurrentContext(this System.Threading.Tasks.Task task) { }
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable ContinueInCurrentContext(this System.Threading.Tasks.ValueTask task) { }
+        public static System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable<T> ContinueInCurrentContext<T>(this System.Collections.Generic.IAsyncEnumerable<T> source) { }
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable<TResult> ContinueInCurrentContext<TResult>(this System.Threading.Tasks.Task<TResult> task) { }
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<TResult> ContinueInCurrentContext<TResult>(this System.Threading.Tasks.ValueTask<TResult> task) { }
+        public static System.Runtime.CompilerServices.ConfiguredAsyncDisposable ContinueOnAnyThread(this System.IAsyncDisposable source) { }
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable ContinueOnAnyThread(this System.Threading.Tasks.Task task) { }
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable ContinueOnAnyThread(this System.Threading.Tasks.ValueTask task) { }
+        public static System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable<T> ContinueOnAnyThread<T>(this System.Collections.Generic.IAsyncEnumerable<T> source) { }
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable<TResult> ContinueOnAnyThread<TResult>(this System.Threading.Tasks.Task<TResult> task) { }
+        public static System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<TResult> ContinueOnAnyThread<TResult>(this System.Threading.Tasks.ValueTask<TResult> task) { }
         [System.Obsolete("Use ContinueInCurrentContext() instead", true)]
         public static System.Runtime.CompilerServices.ConfiguredTaskAwaitable ContinueOnCurrentThread(this System.Threading.Tasks.Task task) { }
         public static void WaitForCompletion(this System.Threading.Tasks.Task task) { }

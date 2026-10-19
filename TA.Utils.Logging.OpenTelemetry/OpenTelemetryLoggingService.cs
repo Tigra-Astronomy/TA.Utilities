@@ -9,6 +9,7 @@
 //
 // File: OpenTelemetryLoggingService.cs  Last modified: 2026-02-23 by tim.long
 
+using System;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;

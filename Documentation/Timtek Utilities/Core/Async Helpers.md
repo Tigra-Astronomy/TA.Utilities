@@ -66,6 +66,31 @@ If the continuation is queued in the message queue waiting for messages to be pu
 The task is prevented from completing and we are in deadlock.
 Therefore, best practice for library writers is to always use `ContinueOnAnyThread()`.
 
+### Value tasks, asynchronous disposal and enumeration
+
+On .NET 8 and later, both continuation helpers also support `ValueTask`, `ValueTask<T>`,
+`IAsyncDisposable` and `IAsyncEnumerable<T>`:
+
+```csharp
+await valueTask.ContinueOnAnyThread();
+
+await using (stream.ContinueOnAnyThread())
+{
+    // Use the stream; its asynchronous disposal does not capture the context.
+}
+
+await foreach (var item in items.ContinueOnAnyThread().WithCancellation(cancellationToken))
+{
+    // Process each item.
+}
+```
+
+Use `ContinueInCurrentContext()` instead when continuation should use the captured
+synchronization context. For `await using`, the setting applies to disposal; for
+`await foreach`, it applies to both advancing and disposing the enumerator.
+It does not change awaits inside the resource or iterator implementation, or inside
+the loop or using body. These overloads are not available in the `netstandard2.0` build.
+
 ## Cancel Culture
 
 One final extension method is `Task.WithCancellation(token)`.

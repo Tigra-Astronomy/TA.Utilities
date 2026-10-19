@@ -3,6 +3,7 @@
 // File: AsyncExtensions.cs  Last modified: 2023-08-14@01:28 by Tim Long
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,7 +80,7 @@ public static class AsyncExtensions
     /// </summary>
     /// <param name="task">The task.</param>
     /// <returns>ConfiguredTaskAwaitable.</returns>
-    /// <seealso cref="ContinueOnAnyThread" />
+    /// <seealso cref="ContinueOnAnyThread(Task)" />
     [Obsolete("Use ContinueInCurrentContext() instead", true)]
     public static ConfiguredTaskAwaitable ContinueOnCurrentThread(this Task task) => task.ConfigureAwait(true);
 
@@ -95,7 +96,7 @@ public static class AsyncExtensions
     /// </summary>
     /// <param name="task">The task.</param>
     /// <returns>A <see cref="ConfiguredTaskAwaitable" /> that continues on the captured synchronization context.</returns>
-    /// <seealso cref="ContinueOnAnyThread" />
+    /// <seealso cref="ContinueOnAnyThread(Task)" />
     /// <remarks>
     ///     This extension method is exactly equivalent to using <c>Task.ConfigureAwait(true);</c>
     ///     but is (we think) more meaningful than a boolean flag.
@@ -114,13 +115,67 @@ public static class AsyncExtensions
     /// </summary>
     /// <param name="task">The task.</param>
     /// <returns>A <see cref="ConfiguredTaskAwaitable{TResult}" /> that continues on the captured synchronization context.</returns>
-    /// <seealso cref="ContinueOnAnyThread" />
+    /// <seealso cref="ContinueOnAnyThread{TResult}(Task{TResult})" />
     /// <remarks>
     ///     This extension method is exactly equivalent to using <c>Task.ConfigureAwait(true);</c>
     ///     but is (we think) more meaningful than a boolean flag.
     /// </remarks>
     public static ConfiguredTaskAwaitable<TResult> ContinueInCurrentContext<TResult>(this Task<TResult> task) =>
         task.ConfigureAwait(true);
+
+#if NET8_0_OR_GREATER
+    /// <summary>Configures a value task awaiter to continue without capturing the synchronization context.</summary>
+    /// <param name="task">The value task to configure.</param>
+    /// <returns>An awaitable object that may schedule continuation on any thread.</returns>
+    public static ConfiguredValueTaskAwaitable ContinueOnAnyThread(this ValueTask task) =>
+        task.ConfigureAwait(false);
+
+    /// <summary>Configures a value task awaiter to continue on the captured synchronization context.</summary>
+    /// <param name="task">The value task to configure.</param>
+    /// <returns>An awaitable object that continues on the captured synchronization context.</returns>
+    public static ConfiguredValueTaskAwaitable ContinueInCurrentContext(this ValueTask task) =>
+        task.ConfigureAwait(true);
+
+    /// <summary>Configures a value task awaiter to continue without capturing the synchronization context.</summary>
+    /// <typeparam name="TResult">The type of the task result.</typeparam>
+    /// <param name="task">The value task to configure.</param>
+    /// <returns>An awaitable object that may schedule continuation on any thread.</returns>
+    public static ConfiguredValueTaskAwaitable<TResult> ContinueOnAnyThread<TResult>(this ValueTask<TResult> task) =>
+        task.ConfigureAwait(false);
+
+    /// <summary>Configures a value task awaiter to continue on the captured synchronization context.</summary>
+    /// <typeparam name="TResult">The type of the task result.</typeparam>
+    /// <param name="task">The value task to configure.</param>
+    /// <returns>An awaitable object that continues on the captured synchronization context.</returns>
+    public static ConfiguredValueTaskAwaitable<TResult> ContinueInCurrentContext<TResult>(this ValueTask<TResult> task) =>
+        task.ConfigureAwait(true);
+
+    /// <summary>Configures asynchronous disposal to continue without capturing the synchronization context.</summary>
+    /// <param name="source">The resource to dispose asynchronously.</param>
+    /// <returns>A disposable object for use with <c>await using</c> that may continue on any thread.</returns>
+    public static ConfiguredAsyncDisposable ContinueOnAnyThread(this IAsyncDisposable source) =>
+        source.ConfigureAwait(false);
+
+    /// <summary>Configures asynchronous disposal to continue on the captured synchronization context.</summary>
+    /// <param name="source">The resource to dispose asynchronously.</param>
+    /// <returns>A disposable object for use with <c>await using</c> that continues on the captured context.</returns>
+    public static ConfiguredAsyncDisposable ContinueInCurrentContext(this IAsyncDisposable source) =>
+        source.ConfigureAwait(true);
+
+    /// <summary>Configures asynchronous enumeration to continue without capturing the synchronization context.</summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The asynchronous sequence to configure.</param>
+    /// <returns>An enumerable for use with <c>await foreach</c> that may continue on any thread.</returns>
+    public static ConfiguredCancelableAsyncEnumerable<T> ContinueOnAnyThread<T>(this IAsyncEnumerable<T> source) =>
+        source.ConfigureAwait(false);
+
+    /// <summary>Configures asynchronous enumeration to continue on the captured synchronization context.</summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The asynchronous sequence to configure.</param>
+    /// <returns>An enumerable for use with <c>await foreach</c> that continues on the captured context.</returns>
+    public static ConfiguredCancelableAsyncEnumerable<T> ContinueInCurrentContext<T>(this IAsyncEnumerable<T> source) =>
+        source.ConfigureAwait(true);
+#endif
 
     /// <summary>
     ///     Executes a task synchronously and unwraps any <see cref="AggregateException" /> to throw the inner exception

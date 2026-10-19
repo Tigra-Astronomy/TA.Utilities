@@ -7,7 +7,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Machine.Specifications.Runner.VisualStudio" />
     <PackageReference Include="Machine.Specifications.Should" />
+    <PackageReference Include="Mono.Cecil" />
     <PackageReference Include="PublicApiGenerator" />
+    <PackageReference Include="Timtek.GitFlowVersion">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TA.Utils.Core\TA.Utils.Core.csproj" />
