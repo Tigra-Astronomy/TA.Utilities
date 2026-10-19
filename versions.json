@@ -7,6 +7,13 @@
     ]
   },
   {
+    "version": "3.6.0",
+    "title": "3.6.0",
+    "aliases": [
+      "latest"
+    ]
+  },
+  {
     "version": "3.6.0-beta.1",
     "title": "3.6.0-beta.1",
     "aliases": [
@@ -51,9 +58,7 @@
   {
     "version": "3.5.2",
     "title": "3.5.2",
-    "aliases": [
-      "latest"
-    ]
+    "aliases": []
   },
   {
     "version": "3.5.2-beta.1",
