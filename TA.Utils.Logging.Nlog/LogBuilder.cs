@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -207,10 +208,10 @@ namespace TA.Utils.Logging.NLog
         private void BindMessageProperties()
         {
             var message = PeekLogEvent.Message;
-            if (string.IsNullOrEmpty(message) || !PeekLogEvent.HasProperties)
+            var arguments = PeekLogEvent.Parameters ?? Array.Empty<object>();
+            if (string.IsNullOrEmpty(message) || (arguments.Length == 0 && !PeekLogEvent.HasProperties))
                 return;
 
-            var arguments = PeekLogEvent.Parameters ?? Array.Empty<object>();
             var probe = new LogEventInfo { Message = message, Parameters = new object[1] };
             var holes = probe.MessageTemplateParameters;
             if (holes.IsPositional || holes.Count <= arguments.Length)
@@ -238,7 +239,7 @@ namespace TA.Utils.Logging.NLog
                 }
             }
 
-            if (!boundProperty)
+            if (!boundProperty && arguments.Length == 0)
                 return;
 
             if (!missingProperty)
@@ -263,14 +264,18 @@ namespace TA.Utils.Logging.NLog
             var renderEvent = new LogEventInfo
             {
                 Message = renderTemplate,
-                Parameters = values.ToArray(),
-                FormatProvider = PeekLogEvent.FormatProvider
+                Parameters = values.ToArray()
             };
-            var renderedMessage = PeekLogEvent.MessageFormatter(renderEvent);
-            foreach (var property in renderEvent.Properties)
-                if (!PeekLogEvent.Properties.ContainsKey(property.Key))
-                    PeekLogEvent.Properties.Add(property);
-            PeekLogEvent.MessageFormatter = _ => renderedMessage;
+            var formatter = PeekLogEvent.MessageFormatter;
+            PeekLogEvent.MessageFormatter = logEvent =>
+            {
+                renderEvent.FormatProvider = logEvent.FormatProvider ?? CultureInfo.CurrentCulture;
+                var renderedMessage = formatter(renderEvent);
+                foreach (var property in renderEvent.Properties)
+                    if (!logEvent.Properties.ContainsKey(property.Key))
+                        logEvent.Properties.Add(property);
+                return renderedMessage;
+            };
         }
 
         private void SetCallerInfo(string callerMethodName, string callerFilePath, int callerLineNumber)
