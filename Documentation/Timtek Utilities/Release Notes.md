@@ -1,5 +1,11 @@
 # Release Notes
 
+3.7.0
+- Overridable content provider
+  - New IOverridableContentProvider / OverridableContentProvider in TA.Utils.Core.OverridableContentProvider (previously a standalone project in a consuming solution). Resolves named content from prioritised override directories, falling back to an embedded resource. See [[Core/Overridable Content Provider]].
+  - TA.Utils.Core now depends on TestableIO.System.IO.Abstractions; IsExternalInit is polyfilled internally for 
+etstandard2.0.
+
 3.6.0
 - Logging analyzers
   - `TA.Utils.Core` now ships a bundled Roslyn analyzer. **TAULOG001** warns when the template passed to `IFluentLogBuilder.Message(...)` is an interpolated string, `string.Format(...)` or a non-constant concatenation, which defeats structured logging.

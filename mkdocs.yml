@@ -45,6 +45,7 @@ nav:
     - Math Extensions: Core/Math Extensions.md
     - Console Logger (Diagnostics): Core/Console Logger (Diagnostics).md
     - Finite State Machine: Core/Finite State Machine.md
+    - Overridable Content Provider: Core/Overridable Content Provider.md
   - Logging:
     - NLog Adapter: Logging/NLog Adapter.md
     - OpenTelemetry Adapter: Logging/OpenTelemetry Adapter.md

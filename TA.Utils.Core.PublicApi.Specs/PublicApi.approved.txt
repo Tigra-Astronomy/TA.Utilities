@@ -408,6 +408,37 @@ namespace TA.Utils.Core.MVVM
         protected bool SetField<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null) { }
     }
 }
+namespace TA.Utils.Core.OverridableContentProvider
+{
+    public interface IOverridableContentProvider
+    {
+        System.IO.Stream Open(System.Collections.Generic.IReadOnlyList<string> overrideDirectories, string itemName);
+        TA.Utils.Core.OverridableContentProvider.OverridableContentResolution Resolve(System.Collections.Generic.IReadOnlyList<string> overrideDirectories, string itemName);
+    }
+    public sealed class OverridableContentNotFoundException : System.Exception
+    {
+        public OverridableContentNotFoundException(string message) { }
+        public OverridableContentNotFoundException(string message, System.Exception innerException) { }
+    }
+    public sealed class OverridableContentProvider : TA.Utils.Core.OverridableContentProvider.IOverridableContentProvider
+    {
+        public OverridableContentProvider(System.Reflection.Assembly embeddedResourceAssembly, string embeddedResourceRootNamespace, System.IO.Abstractions.IFileSystem fileSystem, TA.Utils.Core.Diagnostics.ILog log) { }
+        public System.IO.Stream Open(System.Collections.Generic.IReadOnlyList<string> overrideDirectories, string itemName) { }
+        public TA.Utils.Core.OverridableContentProvider.OverridableContentResolution Resolve(System.Collections.Generic.IReadOnlyList<string> overrideDirectories, string itemName) { }
+    }
+    public sealed class OverridableContentResolution : System.IEquatable<TA.Utils.Core.OverridableContentProvider.OverridableContentResolution>
+    {
+        public OverridableContentResolution(TA.Utils.Core.OverridableContentProvider.OverridableContentSource Source, string? Path) { }
+        public string? Path { get; init; }
+        public TA.Utils.Core.OverridableContentProvider.OverridableContentSource Source { get; init; }
+    }
+    public enum OverridableContentSource
+    {
+        Override = 0,
+        EmbeddedResource = 1,
+        NotFound = 2,
+    }
+}
 namespace TA.Utils.Core.PropertyBinding
 {
     [System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple=true)]

@@ -46,6 +46,7 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <PackageReference Include="System.Reactive" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions" />
     <PackageReference Include="Timtek.GitFlowVersion">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
